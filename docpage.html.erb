@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    
+    <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+    <%
+extend ::Kramdown::Utils::Html
+title = ''
+h = @converter.root.children.find {|c| c.type == :header}
+if h
+  collector = lambda {|c| c.children.collect {|cc| cc.type == :text ? escape_html(cc.value, :text) : collector.call(cc)}.join('')}
+  title = collector.call(h)
+end
+%>
+    <title><%= title %></title>
+
+    <meta name="generator" content="kramdown <%= ::Kramdown::VERSION %>" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <script src="../../asset/syntax-check-widget.js" defer></script>
+    <script src="../../asset/download-file-widget.js" defer></script>
+
+    <link rel="stylesheet" href="https://brick.freetls.fastly.net/Montserrat:300,400,600/Fira+Code:300,400">
+
+    <style>
+    ::root {
+        font-size: 18pt;
+    }
+        body {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 300;
+            color: #444;
+            max-width: 10in;
+            margin: 40px auto;
+            padding: 0 10px;
+        }
+        h1,h2,h3 {
+            font-weight: 600;
+        }
+
+        h2 {
+            border-bottom: #444 solid 1px;
+        }
+        h4,h5,h6,dt {
+            font-weight: 400;
+            font-family: 'Montserrat';
+        }
+        hr {
+            margin-top: 2em;
+            margin-bottom: 2em;
+        }
+        pre {
+            font-family: 'Fira Code', monospace;
+            background: #424B54;
+            color: #FFFCF9;
+            padding: 0.5em;
+            border-radius: 0.125em;
+            overflow-x: auto;
+        }
+        pre code {
+            font: inherit;
+        }
+
+        p {
+            line-height: 1.6;
+        }
+        table {
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #444;
+            padding: 0.2em;
+        }
+
+        .syntax-checker-widget {
+          background: #524254;
+          color: #FFFCF9;
+          margin-top: 0.5em;
+          margin-bottom: 0.5em;
+          min-height: 6em;
+          height: max-content;
+          overflow: hidden;
+          border-radius: 0.25em;
+        }
+        
+        .syntax-checker-widget h5 {
+          padding:  0.25em;
+          padding-top: 0.3em;
+          margin: 0;
+          font-size: 0.95em;
+        }
+
+        .syntax-checker-widget .syntax-widget-messages {
+            list-style-type: none;
+            background: #372D39;
+            margin: 0;
+            padding: 0.5em;
+            position: relative;
+            scroll-behavior: smooth;
+            padding-bottom: 0;
+            max-height: 14em;
+            overflow-y: auto;
+        }
+
+        .syntax-checker-widget .syntax-widget-messages li {
+            padding: 0.2em;
+            display: block;
+        }
+
+        .syntax-checker-widget .syntax-widget-messages li.selected {
+            background: #4D2E54;
+        }
+
+        .syntax-checker-widget .syntax-widget-messages::after {
+            content: "";
+            display: block;
+            height: 0.5em;
+            width: 100%;
+        }
+
+        .syntax-checker-widget .widget-body {
+            display: flex;
+            flex-wrap: wrap;
+            position: relative;
+        }
+        
+        .syntax-checker-widget textarea {
+          background: #2D242E;
+          color: inherit;
+          border: 0;
+          
+          font-family: 'Fira Code', monospace;
+          flex-basis: 100px;
+          flex-grow: 1.5;
+          min-width: 350px;
+          height: 5em;
+          margin: 0;
+          resize: none;
+          padding: 0.2em;
+          box-sizing: border-box;
+        }
+        
+        .syntax-checker-widget output {
+          flex-basis: 100px;
+          flex-grow: 1.5;
+          min-width: 350px;
+          overflow-y: auto;
+          height: 5em;
+          display: block;
+          padding: 0.2em;
+          margin: 0;
+          box-sizing: border-box;
+          background: #433645;
+        }
+
+        .syntax-checker-widget .drag-handle {
+            display: none;
+        }
+
+        pre.railroad-diagram {
+            background: none;
+            padding: none;
+            color: inherit;
+        }
+
+        pre.railroad-diagram h5 {
+            font-size: 0.95em;
+            margin: 0;
+        }
+
+        pre.download-file-instead-of-display {
+            height: 4em;
+            background: none;
+            border: solid 2px #35443E;
+            border-radius: 0.5em;
+        }
+
+        pre.download-file-instead-of-display code {
+            display: none;
+        }
+
+        @media only screen and (min-width: 600px) {
+            .syntax-checker-widget .drag-handle {
+                position: absolute;
+                right: 50%;
+                left: 50%;
+                top: 0px;
+                width: 5px;
+                height: 5em;
+                cursor: ew-resize;
+                display: block;
+                transform: translateX(-2.5px);
+            }  
+        }
+    </style>
+  </head>
+  <body>
+  <%
+    bodyRaw = @body
+    modifiedBody = bodyRaw
+    if bodyRaw.include? "railroad-diagram"
+        nodeGenerator = open("|node parse-railroad-diagram.js", File::RDWR)
+        nodeGenerator.puts(bodyRaw)
+        nodeGenerator.putc("\u0003".encode('utf-8'))
+        xmlBodyWithRailroads = nodeGenerator.gets(nil)
+        modifiedBody = xmlBodyWithRailroads.gsub(' xmlns="http://www.w3.org/1999/xhtml"', '')
+    end
+  %>
+  <%= modifiedBody %>
+  </body>
+  </html>
