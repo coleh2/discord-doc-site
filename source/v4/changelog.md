@@ -1,0 +1,18 @@
+# Version 4.0.0 Changes
+
+## Multi-File
+
+This version added support for multi-file major versions.
+
+## Auto-Build
+
+This version added support for markdown files, which are automatically compiled into HTML. All previous versions were transpiled from HTML into markdown for a lower entry barrier to contributing.
+
+## Backreferences!
+
+v4.0.0 added the backreference specification, a formalization of the notation used to reference other messages
+
+## Docs, not rules
+
+This site is now a documentation site, not solely a rule site.
+
