@@ -106,8 +106,8 @@ function resolveDocpageTemplate(compiledHtml, fileName, erbTemplate, cb) {
             title = kebabToCapital(path.basename(fileName,".html"));
         }
 
-        let version = /(v\d+)/.exec(fileName) || "?";
-        if(version) version = version[1];
+        let version = /(v\d+)/.exec(fileName);
+        if(version) version = `<a href="./">This page is part of ${version[1]}</a>`;
 
         erbParser({
             data: {
@@ -116,7 +116,7 @@ function resolveDocpageTemplate(compiledHtml, fileName, erbTemplate, cb) {
                     title: title,
                     generator: "markedIt",
                     logoImage: "https://cdn.discordapp.com/icons/392830469500043266/8e8f9eff25ffa6d7677a1e7150d1a7a8.png",
-                    versionIndexUrl: "./",
+                    versionIndexLink: version || "",
                     docVersion: version
                 }
             },
