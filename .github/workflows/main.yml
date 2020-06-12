@@ -33,16 +33,20 @@ jobs:
         git pull
       
     - name: npm install and build
+      id: build
       run: |
         cd "$GITHUB_WORKSPACE"
         npm install
         npm run build
+        mv build publish
+        echo "::set-output name=status::$(git status | grep -o 'Changes not staged for commit')"
         
     - name: push to publish branch
+      if: contains(needs.jobs.build.outputs.status, 'Changes not staged for commit')
       run: |
         git config --global user.name 'Automatic Publisher'
         git config --global user.email 'coleh2@users.noreply.github.com'
-        mv build publish
+        
         git add .
         git commit -m "Automatic Publish"
         
