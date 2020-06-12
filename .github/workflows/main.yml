@@ -37,8 +37,8 @@ jobs:
         git config --global user.name 'Automatic Publisher'
         git config --global user.email 'coleh2@users.noreply.github.com'
         mv build publish
-        git branch publish
         git pull
+        git branch publish
         git add .
         git commit -am "Automatic Publish"
-        git push origin publish:publish
+        git push origin publish
