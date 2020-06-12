@@ -14,5 +14,9 @@ v4.0.0 added the backreference specification, a formalization of the notation us
 
 ## Docs, not rules
 
-This site is now a documentation site, not solely a rule site.
+This site is now a documentation site, not solely a rule site. This opens up for more applications
+
+## Design changes!
+
+Redesigned color palatte! Better font! More accessibility! Yay!
 
