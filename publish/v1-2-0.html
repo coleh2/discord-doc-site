@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    
+    <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+    <title>v1.2.0</title>
+
+    <meta name="generator" content="kramdown markedIt" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <script src="./asset/syntax-check-widget.js" defer></script>
+    <script src="./asset/download-file-widget.js" defer></script>
+    <script src="./asset/heading-select.js" defer></script>
+
+    <link rel="stylesheet" href="https://brick.freetls.fastly.net/Montserrat:300,400,600/Fira+Code:300,400">
+
+    <link rel="stylesheet" href="./asset/railroad-diagrams.css">
+
+    <style>
+    :root {
+        font-size: 13pt;
+    }
+        body {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 300;
+            color: #444;
+            margin: 0;
+        }
+
+        main {
+            margin: 40px auto;
+            max-width: 12.5in;
+            padding: 0 10px;
+        }
+        main h1,h2,h3 {
+            font-weight: 600;
+        }
+
+        main h2 {
+            border-bottom: #444 solid 1px;
+        }
+        main h4,h5,h6,dt {
+            font-weight: 400;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        h1.highlighted,
+        h2.highlighted,
+        h3.highlighted,
+        h4.highlighted,
+        h5.highlighted {
+            animation: flashIndicate 2s;
+        }
+
+        hr {
+            margin-top: 2em;
+            margin-bottom: 2em;
+        }
+        pre {
+            font-family: 'Fira Code', monospace;
+            background: #424B54;
+            color: #FFFCF9;
+            padding: 0.5em;
+            border-radius: 0.125em;
+            overflow-x: auto;
+        }
+        pre code {
+            font: inherit;
+        }
+
+        main p {
+            line-height: 1.6;
+        }
+        table {
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #444;
+            padding: 0.2em;
+        }
+
+        .syntax-checker-widget {
+          background: #524254;
+          color: #FFFCF9;
+          margin-top: 0.5em;
+          margin-bottom: 0.5em;
+          min-height: 6em;
+          height: max-content;
+          overflow: hidden;
+          border-radius: 0.25em;
+        }
+        
+        .syntax-checker-widget h5 {
+          padding:  0.25em;
+          padding-top: 0.3em;
+          margin: 0;
+          font-size: 0.95em;
+        }
+
+        .syntax-checker-widget .syntax-widget-messages {
+            list-style-type: none;
+            background: #372D39;
+            margin: 0;
+            padding: 0.5em;
+            position: relative;
+            scroll-behavior: smooth;
+            padding-bottom: 0;
+            max-height: 14em;
+            overflow-y: auto;
+        }
+
+        .syntax-checker-widget .syntax-widget-messages li {
+            padding: 0.2em;
+            display: block;
+        }
+
+        .syntax-checker-widget .syntax-widget-messages li.selected {
+            background: #4D2E54;
+        }
+
+        .syntax-checker-widget .syntax-widget-messages::after {
+            content: "";
+            display: block;
+            height: 0.5em;
+            width: 100%;
+        }
+
+        .syntax-checker-widget .widget-body {
+            display: flex;
+            flex-wrap: wrap;
+            position: relative;
+            height: 5em;
+        }
+        
+        .syntax-checker-widget textarea {
+          background: #2D242E;
+          color: inherit;
+          border: 0;
+          font-family: 'Fira Code', monospace;
+          flex-basis: 100px;
+          flex-grow: 1.5;
+          min-width: 350px;
+          margin: 0;
+          resize: none;
+          padding: 0.2em;
+          box-sizing: border-box;
+        }
+        
+        .syntax-checker-widget output {
+          flex-basis: 100px;
+          flex-grow: 1.5;
+          min-width: 350px;
+          overflow-y: auto;
+          display: block;
+          padding: 0.2em;
+          margin: 0;
+          box-sizing: border-box;
+          background: #433645;
+        }
+
+        .syntax-checker-widget .drag-handle {
+            display: none;
+        }
+
+        pre.railroad-diagram {
+            background: none;
+            padding: none;
+            color: inherit;
+        }
+
+        pre.railroad-diagram h5 {
+            font-size: 0.95em;
+            margin: 0;
+        }
+
+        pre.download-file-instead-of-display {
+            background: none;
+            border: solid 2px #35443E;
+            font-family: inherit;
+            color: inherit;
+            border-radius: 0.5em;
+            display: flex;
+            align-items: center;
+        }
+
+        pre.download-file-instead-of-display img {
+            height: 2em;
+            margin-right: 0.5em;
+        }
+
+        pre.download-file-instead-of-display h5 {
+            font-size: 0.95em;
+            margin: 0;
+        }
+
+        pre.download-file-instead-of-display span {
+            font-size: 0.75em;
+        }
+
+        pre.download-file-instead-of-display code {
+            display: none;
+        }
+
+        header {
+            background: #022B3A;
+            padding: 1em;
+        }
+
+        a#logo-header {
+            color: #eee;
+            display: inline-block;
+            text-decoration: none;
+        }
+
+        #logoimg {
+            max-height: 2em;
+            margin-right: 0.75em;
+            border-radius: 100%;
+        }
+
+        header h1 {
+            display: flex;
+            align-items: center;
+            margin: 0;
+        }
+
+        footer {
+            color: #eee;
+            background: #022B3A;
+            overflow: hidden;
+            height: min-content;
+            min-height: 12em;
+            display: flex;
+            position: relative;
+            padding: 0.5em;
+        }
+
+        footer h2 {
+            margin: 0;
+            font-size: 1.25em;
+        }
+
+        footer ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        footer ul a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .footer-splash {
+            position: absolute;
+            height: 12em;
+            top: 0;
+            z-index: 0;
+            opacity: 0.15;
+        }
+
+        .footer-splash:first-child {
+            transform: scale(2.5) rotate(22.5deg);
+            left: 0;
+        }
+
+        .footer-splash:last-child {
+            display: none;
+        }
+
+        #footer-body {
+            z-index: 1;
+            display: flex;
+            flex-grow: 1;
+            padding: 0 2em 0 2em;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+
+        @media only screen and (min-width: 600px) {
+            .syntax-checker-widget .drag-handle {
+                position: absolute;
+                right: 50%;
+                left: 50%;
+                top: 0px;
+                width: 5px;
+                height: 5em;
+                cursor: ew-resize;
+                display: block;
+                transform: translateX(-2.5px);
+            }  
+            
+            footer {
+                padding: 0.5em 12vw 0.5em 12vw;
+            }
+
+            .footer-splash {
+                opacity: 0.35;
+            }
+
+            #footer-body {
+                flex-wrap: nowrap;
+                justify-content: space-around;
+                padding: 0px;
+            }
+
+            .footer-splash:last-child {
+                transform: scale(2.5) rotate(203.5deg);
+                right: 0;
+                display: initial;
+            }
+        }
+
+        @media only screen and (min-width: 1000px) {
+            footer {
+                padding: 0.5em 25vw 0.5em 25vw;
+            }
+        }
+
+        @keyframes flashIndicate {
+            from {background:#E1CE7A;}
+            to {background:unset;}
+        }
+
+    </style>
+  </head>
+  <body>
+  <header>
+		<h1 class="logo"><img src="https://cdn.discordapp.com/icons/392830469500043266/8e8f9eff25ffa6d7677a1e7150d1a7a8.png" alt="logo" id="logoimg"><a href="./index.html" id="logo-header">NHS Rules: Change Archive</a></h1>
+
+</header>
+<main>
+  <h1 id="v1-2-0">v1.2.0</h1>
+<ul toc><li><a href="#v1-2-0">v1.2.0</a><ul><li><a href="#section-1-basic-rules">Section 1: Basic Rules</a></li><li><a href="#section-2-technical-definitions">Section 2: Technical Definitions</a></li><li><a href="#section-3-exceptions">Section 3: Exceptions</a></li><li><a href="#section-4-consequences">Section 4: Consequences</a></li></ul></li></ul>
+<p>Note: I tried to make these as comprehensive as possible (as in, a warthog could be a moderator if they follow the rules), but if you think something can be changed, DM me @coleh.</p>
+<h2 id="section-1-basic-rules">Section 1: Basic Rules</h2>
+<ol>
+<li>Have fun!</li>
+<li>Hate speech is not tolerated.</li>
+<li>Spam is not allowed. This includes basic spam, misplaced NSFW images, and/or excessive cursing.</li>
+<li>Impersonation, whether of someone we know IRL or on the internet, is prohibited without the explicit permission of the person in question.</li>
+<li>Names should be phonetically pronounceable and not be offensive.</li>
+</ol>
+<h2 id="section-2-technical-definitions">Section 2: Technical Definitions</h2>
+<p>Spam
+: Two messages by the same person within 1 day that both say @everyone
+: No images in #general
+: Any NSFW image posted in a non-NSFW chat</p>
+<p>Impersonation
+: Purposefully pretending to be someone who you are not.</p>
+<p>Excessive
+: More than 60%; can be chosen otherwise by a moderator</p>
+<p>Hate Speech
+: Messages that personally attack another user based on their identity</p>
+<p>Bot
+: Any Discord account which is a bot account and has the @Bot role. </p>
+<p>We
+: The majority of the community.</p>
+<h2 id="section-3-exceptions">Section 3: Exceptions</h2>
+<p>Your name is not required to be phonetically pronounceable if:</p>
+<ul>
+<li>It is more than 60% similar to your IRL name (first or last)</li>
+<li>It is a common word in the language spoken by the majority of the server.</li>
+<li>It is two syllables or less.</li>
+</ul>
+<p>Spam is allowed if:</p>
+<ul>
+<li>The person in question (the spammer) is a bot.</li>
+</ul>
+<h2 id="section-4-consequences">Section 4: Consequences</h2>
+<p>Violations of any rules will probably result in a warning about the consequences of more rule-breaking.</p>
+<p>Violations of Rule 1 will result in stern looks from the higher-ups.</p>
+<p>Violations of Rule 2 will result in:</p>
+<ul>
+<li>Removal of chatting abilities and deletion of offending message(s).<ul>
+<li>First offense: 1 hour.</li>
+</ul>
+</li>
+<li>Being kicked/banned from the server.</li>
+</ul>
+<p>Violations of Rule 3 can result in:</p>
+<ul>
+<li>Deletion of messages.<ul>
+<li>This will be used for the first through third offenses.</li>
+</ul>
+</li>
+<li>Removal of chatting abilities, except in the #time-out chat.<ul>
+<li>For the fourth offense, this will last 15 minutes.</li>
+<li>For the fifth offense, this will last 30 minutes.</li>
+<li>For the sixth offense, this will last 2 hours.</li>
+<li>For the seventh offense, this will last 6 hours.</li>
+<li>For the eighth offense, this will last 1 day.</li>
+<li>For the ninth offense, this will last 3 days.</li>
+<li>For the tenth offense, this will last 1 week.</li>
+<li>For the eleventh offense, this will last 2 weeks.</li>
+<li>For the twelfth offense, this will last 1 month.</li>
+</ul>
+</li>
+<li>Being kicked/banned from the server.</li>
+</ul>
+<p>Violations of Rule 4 will result in:</p>
+<ul>
+<li>Being kicked/banned from the server.</li>
+<li>This can be chosen by the person who was impersonated, if applicable. If not, you will be kicked.</li>
+<li>The person you tried to impersonate may be notified (if applicable).</li>
+</ul>
+<p>Violations of Rule 5 can result in:</p>
+<ul>
+<li>Requests to change your nickname.</li>
+<li>Manual nickname changes.</li>
+</ul>
+</main>
+  <footer>
+    <img class="footer-splash" src="./4-0-0/asset/footer-splash.svg">
+    <div id="footer-body">
+        <div style="margin-right:1em;">
+            <h2>Doc Versioning</h2>
+            <ul>
+                <li>Version List</li>
+                <li>Change Chart</li>
+                <li><a href="about-semver.html" target="_blank">Version Number Style</a></li>
+                <li>About</li>
+            </ul>
+        </div>
+        <div>
+            <h2>Plumbing</h2>
+            <ul>
+                <li><a href="https://github.com/coleh2/discord-doc-site" target="_blank">View Source on GitHub</a></li>
+                <li>Join Discord</li>
+                <li><a href="https://github.com/coleh2/discord-doc-site/blob/master/contributing.md" target="_blank">Contribute Documentation</a></li>
+            </ul>
+        </div>
+    </div>
+    <img class="footer-splash" src="./4-0-0/asset/footer-splash.svg">
+  </footer>
+  </body>
+  </html>
