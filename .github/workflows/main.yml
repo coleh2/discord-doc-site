@@ -28,6 +28,7 @@ jobs:
         
     - name: Make publish Branch
       run: |
+        git fetch --all
         git checkout --track origin/publish
         git pull
       
