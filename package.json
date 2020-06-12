@@ -1,0 +1,25 @@
+{
+  "name": "nhs-rules",
+  "version": "1.0.0",
+  "description": "",
+  "dependencies": {
+    "erb": "^1.3.0-hf.1",
+    "marked-it-core": "^0.14.1",
+    "parse5": "^6.0.0",
+    "xmlserializer": "^0.6.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "build": "build-scripts/github-build.sh"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/coleh2/discord-doc-site.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/coleh2/discord-doc-site/issues"
+  },
+  "homepage": "https://github.com/coleh2/discord-doc-site#readme"
+}

@@ -4,7 +4,7 @@ let parseRailroad = require("./parse-railroad-diagram.js");
 
 let erbParser = require("erb");
 
-let projectFolder = process.env.GITHUB_WORKSPACE || ".";
+let projectFolder = process.env.NHS_RULES_DIR || "..";
 
 var fs = require("fs");
 var path = require("path");
@@ -106,7 +106,7 @@ function resolveDocpageTemplate(compiledHtml, fileName, erbTemplate, cb) {
             title = kebabToCapital(path.basename(fileName,".html"));
         }
 
-        let version = /(v\d+)-\d+-\d+/.exec(fileName) || "?";
+        let version = /(v\d+)/.exec(fileName) || "?";
         if(version) version = version[1];
 
         erbParser({
@@ -117,7 +117,7 @@ function resolveDocpageTemplate(compiledHtml, fileName, erbTemplate, cb) {
                     generator: "markedIt",
                     logoImage: "https://cdn.discordapp.com/icons/392830469500043266/8e8f9eff25ffa6d7677a1e7150d1a7a8.png",
                     versionIndexUrl: "./",
-                    docVersion: "v" + version
+                    docVersion: version
                 }
             },
             template: erbTemplate

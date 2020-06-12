@@ -1,4 +1,6 @@
-export NHS_RULES_DIR="."
+export NHS_RULES_DIR=$GITHUB_WORKSPACE
+
+cd "$NHS_RULES_DIR"
 
 #clean build directory of old artifacts
 rm -rf './build'
