@@ -15,7 +15,9 @@
 
     <link rel="stylesheet" href="https://brick.freetls.fastly.net/Montserrat:300,400,600/Fira+Code:300,400">
 
-    <link rel="stylesheet" href="./asset/railroad-diagrams.css">
+    <link rel="stylesheet" href="/v4/asset/railroad-diagrams.css">
+
+    <link rel="stylesheet" href="/v4/asset/style.css">
 
     <style>
     :root {
@@ -323,6 +325,7 @@
             to {background:unset;}
         }
 
+        
     </style>
   </head>
   <body>
@@ -331,17 +334,18 @@
 
 </header>
 <main>
+  <a href="<%= @versionIndexUrl %>">This is part of <%= @docVersion %></a>
   <%= @body %>
 </main>
   <footer>
-    <img class="footer-splash" src="./4-0-0/asset/footer-splash.svg">
+    <img class="footer-splash" src="./v4/asset/footer-splash.svg">
     <div id="footer-body">
         <div style="margin-right:1em;">
             <h2>Doc Versioning</h2>
             <ul>
                 <li>Version List</li>
                 <li>Change Chart</li>
-                <li><a href="about-semver.html">Version Number Style</a></li>
+                <li><a href="./about-semver.html">Version Number Style</a></li>
                 <li>About</li>
             </ul>
         </div>
@@ -354,7 +358,7 @@
             </ul>
         </div>
     </div>
-    <img class="footer-splash" src="./4-0-0/asset/footer-splash.svg">
+    <img class="footer-splash" src="./asset/footer-splash.svg">
   </footer>
   </body>
   </html>
