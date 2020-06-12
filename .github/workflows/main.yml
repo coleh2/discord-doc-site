@@ -39,4 +39,4 @@ jobs:
         mv build publish
         git add .
         git commit -m "Automatic Publish"
-        git push --set-upstream origin master
+        git push --set-upstream origin master:publish
