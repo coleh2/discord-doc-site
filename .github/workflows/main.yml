@@ -38,7 +38,7 @@ jobs:
         git config --global user.email 'coleh2@users.noreply.github.com'
         mv build publish
         git pull
-        git branch publish
+        git checkout -b publish
         git add .
         git commit -m "Automatic Publish"
         git push --set-upstream origin publish
