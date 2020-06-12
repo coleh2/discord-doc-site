@@ -25,6 +25,9 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: '10.x'
+        
+    - name: Make publish Branch
+      run: git checkout -b publish
       
     - name: npm install and build
       run: |
@@ -37,8 +40,6 @@ jobs:
         git config --global user.name 'Automatic Publisher'
         git config --global user.email 'coleh2@users.noreply.github.com'
         mv build publish
-        git pull
-        git branch publish
         git add .
         git commit -m "Automatic Publish"
         git push --set-upstream origin publish
