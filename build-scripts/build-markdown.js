@@ -124,6 +124,8 @@ function resolveDocpageTemplate(compiledHtml, fileName, erbTemplate, cb) {
         }).then(function(erbHtml) {
             cb(erbHtml);
         }, function(error) {
+            console.error("Template parsing error! Using bare parsed HTML. Error below:");
+            console.error(error);
             cb(compiledHtml.html.text);
         });
 }
