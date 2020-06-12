@@ -39,10 +39,8 @@ jobs:
         mv build publish
         git pull
         git checkout -b publish
+        git branch --set-upstream-to=origin/publish publish
         git pull
-        git log
         git add .
         git commit -m "Automatic Publish"
-        git log
-        git pull
         git push --set-upstream origin publish
