@@ -29,8 +29,8 @@ jobs:
     - name: Update publish branch
       run: |
         git fetch --all
-        git checkout -b tmp master
-        git merge -s ours origin/publish
+        git checkout -b tmp origin/master
+        git merge -s ours publish
         git checkout publish
         git merge --ff-only tmp
         git branch -D tmp
