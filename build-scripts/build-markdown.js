@@ -2,6 +2,8 @@ let markedIt = require("marked-it-core");
 
 let parseRailroad = require("./parse-railroad-diagram.js");
 
+const debugLevel = 3;
+
 let erbParser = require("erb");
 
 let projectFolder = process.env.NHS_RULES_DIR || "..";
@@ -15,6 +17,8 @@ let mdBuildFolder = path.resolve(projectFolder, "build");
 let mdFiles = loadMarkdownFilesFromFolder(mdSourceFolder);
 
 for(var i = 0; i < mdFiles.length; i++) {
+    if(debugLevel >=2) console.log(`Parsing ${mdFiles[i]}`);
+
     let source = fs.readFileSync(mdFiles[i], {encoding: "utf-8"})
 
     compileMarkdown(source, mdFiles[i], function(html,builtFileName) {
@@ -52,12 +56,15 @@ function compileMarkdown(mdSource, sourceFileName, cb) {
 
     //if there's a template in the folder, load and apply it
     if(fs.existsSync(templateFileName)) {
+        if(debugLevel >=2) console.log(`Template file ${templateFileName} found; applying template`);
+
         let erbTemplate = fs.readFileSync(templateFileName, {encoding: "utf-8"});
 
         resolveDocpageTemplate(compiledHtml, builtFileName, erbTemplate, function(erbHtml) {
             cb(erbHtml,builtFileName);
         });
     } else {
+        if(debugLevel >=2) console.log(`No template file ${templateFileName} found; falling back to bare markdown output`);
         cb(compiledHtml.html.text,builtFileName);
     }
 }
@@ -122,6 +129,7 @@ function resolveDocpageTemplate(compiledHtml, fileName, erbTemplate, cb) {
             },
             template: erbTemplate
         }).then(function(erbHtml) {
+            if(debugLevel >=2) console.log(`Template applied successfully`);
             cb(erbHtml);
         }, function(error) {
             console.error("Template parsing error! Using bare parsed HTML. Error below:");
