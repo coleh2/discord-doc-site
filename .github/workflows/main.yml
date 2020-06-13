@@ -39,10 +39,9 @@ jobs:
         npm install
         npm run build
         mv build publish
-        echo "::set-output name=status::$(git status | grep -o 'Changes not staged for commit')"
-        
+        echo "::set-output name=changestatus::$(git status)"  
     - name: push to publish branch
-      if: contains(needs.jobs.build.outputs.status, 'Changes not staged for commit')
+      if: contains(steps.build.outputs.changestatus, 'Changes not staged for commit')
       run: |
         git config --global user.name 'Automatic Publisher'
         git config --global user.email 'coleh2@users.noreply.github.com'
