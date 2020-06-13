@@ -29,12 +29,8 @@ jobs:
     - name: Update publish branch
       run: |
         git fetch --all
-        git checkout -b tmp origin/master
-        git merge -s ours origin/publish
         git checkout publish
-        git merge --ff-only tmp
-        git branch -D tmp
-      
+        git merge -X theirs master
     - name: NPM Install and Build
       id: build
       run: |
