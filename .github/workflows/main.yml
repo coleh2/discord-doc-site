@@ -30,7 +30,7 @@ jobs:
       run: |
         git fetch --all
         git checkout -b tmp origin/master
-        git merge -s ours publish
+        git merge -s ours origin/publish
         git checkout publish
         git merge --ff-only tmp
         git branch -D tmp
