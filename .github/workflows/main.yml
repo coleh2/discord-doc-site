@@ -32,15 +32,22 @@ jobs:
         git checkout --track origin/publish
         git pull
       
-    - name: npm install and build
+    - name: NPM Install and Build
       id: build
       run: |
-        cd "$GITHUB_WORKSPACE"
         npm install
         npm run build
         mv build publish
-        echo "::set-output name=changestatus::$(git status)"  
-    - name: push to publish branch
+        echo "::set-output name=changestatus::$(git status)" 
+        echo "" 
+    - name: Add Publish Directory as Artifact
+      id: artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: publishDirectory
+        path: publish
+    - name: Push to publish Branch
+      id: publish
       if: contains(steps.build.outputs.changestatus, 'Changes not staged for commit')
       run: |
         git config --global user.name 'Automatic Publisher'
