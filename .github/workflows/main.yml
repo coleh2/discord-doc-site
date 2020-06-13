@@ -26,11 +26,14 @@ jobs:
       with:
         node-version: '10.x'
         
-    - name: Make publish Branch
+    - name: Update publish branch
       run: |
         git fetch --all
-        git checkout --track origin/publish
-        git pull
+        git checkout -b tmp master
+        git merge -s ours origin/publish
+        git checkout publish
+        git merge --ff-only tmp
+        git branch -D tmp
       
     - name: NPM Install and Build
       id: build
@@ -46,7 +49,7 @@ jobs:
       with:
         name: publishDirectory
         path: publish
-    - name: Push to publish Branch
+    - name: Push to publish branch
       id: publish
       if: contains(steps.build.outputs.changestatus, 'Changes not staged for commit')
       run: |
