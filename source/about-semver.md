@@ -2,7 +2,7 @@
 
 ## What is it?
 
-Semantic versions, or "semver", is a way of formatting version numbers. A bunch of things use it-- "Minecraft 1.15.2" is an example; the first number is the "major version" (1), the second number is the minor version (15), and the third number (2) is the patch version. More information can be found [here](https://semver.org/).
+Semantic versions, or "semver", is a way of formatting version numbers. A bunch of things use it-- "Minecraft 1.15.2" is an example; the first number (1) is the "major version", the second number (15) is the minor version, and the third number (2) is the patch version. More information can be found [here](https://semver.org/).
 
 ## How does this project use it?
 
