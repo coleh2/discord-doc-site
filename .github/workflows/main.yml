@@ -26,20 +26,22 @@ jobs:
       with:
         node-version: '10.x'
         
-    - name: Update publish branch
+    - name: Merge publish branch
       run: |
-        git fetch --all
+        git config --global user.name 'Automatic Publisher'
+        git config --global user.email 'coleh2@users.noreply.github.com'
+        
+        git fetch origin
         git checkout -b publish master
-        git pull origin publish
-        git merge -X theirs master
+        git pull --no-commit --allow-unrelated-histories -s ours origin publish
     - name: NPM Install and Build
       id: build
       run: |
         npm install
         npm run build
         mv build publish
-        echo "::set-output name=changestatus::$(git status)" 
-        echo "" 
+        git add .
+        echo "::set-output name=changestatus::$(git status | grep -o 'Changes')"
     - name: Add Publish Directory as Artifact
       id: artifact
       uses: actions/upload-artifact@v2
@@ -48,12 +50,8 @@ jobs:
         path: publish
     - name: Push to publish branch
       id: publish
-      if: contains(steps.build.outputs.changestatus, 'Changes not staged for commit')
+      if: contains(steps.build.outputs.changestatus, 'Changes')
       run: |
-        git config --global user.name 'Automatic Publisher'
-        git config --global user.email 'coleh2@users.noreply.github.com'
-        
-        git add .
         git commit -m "Automatic Publish"
         
         git push --set-upstream origin publish
