@@ -40,6 +40,7 @@ jobs:
         npm install
         npm run build
         mv build publish
+        git add .
         echo "::set-output name=changestatus::$(git status)"
     - name: Add Publish Directory as Artifact
       id: artifact
@@ -49,9 +50,8 @@ jobs:
         path: publish
     - name: Push to publish branch
       id: publish
-      if: contains(steps.build.outputs.changestatus, 'Changes not staged for commit')
+      if: contains(steps.build.outputs.changestatus, 'Changes to be committed')
       run: |
-        git add .
         git commit -m "Automatic Publish"
         
         git push --set-upstream origin publish
