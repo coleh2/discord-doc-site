@@ -28,6 +28,9 @@ jobs:
         
     - name: Merge publish branch
       run: |
+        git config --global user.name 'Automatic Publisher'
+        git config --global user.email 'coleh2@users.noreply.github.com'
+        
         git fetch origin
         git checkout -b publish master
         git pull --no-commit --allow-unrelated-histories -s ours origin publish
@@ -48,9 +51,6 @@ jobs:
       id: publish
       if: contains(steps.build.outputs.changestatus, 'Changes not staged for commit')
       run: |
-        git config --global user.name 'Automatic Publisher'
-        git config --global user.email 'coleh2@users.noreply.github.com'
-        
         git add .
         git commit -m "Automatic Publish"
         
