@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    
+    <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+    <title><%= @title %></title>
+
+    <meta name="generator" content="kramdown <%= @generator %>" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <script src="./asset/syntax-check-widget.js" defer></script>
+    <script src="./asset/download-file-widget.js" defer></script>
+    <script src="./asset/heading-select.js" defer></script>
+
+    <link rel="stylesheet" href="https://brick.freetls.fastly.net/Montserrat:300,400,600/Fira+Code:300,400">
+
+    <link rel="stylesheet" href="/v4/asset/railroad-diagrams.css">
+
+    <link rel="stylesheet" href="/v4/asset/style.css">
+
+  </head>
+  <body>
+  <header>
+		<h1 class="logo"><img src="<%= @logoImage %>" alt="logo" id="logoimg"><a href="./index.html" id="logo-header">NHS Rules: Change Archive</a></h1>
+
+</header>
+<main>
+<%= @versionIndexLink %>
+<%= @body %>
+</main>
+  <footer>
+    <img class="footer-splash" src="/v4/asset/footer-splash.svg">
+    <div id="footer-body">
+        <div style="margin-right:1em;">
+            <h2>Doc Versioning</h2>
+            <ul>
+                <li>Version List</li>
+                <li><a href="https://github.com/coleh2/discord-doc-site/network">Change Chart</a></li>
+                <li><a href="/about-semver.html">Version Number Style</a></li>
+                <li><a href="/about-site.html">About</a></li>
+            </ul>
+        </div>
+        <div>
+            <h2>Plumbing</h2>
+            <ul>
+                <li><a href="https://github.com/coleh2/discord-doc-site" target="_blank">View Source on GitHub</a></li>
+                <li>Join Discord</li>
+                <li><a href="https://github.com/coleh2/discord-doc-site/issues" target="_blank">Report Issues</a></li>
+                <li><a href="https://github.com/coleh2/discord-doc-site/blob/master/contributing.md" target="_blank">Contribute Documentation</a></li>
+            </ul>
+        </div>
+    </div>
+    <img class="footer-splash" src="/v4/asset/footer-splash.svg">
+  </footer>
+  </body>
+  </html>
