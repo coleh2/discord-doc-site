@@ -26,19 +26,18 @@ jobs:
       with:
         node-version: '10.x'
         
-    - name: Update publish branch
+    - name: Merge publish branch
       run: |
         git fetch --all
         git checkout -b publish master
-        git pull origin publish
-        git merge -X theirs master
+        git pull --no-commit -s ours origin publish
     - name: NPM Install and Build
       id: build
       run: |
         npm install
         npm run build
         mv build publish
-        echo "::set-output name=changestatus::$(git status)" 
+        echo "::set-output name=changestatus::$(git status)"
         echo "" 
     - name: Add Publish Directory as Artifact
       id: artifact
