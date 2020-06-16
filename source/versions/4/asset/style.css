@@ -6,6 +6,11 @@
         font-weight: 300;
         color: #444;
         margin: 0;
+        padding-bottom: 12em;
+        position: relative;
+        min-height: 100vh;
+        height: max-content;
+        box-sizing: border-box;
     }
 
     main {
@@ -212,8 +217,11 @@
         height: min-content;
         min-height: 12em;
         display: flex;
-        position: relative;
+        position: absolute;
+        bottom: 0;
+        box-sizing: border-box;
         padding: 0.5em;
+        width: 100%;
     }
 
     footer h2 {
@@ -256,7 +264,34 @@
         flex-wrap: wrap;
         align-items: center;
     }
-    
+
+    .breadcrumb {
+        margin: 0;
+        padding: 0;
+        display: block;
+    }
+
+    .breadcrumb li {
+        display: inline-block;
+    }
+
+    .breadcrumb li a {
+        color: inherit;
+        text-decoration: none;
+    }
+
+    .breadcrumb li::before {
+        content: "\0000A0/";
+        font-weight: normal;
+    }
+
+    .breadcrumb li:first-child::before {
+        content: "";
+    }
+
+    .breadcrumb li:last-child {
+        font-weight: bold;
+    }
 
     @media only screen and (min-width: 600px) {
         .syntax-checker-widget .drag-handle {

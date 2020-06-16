@@ -4,13 +4,15 @@
   "description": "",
   "dependencies": {
     "erb": "^1.3.0-hf.1",
+    "express": "^4.17.1",
     "marked-it-core": "^0.14.1",
     "parse5": "^6.0.0",
     "xmlserializer": "^0.6.1"
   },
   "devDependencies": {},
   "scripts": {
-    "build": "build-scripts/github-build.sh"
+    "build": "./build-scripts/github-build.sh",
+    "start": "node build-scripts/local-dev-server.js"
   },
   "repository": {
     "type": "git",

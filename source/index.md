@@ -1,0 +1,5 @@
+# Site Home
+
+* Index
+{:index}
+

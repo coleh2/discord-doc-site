@@ -18,11 +18,15 @@ I'd be glad to accept help! You don't really need technical experience, but a ba
 
 ## Is this affiliated with {person or group}?
 
-This is made & maintained by @coleh. That's it.
+This is made & maintained by @coleh. That's it :) 
 
 ## This page looks bad
 
 If it's an actual bug, please take a screenshot and post it to the [issue tracker](https://github.com/coleh2/discord-doc-site/issues) on GitHub. If you don't like the design, then still feel free to make an issue-- if you have a pet peeve to fix, a request to make the site better, or any other feedback, I'd love to hear it!
+
+## How is this site hosted? How do we know you're not changing the rules?
+
+This site is hosted on Netlify, a static site hosting service. Whenever a new version of the site is put up on the ["master" Git branch](https://github.com/coleh2/discord-doc-site/tree/master/), GitHub compiles that into a web-viewable version, and then puts that version onto the  ["publish" Git branch](https://github.com/coleh2/discord-doc-site/tree/publish/). Netlify sees this and deploys it to their servers. You can be sure I'm not changing the rules behind anyone's back because Git doesn't allow that-- every change submitted is cryptographically linked to those made before; it's extremely difficult if not impossible to falsely edit the pages on this site.
 
 ## Is there any way I can contact you that isn't GitHub?
 

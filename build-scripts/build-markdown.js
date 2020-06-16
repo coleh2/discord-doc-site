@@ -6,7 +6,7 @@ const debugLevel = 3;
 
 let erbParser = require("erb");
 
-let projectFolder = process.env.NHS_RULES_DIR || "..";
+let projectFolder = process.env.NHS_RULES_DIR || path.resolve(__dirname,"..");
 
 var fs = require("fs");
 var path = require("path");
@@ -22,7 +22,8 @@ for(var i = 0; i < mdFiles.length; i++) {
     let source = fs.readFileSync(mdFiles[i], {encoding: "utf-8"})
 
     compileMarkdown(source, mdFiles[i], function(html,builtFileName) {
-        fs.writeFileSync(builtFileName,html);
+        //only write if a custom-made version doesn't exist
+        if(!fs.existsSync(builtFileName)) fs.writeFileSync(builtFileName,html);
     });
     
 }
@@ -37,6 +38,7 @@ function compileMarkdown(mdSource, sourceFileName, cb) {
                 onCode: parseDiagrams,
                 onList: function(html, data) {
                     if(html.startsWith("<ul toc>")) return "<ul toc></ul>";
+                    else if(html.startsWith("<ul index>")) return "<ul index></ul>";
                 }
             }
         }
@@ -46,13 +48,19 @@ function compileMarkdown(mdSource, sourceFileName, cb) {
 
     let builtFileName = sourceFileName.replace(mdSourceFolder,mdBuildFolder).replace(/\.md$/,".html");
 
+    //don't override the file if it's already custom-made from the source directory
+    if(fs.existsSync(builtFileName)) return cb(compiledHtml.html.text,builtFileName);
+
     let sourceFileFolder = sourceFileName.replace(path.basename(sourceFileName),"");
+
+    //add index list
+    compiledHtml.html.text = replaceIndex(compiledHtml, sourceFileFolder, sourceFileName);
 
     //make folder to place built file in
     let builtFileFolder = builtFileName.replace(path.basename(builtFileName),"");
     fs.mkdirSync(builtFileFolder, { recursive: true });
 
-    let templateFileName = path.resolve(sourceFileFolder,"docpage.html.erb");
+    let templateFileName = path.resolve(mdSourceFolder,"docpage.html.erb");
 
     //if there's a template in the folder, load and apply it
     if(fs.existsSync(templateFileName)) {
@@ -67,6 +75,27 @@ function compileMarkdown(mdSource, sourceFileName, cb) {
         if(debugLevel >=2) console.log(`No template file ${templateFileName} found; falling back to bare markdown output`);
         cb(compiledHtml.html.text,builtFileName);
     }
+}
+
+function replaceIndex(compiledHtml, folder, indexFilename) {
+    let folderContents = fs.readdirSync(folder, {
+        withFileTypes: true
+    });
+
+    if(compiledHtml.html.text.indexOf("<ul index></ul>") == -1) return compiledHtml.html.text;
+
+    let listElements = [];
+
+    for(var i = 0; i < folderContents.length; i++) {
+        if((folderContents[i].name.endsWith(".md") && !indexFilename.endsWith(folderContents[i].name)) || 
+           (folderContents[i].isDirectory() && folderContents[i].name != "asset")) {
+            let filename = path.basename(folderContents[i].name, ".md")
+            listElements.push(`<li><a href="${filename}">${kebabToCapital(filename)}</a></li>`)
+        }
+    }
+
+    if(listElements.length > 0) return compiledHtml.html.text.replace("<ul index></ul>",`<ul index>${listElements.join("\n")}</ul>`);
+    else return compiledHtml.html.text;
 }
 
 function replaceToc(compiledHtml) {
@@ -113,6 +142,35 @@ function resolveDocpageTemplate(compiledHtml, fileName, erbTemplate, cb) {
             title = kebabToCapital(path.basename(fileName,".html"));
         }
 
+        var breadcrumbRelativeAddress = fileName.replace(mdBuildFolder, "");
+        var breadcrumbListElems = [];
+
+        //construct breadcrumbs
+        for(; breadcrumbRelativeAddress != "" ;) {
+            let currentName = path.basename(breadcrumbRelativeAddress);
+            let relativeAddressNoEnd = breadcrumbRelativeAddress.replace(/\.html$/,"");
+
+            //don't make entries for indexes
+            if(currentName == "index.html") {
+                breadcrumbRelativeAddress = breadcrumbRelativeAddress.replace(path.sep + currentName,"");
+                continue;
+            }
+
+            breadcrumbListElems.push(`<li><a href="${relativeAddressNoEnd.replace(RegExp("\\" + path.sep, "g"), "/")}">
+                ${kebabToCapital(currentName.replace(/\.html$/,""))}</a>
+            </li>`);
+
+            breadcrumbRelativeAddress = breadcrumbRelativeAddress.replace(path.sep + currentName,"");
+        }
+
+        var breadcrumbHtml = "";
+
+        if(breadcrumbListElems.length > 0) {
+            breadcrumbHtml = `<ul class="breadcrumb">
+            <li><a href="/">Home</a></li>${breadcrumbListElems.reverse().join("")}
+            </ul>`
+        }
+
         let version = /(v\d+)/.exec(fileName);
         if(version) version = `<a href="./">This page is part of ${version[1]}</a>`;
 
@@ -123,7 +181,7 @@ function resolveDocpageTemplate(compiledHtml, fileName, erbTemplate, cb) {
                     title: title,
                     generator: "markedIt",
                     logoImage: "https://cdn.discordapp.com/icons/392830469500043266/8e8f9eff25ffa6d7677a1e7150d1a7a8.png",
-                    versionIndexLink: version || "",
+                    breadcrumbs: breadcrumbHtml,
                     docVersion: version
                 }
             },

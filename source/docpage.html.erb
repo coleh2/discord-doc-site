@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    
+
+<head>
+
     <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
 
     <title><%= @title %></title>
@@ -15,42 +16,47 @@
 
     <link rel="stylesheet" href="https://brick.freetls.fastly.net/Montserrat:300,400,600/Fira+Code:300,400">
 
-    <link rel="stylesheet" href="/v4/asset/railroad-diagrams.css">
+    <link rel="stylesheet" href="/versions/4/asset/railroad-diagrams.css">
 
-    <link rel="stylesheet" href="/v4/asset/style.css">
-  </head>
-  <body>
-  <header>
-		<h1 class="logo"><img src="<%= @logoImage %>" alt="logo" id="logoimg"><a href="./index.html" id="logo-header">NHS Rules: Change Archive</a></h1>
+    <link rel="stylesheet" href="/versions/4/asset/style.css">
+</head>
+<body>
+    <header>
+        <h1 class="logo"><img src="<%= @logoImage %>" alt="logo" id="logoimg"><a href="./index.html"
+                id="logo-header">NHS Rules: Change Archive</a></h1>
 
-</header>
-<main>
-<%= @versionIndexLink %>
-  <%= @body %>
-</main>
-  <footer>
-    <img class="footer-splash" src="/v4/asset/footer-splash.svg">
-    <div id="footer-body">
-        <div style="margin-right:1em;">
-            <h2>Doc Versioning</h2>
-            <ul>
-                <li>Version List</li>
-                <li><a href="https://github.com/coleh2/discord-doc-site/network">Change Chart</a></li>
-                <li><a href="/about-semver.html">Version Number Style</a></li>
-                <li><a href="/about-site.html">About</a></li>
-            </ul>
+    </header>
+    <main>
+        <%= @breadcrumbs %>
+        <%= @body %>
+    </main>
+    <footer>
+        <img class="footer-splash" src="/versions/4/asset/footer-splash.svg">
+        <div id="footer-body">
+            <div style="margin-right:1em;">
+                <h2>Doc Versioning</h2>
+                <ul>
+                    <li><a href="/versions">Version List</a></li>
+                    <li><a href="https://github.com/coleh2/discord-doc-site/network">Change Chart</a></li>
+                    <li><a href="/about-semver">Version Number Style</a></li>
+                    <li><a href="/about-site">About</a></li>
+                </ul>
+            </div>
+            <div>
+                <h2>Plumbing</h2>
+                <ul>
+                    <li><a href="https://github.com/coleh2/discord-doc-site" target="_blank">View Source on GitHub</a>
+                    </li>
+                    <li>Join Discord</li>
+                    <li><a href="https://github.com/coleh2/discord-doc-site/issues" target="_blank">Report Issues</a>
+                    </li>
+                    <li><a href="https://github.com/coleh2/discord-doc-site/blob/master/contributing.md"
+                            target="_blank">Contribute Documentation</a></li>
+                </ul>
+            </div>
         </div>
-        <div>
-            <h2>Plumbing</h2>
-            <ul>
-                <li><a href="https://github.com/coleh2/discord-doc-site" target="_blank">View Source on GitHub</a></li>
-                <li>Join Discord</li>
-                <li><a href="https://github.com/coleh2/discord-doc-site/issues" target="_blank">Report Issues</a></li>
-                <li><a href="https://github.com/coleh2/discord-doc-site/blob/master/contributing.md" target="_blank">Contribute Documentation</a></li>
-            </ul>
-        </div>
-    </div>
-    <img class="footer-splash" src="/v4/asset/footer-splash.svg">
-  </footer>
-  </body>
-  </html>
+        <img class="footer-splash" src="/versions/4/asset/footer-splash.svg">
+    </footer>
+</body>
+
+</html>
