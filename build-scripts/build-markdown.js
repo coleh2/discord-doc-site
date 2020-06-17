@@ -180,7 +180,7 @@ function resolveDocpageTemplate(compiledHtml, fileName, erbTemplate, cb) {
                     body: compiledHtml.html.text,
                     title: title,
                     generator: "markedIt",
-                    logoImage: "https://cdn.discordapp.com/icons/392830469500043266/8e8f9eff25ffa6d7677a1e7150d1a7a8.png",
+                    logoImage: "https://cdn.discordapp.com/icons/392830469500043266/3a73e851908ba602319a88f63671a2f5.png",
                     breadcrumbs: breadcrumbHtml,
                     docVersion: version
                 }
