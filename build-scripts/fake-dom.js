@@ -1,75 +1,105 @@
 module.exports = {
+    createTextNode(content) {
+        var el = createElement("#text");
+        el.value = content;
+        return el;
+    },
     createElement: function (tag) {
         return {
-            clientWidth: 100,
-            clientHeight: 100,
             appendChild: function (child) {
                 this.childNodes.push(child);
                 child.parentNode = this;
+
+                return child;
             },
             insertBefore: function (newChild, reference) {
-                this.childNodes.splice(this.childNodes.indexOf(reference), 0, newChild);
+                let index = this.childNodes.indexOf(reference);
+                if(index == -1) index = this.childNodes.length;
+
+                this.childNodes.splice(index, 0, newChild);
+                newChild.parentNode = this;
+
+                return newChild;
             },
             removeChild: function (child) {
                 this.childNodes.splice(this.childNodes.indexOf(child), 1);
-            },
-            get clientWidth() {
-                throw problem;
-            },
-            get scrollWidth() {
-                throw problem;
+                child.parentNode = null;
+
+                return child;
             },
             get offsetWidth() {
-                return 14 * arrayMax(this.textContent.split("\n")).length;
-                throw problem;
+                return 10 * Math.max(arrayMax(this.textContent.split("\n")).length,
+                                     (this.attributes.text || "").length);
             },
             get offsetHeight() {
-                return 10;
-                throw problem;
+                return this.textContent.split("\n").length*20;
             },
             get offsetTop() {
-                return 0;
-                throw problem;
+                return this.attributes.y || this.attributes.top || 0
             },
             get offsetLeft() {
-                return 0;
-                throw problem;
+                return this.attributes.x || this.attributes.left || 0;
             },
-            innerHTML: "",
+            _innerHTML: "",
             nodeName: tag,
-            getBoundingClientRect: function() {
+            getBoundingClientRect: function () {
                 return {
                     top: 0,
                     left: 0,
                     width: this.offsetWidth,
-                    height: 100,
+                    height: this.offsetHeight,
                     x: 0,
                     y: 0
                 };
             },
+            cloneNode: function() {
+                let copy = H.merge({}, this);
+                copy.parentNode = null;
+                return copy;
+            },
             setAttribute: function (attr, val) {
-                if(val.toString() == "NaN") throw problem;
+                if (val.toString() == "NaN") throw problem;
                 this.attributes[attr] = val;
+            },
+            setAttributeNS: function(ns, attr, val) {
+                this.setAttribute(attr, val);
             },
             get textContent() {
                 if (this.nodeName == "#text") return this.value;
 
                 return this.childNodes.map(node => {
-                    node.textContent;
+                    return node.textContent;
                 }).join("");
             },
+            set textContent(val) {
+                this.childNodes = [
+                    createTextNode(val)
+                ];
+            },
             get innerHTML() {
-                if (this.nodeName == "#text") return this.value;
-                let attrs = Object.keys(this.attributes).map(attribute => {
-                    return `${attribute}="${this.attributes[attribute]}"`
-                });
-                let styles = Object.keys(this.style).map(style => {
-                    return `${camelToKebab(style)}: ${this.style[style]}`
-                });
-                return `<${this.nodeName} ${attrs.join(" ")}>${this.childNodes.map(node => node.innerHTML).join("")}</${this.nodeName}>`;
+                return this.__buildInnerHTML(true);
             },
             set innerHTML(val) {
                 this.childNodes = [];
+            },
+            __buildInnerHTML: function(includeStyles) {
+                if (this.nodeName == "#text") return encodeCharacterEntities(this.value || "");
+                let attrs = Object.keys(this.attributes).map(attribute => {
+                    return `${attribute}="${this.attributes[attribute]}"`
+                });
+                
+                if(includeStyles) {
+                    let styles = Object.keys(this.style).map(style => {
+                        if(["setProperty","getComputed","getPropertyValue"].includes(style)) return "";
+                        return `${camelToKebab(style)}: ${encodeCharacterEntities(this.style[style].toString())};`;
+                    });
+
+                    attrs.push(`style="${styles.join("")}"`);
+                }
+
+                return "<"+this.nodeName +" "+attrs.join(" ") + ">" + 
+                        this.childNodes.map(node => node.__buildInnerHTML(includeStyles)).join("") + 
+                        "</" + this.nodeName + ">";
             },
             getElementsByTagName: function (tagName) {
                 let children = this.childNodes.filter(node => {
@@ -93,12 +123,12 @@ module.exports = {
             parentNode: null,
             style: {
                 setProperty: function (prop, val, attr) {
-                    this[prop] = val + (attr&&" !" + attr);
+                    this[prop] = val + (attr && " !" + attr);
                 },
-                getComputed: function() {
+                getComputed: function () {
                     return this;
                 },
-                getPropertyValue: function(prop) {
+                getPropertyValue: function (prop) {
                     return this[prop];
                 }
             }
@@ -110,21 +140,30 @@ function camelToKebab(str) {
     let words = [];
 
     let wordStartIndex = 0;
-    for(var i =0; i < str.length; i++) {
-        if(str[i].toUpperCase() == str[i]) {
+    for (var i = 0; i < str.length; i++) {
+        if (str[i].toUpperCase() == str[i]) {
             words.push(str.substring(wordStartIndex, i).toLowerCase());
-            wordStartIndex = i+1;
+            wordStartIndex = i;
         }
     }
+    words.push(str.substring(wordStartIndex).toLowerCase())
 
     return words.join("-");
+}
+
+function encodeCharacterEntities(str) {
+    return str.replace(/&/g,"&amp;")
+              .replace(/"/g,"&quot;")
+              .replace(/'/g,"&apos;")
+              .replace(/</g,"&lt;")
+              .replace(/>/g,"&gt;");
 }
 
 function arrayMax(arr) {
     let max = arr[0];
     let i = arr.length;
-    while(i--) {
-        if(arr[i] > max) max = arr[i]
+    while (i--) {
+        if (arr[i] > max) max = arr[i]
     };
 
     return max;

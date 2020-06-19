@@ -1,35 +1,4 @@
-function camelToKebab(str) {
-    let words = [];
 
-    let wordStartIndex = 0;
-    for (var i = 0; i < str.length; i++) {
-        if (str[i].toUpperCase() == str[i]) {
-            words.push(str.substring(wordStartIndex, i).toLowerCase());
-            wordStartIndex = i;
-        }
-    }
-    words.push(str.substring(wordStartIndex).toLowerCase())
-
-    return words.join("-");
-}
-
-function encodeCharacterEntities(str) {
-    return str.replace(/&/g,"&amp;")
-              .replace(/"/g,"&quot;")
-              .replace(/'/g,"&apos;")
-              .replace(/</g,"&lt;")
-              .replace(/>/g,"&gt;");
-}
-
-function arrayMax(arr) {
-    let max = arr[0];
-    let i = arr.length;
-    while (i--) {
-        if (arr[i] > max) max = arr[i]
-    };
-
-    return max;
-}
 
 /**
  * @license Highcharts JS v8.1.2 (2020-06-16)
@@ -537,119 +506,7 @@ function arrayMax(arr) {
         })(error || (error = {}));
         H.error = error;
         
-        var fakeDom = H.fakeDom = {
-            createElement: function (tag) {
-                return {
-                    appendChild: function (child) {
-                        this.childNodes.push(child);
-                        child.parentNode = this;
-                    },
-                    insertBefore: function (newChild, reference) {
-                        this.childNodes.splice(this.childNodes.indexOf(reference), 0, newChild);
-                    },
-                    removeChild: function (child) {
-                        this.childNodes.splice(this.childNodes.indexOf(child), 1);
-                    },
-                    get offsetWidth() {
-                        return 10 * Math.max(arrayMax(this.textContent.split("\n")).length,
-                                             (this.attributes.text || "").length);
-                    },
-                    get offsetHeight() {
-                        return this.textContent.split("\n").length*20;
-                    },
-                    get offsetTop() {
-                        return this.attributes.y || this.attributes.top || 0
-                    },
-                    get offsetLeft() {
-                        return this.attributes.x || this.attributes.left || 0;
-                    },
-                    innerHTML: "",
-                    nodeName: tag,
-                    getBoundingClientRect: function () {
-                        return {
-                            top: 0,
-                            left: 0,
-                            width: this.offsetWidth,
-                            height: this.offsetHeight,
-                            x: 0,
-                            y: 0
-                        };
-                    },
-                    cloneNode: function() {
-                        let copy = H.merge({}, this);
-                        copy.parentNode = null;
-                        return copy;
-                    },
-                    setAttribute: function (attr, val) {
-                        if (val.toString() == "NaN") throw problem;
-                        this.attributes[attr] = val;
-                    },
-                    get textContent() {
-                        if (this.nodeName == "#text") return this.value;
-        
-                        return this.childNodes.map(node => {
-                            return node.textContent;
-                        }).join("");
-                    },
-                    get innerHTML() {
-                        return this.__buildInnerHTML(true);
-                    },
-                    __buildInnerHTML: function(includeStyles) {
-                        if (this.nodeName == "#text") return encodeCharacterEntities(this.value || "");
-                        let attrs = Object.keys(this.attributes).map(attribute => {
-                            return `${attribute}="${this.attributes[attribute]}"`
-                        });
-                        
-                        if(includeStyles) {
-                            let styles = Object.keys(this.style).map(style => {
-                                if(["setProperty","getComputed","getPropertyValue"].includes(style)) return "";
-                                return `${camelToKebab(style)}: ${encodeCharacterEntities(this.style[style].toString())};`;
-                            });
-
-                            attrs.push(`style="${styles.join("")}"`);
-                        }
-
-                        return "<"+this.nodeName +" "+attrs.join(" ") + ">" + 
-                                this.childNodes.map(node => node.__buildInnerHTML(includeStyles)).join("") + 
-                                "</" + this.nodeName + ">";
-                    },
-                    set innerHTML(val) {
-                        this.childNodes = [];
-                    },
-                    getElementsByTagName: function (tagName) {
-                        let children = this.childNodes.filter(node => {
-                            return node.nodeName == tagName;
-                        });
-        
-                        this.childNodes.forEach(node => {
-                            children = children.concat(node.getElementsByTagName(tagName));
-                        });
-        
-                        return children;
-                    },
-                    getAttribute: function (attr) {
-                        return this.attributes[attr];
-                    },
-                    removeAttribute: function (attr) {
-                        delete this.attributes[attr];
-                    },
-                    attributes: {},
-                    childNodes: [],
-                    parentNode: null,
-                    style: {
-                        setProperty: function (prop, val, attr) {
-                            this[prop] = val + (attr && " !" + attr);
-                        },
-                        getComputed: function () {
-                            return this;
-                        },
-                        getPropertyValue: function (prop) {
-                            return this[prop];
-                        }
-                    }
-                };
-            }
-        };
+        var fakeDom = H.fakeDom = require("./fake-dom.js");
         /* eslint-disable valid-jsdoc */
         /**
          * Utility function to deep merge two or more objects and return a third object.
@@ -1062,16 +919,14 @@ function arrayMax(arr) {
         };
 
         var createTextNode = H.createTextNode = function createTextNode(content) {
-            el = createElement("#text");
+            var el = H.createElement("#text");
             el.value = content;
 
             return el;
         }
 
         var createElementNS = H.createElementNS = function createElementNS(namespace, tag) {
-            var el;
-
-            el = createElement(tag);
+            var el = H.createElement(tag);
 
             return el;
         }
@@ -25963,7 +25818,7 @@ function arrayMax(arr) {
              * @fires Highcharts.Chart#event:afterDrawChartBox
              */
             Chart.prototype.drawChartBox = function () {
-                var chart = this, optionsChart = chart.options.chart, renderer = chart.renderer, chartWidth = chart.chartWidth, chartHeight = chart.chartHeight, chartBackground = chart.chartBackground, plotBackground = chart.plotBackground, plotBorder = chart.plotBorder, chartBorderWidth, styledMode = chart.styledMode, plotBGImage = chart.plotBGImage, chartBackgroundColor = optionsChart.backgroundColor, plotBackgroundColor = optionsChart.plotBackgroundColor, plotBackgroundImage = optionsChart.plotBackgroundImage, mgn, bgAttr, plotLeft = chart.plotLeft, plotTop = chart.plotTop, plotWidth = chart.plotWidth, plotHeight = chart.plotHeight, plotBox = chart.plotBox, clipRect = chart.clipRect, clipBox = chart.clipBox, verb = 'animate';
+                var chart = this, optionsChart = chart.options.chart, renderer = chart.renderer, chartWidth = chart.chartWidth, chartHeight = chart.chartHeight, chartBackground = chart.chartBackground, plotBackground = chart.plotBackground, plotBorder = chart.plotBorder, chartBorderWidth, styledMode = chart.styledMode, plotBGImage = chart.plotBGImage, chartBackgroundColor = optionsChart.backgroundColor, plotBackgroundColor = optionsChart.plotBackgroundColor, plotBackgroundImage = optionsChart.plotBackgroundImage, mgn, bgAttr, plotLeft = chart.plotLeft, plotTop = chart.plotTop, plotWidth = chart.plotWidth, plotHeight = chart.plotHeight, plotBox = chart.plotBox, clipRect = chart.clipRect, clipBox = chart.clipBox, verb = 'attr';
                 // Chart area
                 if (!chartBackground) {
                     chart.chartBackground = chartBackground = renderer.rect()
@@ -35659,7 +35514,7 @@ function arrayMax(arr) {
                         ]);
                     });
                     props.forEach(function (prop) {
-                        var areaKey = prop[0], area = series[areaKey], verb = area ? 'animate' : 'attr', attribs = {};
+                        var areaKey = prop[0], area = series[areaKey], verb = 'attr', attribs = {};
                         // Create or update the area
                         if (area) { // update
                             area.endX = series.preventGraphAnimation ?
@@ -36927,8 +36782,7 @@ function arrayMax(arr) {
                     var series = this, chart = this.chart, options = series.options, renderer = chart.renderer, animationLimit = options.animationLimit || 250, shapeArgs;
                     // draw the columns
                     series.points.forEach(function (point) {
-                        var plotY = point.plotY, graphic = point.graphic, hasGraphic = !!graphic, verb = graphic && chart.pointCount < animationLimit ?
-                            'animate' : 'attr';
+                        var plotY = point.plotY, graphic = point.graphic, hasGraphic = !!graphic, verb = 'attr';
                         if (isNumber(plotY) && point.y !== null) {
                             shapeArgs = point.shapeArgs;
                             // When updating a series between 2d and 3d or cartesian and
@@ -36954,7 +36808,7 @@ function arrayMax(arr) {
                                         x: point.startXPos
                                     });
                                     hasGraphic = true;
-                                    verb = 'animate';
+                                    verb = 'attr';
                                 }
                             }
                             if (graphic && hasGraphic) { // update
@@ -39341,7 +39195,7 @@ function arrayMax(arr) {
                             alignTo.height)
                     };
                     setStartPos(alignAttr); // data sorting
-                    dataLabel[isNew ? 'attr' : 'animate'](alignAttr)
+                    dataLabel.attr(alignAttr)
                         .attr({
                             align: align
                         });
@@ -39380,7 +39234,7 @@ function arrayMax(arr) {
                 // When we're using a shape, make it possible with a connector or an
                 // arrow pointing to thie point
                 if (options.shape && !rotation) {
-                    dataLabel[isNew ? 'attr' : 'animate']({
+                    dataLabel.attr({
                         anchorX: inverted ?
                             chart.plotWidth - point.plotY :
                             point.plotX,
@@ -39880,7 +39734,7 @@ function arrayMax(arr) {
                                 dataLabel.shortened = true;
                             }
                             dataLabel.attr(dataLabel._attr);
-                            dataLabel[dataLabel.moved ? 'animate' : 'attr'](_pos);
+                            dataLabel.animate(_pos);
                             dataLabel.moved = true;
                         }
                         else if (dataLabel) {
@@ -40193,7 +40047,7 @@ function arrayMax(arr) {
                             isLabelAffected = true;
                             // Animate or set the opacity
                             label.alignAttr.opacity = newOpacity;
-                            label[label.isOld ? 'animate' : 'attr'](label.alignAttr, null, complete);
+                            label.attr(label.alignAttr, null, complete);
                             fireEvent(chart, 'afterHideOverlappingLabel');
                         }
                         else { // other labels, tick labels
@@ -41007,7 +40861,7 @@ function arrayMax(arr) {
                                 // Move the existing graphic
                             }
                             else {
-                                stateMarkerGraphic[move ? 'animate' : 'attr']({
+                                stateMarkerGraphic.attr({
                                     x: markerAttribs.x,
                                     y: markerAttribs.y
                                 });
@@ -41036,7 +40890,7 @@ function arrayMax(arr) {
                             // #5818, #5903, #6705
                             .add(markerGraphic.parentGroup);
                     }
-                    halo.show()[move ? 'animate' : 'attr']({
+                    halo.show().attr({
                         d: point.haloPath(haloOptions.size)
                     });
                     halo.attr({
