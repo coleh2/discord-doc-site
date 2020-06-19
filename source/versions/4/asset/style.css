@@ -148,15 +148,9 @@
         display: none;
     }
 
-    pre.railroad-diagram {
-        background: none;
-        padding: none;
-        color: inherit;
-    }
-
-    pre.railroad-diagram h5 {
+    figcaption {
         font-size: 0.95em;
-        margin: 0;
+        font-weight: bold;
     }
 
     pre.download-file-instead-of-display {
