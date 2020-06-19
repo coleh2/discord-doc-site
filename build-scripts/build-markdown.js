@@ -253,7 +253,7 @@ function parseDiagrams(html, data) {
         let innerText = data.domUtils.getText(dom);
         let parsableText = parseCharacterEntities(innerText);
 
-        return html.replace(innerText,parseRailroad(parsableText));
+        return parseRailroad(parsableText);
     }
 }
 
