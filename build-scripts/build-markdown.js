@@ -1,15 +1,28 @@
 let markedIt = require("marked-it-core");
 
-let parseRailroad = require("./parse-railroad-diagram.js");
+var fs = require("fs");
+var path = require("path");
+
+let parseRailroad = require(path.resolve(__dirname, "parse-railroad-diagram.js"));
+let parseExpression = require(path.resolve(__dirname, "parse-js-expression.js"));
+let Highcharts = require(path.resolve(__dirname, "highcharts-server-version.js"))();
+
+//initialize additional charts
+let additionalChartDir = path.resolve(__dirname, "highcharts-more-chart-types");
+let additionalCharts = fs.readdirSync(additionalChartDir);
+
+for(let i = 0; i < additionalCharts.length; i++) {
+    let chartModule = require(path.resolve(additionalChartDir, additionalCharts[i]));
+
+    chartModule(Highcharts);
+}
+
 
 const debugLevel = 3;
 
 let erbParser = require("erb");
 
 let projectFolder = process.env.NHS_RULES_DIR || path.resolve(__dirname,"..");
-
-var fs = require("fs");
-var path = require("path");
 
 let mdSourceFolder = path.resolve(projectFolder, "source");
 let mdBuildFolder = path.resolve(projectFolder, "build");
@@ -246,14 +259,35 @@ function cleanMarkdownFilesFromFolder(folder) {
 function parseDiagrams(html, data) {
     let dom = data.htmlToDom(html)[0];
     
-    
-    
-    //if the railroad-diagram class is in the code elem
-    if(dom.attribs.class && /( |^)railroad-diagram( |$)/.test(dom.attribs.class)) {
-        let innerText = data.domUtils.getText(dom);
-        let parsableText = parseCharacterEntities(innerText);
+    //if it has a foo-diagram class, it's a diagram
+    if(dom.attribs.class && /( |^)\w+-diagram( |$)/.test(dom.attribs.class)) {
+        let diagramType = /( |^)(\w+)-diagram( |$)/.exec(dom.attribs.class)[2];
 
-        return parseRailroad(parsableText);
+        let innerText = data.domUtils.getText(dom),
+            parsableText = parseCharacterEntities(innerText);
+        switch(diagramType) {
+            case "railroad":
+                return parseRailroad(parsableText);
+            break;
+            case "highchart":
+                let chartParams = parseExpression(parsableText);
+
+                //fill in properties that are required for the server-side variety
+                if(!chartParams.chart) chartParams.chart = {};
+                if(!chartParams.chart.width || !chartParams.chart.height) {
+                    chartParams.chart.height = 600;
+                    chartParams.chart.width = 800;
+                }
+
+                //default to no-credits
+                if(!chartParams.credits) chartParams.credits = {};
+                if(!chartParams.credits.enabled) chartParams.credits.enabled = false;
+
+                let chart = Highcharts.chart(chartParams);
+
+                return `<figure>${chart.container.__buildInnerHTML(false)}</figure>`;
+            break;
+        }
     }
 }
 
@@ -262,5 +296,6 @@ function parseCharacterEntities(str) {
               .replace(/&quot;/g,"\"")
               .replace(/&apos;/g,"'")
               .replace(/&lt;/g,"<")
-              .replace(/&gt;/g,">");
+              .replace(/&gt;/g,">")
+              .replace(/&#39;/g,"'");
 }
