@@ -22,7 +22,7 @@ module.exports = function(ebnf) {
 
         let railroadSvg = generator.Diagram(...ruleToSequence(parseRhs(rightHandSide))).toString();
 
-        html += `<h5 id=${idAnize(leftHandSide)}>${leftHandSide}:</h5>${railroadSvg}`;
+        html += `<figure id="fig-${idAnize(leftHandSide)}"><figcaption>${leftHandSide}:</figcaption>${railroadSvg}</figure>`;
 
         
     }
