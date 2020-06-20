@@ -23780,7 +23780,7 @@
                 legend.setText(item);
                 // calculate the positions for the next line
                 bBox = li.getBBox();
-                console.log("legend",item,bBox);
+
                 item.itemWidth = item.checkboxOffset =
                     options.itemWidth ||
                     item.legendItemWidth ||
@@ -25490,9 +25490,7 @@
              */
             Chart.prototype.getMargins = function (skipAxes) {
                 var chart = this, spacing = chart.spacing, margin = chart.margin, titleOffset = chart.titleOffset;
-                console.log("getMargins before reset", spacing, margin, titleOffset);
                 this.resetMargins();
-                console.log("getMargins after reset", spacing, margin, titleOffset);
 
                 // Adjust for title and subtitle
                 if (titleOffset[0] && !defined(margin[0])) {
@@ -25509,8 +25507,6 @@
                 if (!skipAxes) {
                     this.getAxisMargins();
                 }
-
-                console.log("marginBottom", this.marginBottom);
             };
             /**
              * @private
@@ -25758,7 +25754,7 @@
                     width: plotWidth,
                     height: plotHeight
                 };
-                console.log("plotBox", chart.plotBox);
+                
                 plotBorderWidth = 2 * Math.floor(chart.plotBorderWidth / 2);
                 clipX = Math.ceil(Math.max(plotBorderWidth, clipOffset[3]) / 2);
                 clipY = Math.ceil(Math.max(plotBorderWidth, clipOffset[0]) / 2);
