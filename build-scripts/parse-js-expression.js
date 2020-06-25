@@ -1,5 +1,7 @@
 if (typeof module === 'object') module.exports = parseExpression;
 
+const safeEval = require("safe-eval");
+
 function parseExpression(str) {
     str = str.trim();
     if (!str) return null;
@@ -40,34 +42,7 @@ function parseExpression(str) {
     }
     //Function
     else if (str.startsWith("function")) {
-        let functionExpression = str.substring("function".length).trim();
-
-        let functionName = /^(\w+)/.exec(functionExpression);
-        if (functionName) {
-            functionName = functionName[1];
-
-            functionExpression = functionExpression.substring(functionName.length).trim();
-        }
-
-        let arguments = /\(([^)]*)\)/.exec(functionExpression)[1];
-
-        let argList = arguments.split(",");
-
-        for (var i = 0; i < argList.length; i++) argList[i] = argList[i].trim();
-
-        let body = functionExpression.substring(arguments.length + 2).trim();
-        body = body.substring(1, body.length - 1);
-
-        result = {
-            __type: "function",
-            displayName: functionName,
-            arguments: argList,
-            body: body
-        };
-
-        let safety = safetyCheckFunction(result);
-
-        if (!safety.safe) throw "Safety check on function failed. " + safety.reason;
+        result = safeEval(str);
     }
     //Number
     else if (!isNaN(str)) {
@@ -132,14 +107,6 @@ function indexOfAfter(str, substr, index) {
 
 function indexReplace(str, replaceStart, replaceEnd, replaceText) {
     return str.substring(0, replaceStart) + replaceText + str.substring(replaceEnd + 1);
-}
-
-//TODO: write a proper safety checker (variable usage list, safe variables, etc.)
-function safetyCheckFunction(funcObj) {
-    return {
-        safe: false,
-        reason: "At the moment, functions are not allowed due to vulnerabilities when running them."
-    };
 }
 
 function unQuote(str) {
