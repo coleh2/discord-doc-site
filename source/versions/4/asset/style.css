@@ -287,6 +287,12 @@
         font-weight: bold;
     }
 
+    svg.icon {
+        margin-right: 0.2em;
+        margin-left: 0.2em;
+        height: 1em;
+    }
+
     @media only screen and (min-width: 600px) {
         .syntax-checker-widget .drag-handle {
             position: absolute;
