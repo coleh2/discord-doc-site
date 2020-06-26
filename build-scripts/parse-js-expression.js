@@ -42,7 +42,9 @@ function parseExpression(str) {
     }
     //Function
     else if (str.startsWith("function")) {
-        result = safeEval(str);
+        result = function() {
+            return safeEval(str)(...arguments);
+        }
     }
     //Number
     else if (!isNaN(str)) {
