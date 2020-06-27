@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+    <title>NHS Documentation</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <script src="/versions/4/asset/syntax-check-widget.js" defer></script>
+    <script src="/versions/4/asset/download-file-widget.js" defer></script>
+    <script src="/versions/4/asset/heading-select.js" defer></script>
+    <script src="/versions/4/asset/sticky-footer.js" defer></script>
+
+    <link rel="stylesheet" href="https://brick.freetls.fastly.net/Montserrat:300,400,600/Fira+Code:300,400">
+
+    <link rel="stylesheet" href="/versions/4/asset/railroad-diagrams.css">
+
+    <link rel="stylesheet" href="/versions/4/asset/style.css">
+    <style>
+        #hero {
+            height: 80vh;
+            display: flex;
+            align-items: center;
+            padding: 2em;
+            justify-content: center;
+            position: relative;
+            box-sizing: border-box;
+            background: linear-gradient(180deg, hsla(191, 75%, 44%, 1) 0%, hsla(248, 87%, 57%, 1) 100%);
+            background: -moz-linear-gradient(180deg, hsla(191, 75%, 44%, 1) 0%, hsla(248, 87%, 57%, 1) 100%);
+            background: -webkit-linear-gradient(180deg, hsla(191, 75%, 44%, 1) 0%, hsla(248, 87%, 57%, 1) 100%);
+            flex-wrap: wrap;
+        }
+
+        #hero h2 {
+            margin: 0;
+        }
+
+        #hero-cta {
+            padding: 2em;
+            border-radius: 1em;
+            background: #eee;
+            z-index: 1;
+            box-shadow: 0px 0px 1.5em 0px #43447ac0;
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+            align-items: center;
+        }
+
+        #hero-cta button {
+            color: #eee;
+            background: linear-gradient(180deg, hsla(191, 75%, 44%, 1) 0%, hsla(248, 87%, 57%, 1) 100%);
+            background: -moz-linear-gradient(180deg, hsla(191, 75%, 44%, 1) 0%, hsla(248, 87%, 57%, 1) 100%);
+            background: -webkit-linear-gradient(180deg, hsla(191, 75%, 44%, 1) 0%, hsla(248, 87%, 57%, 1) 100%);
+            padding: 1em;
+            font-size: 0.95em;
+            border-radius: 1.5em;
+            font-family: inherit;
+            border: none;
+            cursor: pointer;
+        }
+
+        #hero-carousel {
+            width: 100%;
+            background: linear-gradient(180deg, hsla(191, 75%, 44%, 1) 0%, hsla(248, 87%, 57%, 1) 100%);
+            background: -moz-linear-gradient(180deg, hsla(191, 75%, 44%, 1) 0%, hsla(248, 87%, 57%, 1) 100%);
+            background: -webkit-linear-gradient(180deg, hsla(191, 75%, 44%, 1) 0%, hsla(248, 87%, 57%, 1) 100%);
+            margin: 0;
+            padding: 1em;
+            list-style-type: none;
+            box-sizing: border-box;
+            overflow: hidden;
+            display: flex;
+            justify-content: space-evenly;
+            flex-wrap: wrap;
+        }
+
+        #hero-carousel li {
+            margin: 1em;
+            flex-basis: 1px;
+            flex-grow: 1;
+            border-radius: 4px;
+            background: #eee;
+            transition: transform 0.2s;
+        }
+
+        #hero-carousel li:hover {
+            transform: scale(1.025) skew(-1.25deg);
+        }
+
+        #hero-carousel li > a {
+            padding: 1em;
+            display: inline-block;
+            font: inherit;
+            color: inherit;
+            text-decoration: inherit;
+        }
+
+        #hero-carousel li h3 {
+            display: flex;
+            align-items: center;
+        }
+
+        @keyframes float {
+            0% {
+                transform: skew(1deg, 1deg);
+            }
+
+            100% {
+                transform: skew(-1deg, -1deg);
+            }
+        }
+
+        @keyframes background-float {
+            from {
+                background-position: 0vw 0vw;
+            }
+
+            to {
+                background-position: -20vw 140vw;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1 class="logo"><img
+                src="https://cdn.discordapp.com/icons/392830469500043266/57cb0e70e22923da0df1c2ce6c8cfbc1.png"
+                alt="logo" id="logoimg"><a href="/" id="logo-header">NHS Documentation</a></h1>
+                <form id="search" action="/search" method="GET">
+                    <label>
+                        <input type="search" name="q" placeholder="Search">
+                        <button type="submit">
+                            <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#eee" d="M23.822 20.88l-6.353-6.354c.93-1.465 1.467-3.2 1.467-5.059.001-5.219-4.247-9.467-9.468-9.467s-9.468 4.248-9.468 9.468c0 5.221 4.247 9.469 9.468 9.469 1.768 0 3.421-.487 4.839-1.333l6.396 6.396 3.119-3.12zm-20.294-11.412c0-3.273 2.665-5.938 5.939-5.938 3.275 0 5.94 2.664 5.94 5.938 0 3.275-2.665 5.939-5.94 5.939-3.274 0-5.939-2.664-5.939-5.939z"/></svg>
+                        </button>
+                    </label>
+                </form>
+    </header>
+    <div id="hero">
+        <div id="hero-cta">
+            <h2>Learn what you can do</h2>
+            <p>Reference rules, bot features, and other documentation.</p>
+            <a href="/versions">
+                <button>
+                    Read some Stuff
+                </button>
+            </a>
+        </div>
+
+    </div>
+    <ul id="hero-carousel">
+        <li><a href="/versions">
+                <h3> <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                        <path
+                            d="M19 11h-14v-2h14v2zm0 2h-14v2h14v-2zm0 4h-14v2h14v-2zm3-11v16h-20v-16h20zm2-6h-24v24h24v-24z" />
+                    </svg>
+                    View Archived Versions</h3>
+                <p>View publicly preserved copies of all major changes.</p>
+            </a>
+        </li>
+
+        <li><a href="https://github.com/coleh2/discord-doc-site">
+                <h3> <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                        <path
+                            d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm2.218 18.616c-.354.069-.468-.149-.468-.336v-1.921c0-.653-.229-1.079-.481-1.296 1.56-.173 3.198-.765 3.198-3.454 0-.765-.273-1.389-.721-1.879.072-.177.312-.889-.069-1.853 0 0-.587-.188-1.923.717-.561-.154-1.159-.231-1.754-.234-.595.003-1.193.08-1.753.235-1.337-.905-1.925-.717-1.925-.717-.379.964-.14 1.676-.067 1.852-.448.49-.722 1.114-.722 1.879 0 2.682 1.634 3.282 3.189 3.459-.2.175-.381.483-.444.936-.4.179-1.413.488-2.037-.582 0 0-.37-.672-1.073-.722 0 0-.683-.009-.048.426 0 0 .46.215.777 1.024 0 0 .405 1.25 2.353.826v1.303c0 .185-.113.402-.462.337-2.782-.925-4.788-3.549-4.788-6.641 0-3.867 3.135-7 7-7s7 3.133 7 7c0 3.091-2.003 5.715-4.782 6.641z" />
+                        </svg>
+                    See Code on GitHub</h3>
+                <p>To see the source code and contribute documentation/feedback, visit
+                    this project's GitHub page.</p>
+            </a></li>
+    </ul>
+    <footer>
+        <img class="footer-splash" src="/versions/4/asset/footer-splash.svg">
+        <div id="footer-body">
+            <div style="margin-right:1em;">
+                <h2>Doc Versioning</h2>
+                <ul>
+                    <li><a href="/versions">Version List</a></li>
+                    <li><a href="https://github.com/coleh2/discord-doc-site/network">Change Chart</a></li>
+                    <li><a href="/about-semver">Version Number Style</a></li>
+                    <li><a href="/about-site">About</a></li>
+                </ul>
+            </div>
+            <div>
+                <h2>Plumbing</h2>
+                <ul>
+                    <li><a href="https://github.com/coleh2/discord-doc-site" target="_blank">View Source on GitHub</a>
+                    </li>
+                    <li>Join Discord</li>
+                    <li><a href="https://github.com/coleh2/discord-doc-site/issues" target="_blank">Report Issues</a>
+                    </li>
+                    <li><a href="https://github.com/coleh2/discord-doc-site/blob/master/contributing.md"
+                            target="_blank">Contribute Documentation</a></li>
+                </ul>
+            </div>
+        </div>
+        <img class="footer-splash" src="/versions/4/asset/footer-splash.svg">
+    </footer>
+</body>
+
+</html>
