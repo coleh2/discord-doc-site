@@ -7,6 +7,7 @@
     "express": "^4.17.1",
     "marked-it-core": "^0.14.1",
     "parse5": "^6.0.0",
+    "safe-eval": "^0.4.1",
     "xmlserializer": "^0.6.1"
   },
   "devDependencies": {},

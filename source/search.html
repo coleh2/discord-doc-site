@@ -5,15 +5,16 @@
 
     <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
 
-    <title><%= @title %></title>
+    <title>NHS Documentation</title>
 
-    <meta name="generator" content="kramdown <%= @generator %>" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <script src="/versions/4/asset/syntax-check-widget.js" defer></script>
     <script src="/versions/4/asset/download-file-widget.js" defer></script>
     <script src="/versions/4/asset/heading-select.js" defer></script>
     <script src="/versions/4/asset/sticky-footer.js" defer></script>
+    <script src="/versions/4/asset/lunr.js" defer></script>
+    <script src="/versions/4/asset/search.js" defer></script>
 
     <link rel="stylesheet" href="https://brick.freetls.fastly.net/Montserrat:300,400,600/Fira+Code:300,400">
 
@@ -21,10 +22,12 @@
 
     <link rel="stylesheet" href="/versions/4/asset/style.css">
 </head>
+
 <body>
     <header>
-        <h1 class="logo"><img src="<%= @logoImage %>" alt="logo" id="logoimg"><a href="/"
-                id="logo-header">NHS Documentation</a></h1>
+        <h1 class="logo"><img
+                src="https://cdn.discordapp.com/icons/392830469500043266/57cb0e70e22923da0df1c2ce6c8cfbc1.png"
+                alt="logo" id="logoimg"><a href="/" id="logo-header">NHS Documentation</a></h1>
                 <form id="search" action="/search" method="GET">
                     <label>
                         <input type="search" name="q" placeholder="Search">
@@ -33,11 +36,12 @@
                         </button>
                     </label>
                 </form>
-
     </header>
     <main>
-        <%= @breadcrumbs %>
-        <%= @body %>
+        <h2 id="serp-query"></h2>
+        <ul id="serp-list">
+
+        </ul>
     </main>
     <footer>
         <img class="footer-splash" src="/versions/4/asset/footer-splash.svg">

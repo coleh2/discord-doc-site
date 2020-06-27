@@ -1,5 +1,0 @@
-# Site Home
-
-* Index
-{:index}
-
