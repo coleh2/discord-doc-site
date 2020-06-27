@@ -184,6 +184,38 @@
     header {
         background: #022B3A;
         padding: 1em;
+        display: flex;
+        align-items: center;
+    }
+
+    header form#search {
+        margin-left: auto;
+    }
+
+    header form#search label {
+        display: flex;
+        align-items: center;
+        position: relative;
+    }
+
+    header form#search input {
+        background: #EBF9FE;
+        padding: 0.5em;
+        border-radius: 5px;
+        border: none;
+        display: none;
+    }
+
+    header form#search button {
+        background: none;
+        border: none;
+        margin: 0;
+        font-size: inherit;
+        padding: 0;
+        cursor: pointer;
+        display: inline-block;
+        height: min-content;
+        width: min-content;
     }
 
     a#logo-header {
@@ -308,6 +340,10 @@
         
         footer {
             padding: 0.5em 12vw 0.5em 12vw;
+        }
+
+        header form#search input {
+            display: initial;
         }
 
         .footer-splash {
