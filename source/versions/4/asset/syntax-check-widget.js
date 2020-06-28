@@ -31,6 +31,7 @@ window.addEventListener("load", function() {
         let explaination = this.document.createElement("output");
 
         let textbox = document.createElement("textarea");
+        textbox.setAttribute("aria-label","syntax-check-textarea");
         textbox.placeholder = "Enter a backreference";
         textbox.addEventListener("input", function() {
             let backrefData = findBackreferences(textbox.value);
