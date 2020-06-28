@@ -54,7 +54,8 @@
         font: inherit;
     }
 
-    main p {
+    main p,
+    main li {
         line-height: 1.6;
     }
     table {
