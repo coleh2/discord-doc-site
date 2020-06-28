@@ -1,6 +1,6 @@
 # `#counting` Guidelines
 
-This is a description of how to count with friends (specifically in the #counting channel). Please adhere to these guidelines in order to preserve the integrity of the never-ending quest!
+This is a description of how to count with friends (specifically in the #counting channel). Please adhere to these guidelines in order to keep the channel orderly!
 
 ## Guidelines
 
