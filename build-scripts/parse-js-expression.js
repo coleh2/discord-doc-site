@@ -37,9 +37,7 @@ function parseExpression(str) {
     }
     //Array
     else if (str.startsWith("[") && str.endsWith("]")) {
-        console.log("array! ", str);
         let arrBody = str.substring(1, str.length - 1);
-        console.log("body! ", arrBody);
         let vals = parserTools.groupAwareSplit(arrBody, ",");
 
         result = [];

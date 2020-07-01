@@ -276,7 +276,6 @@ function parseHTML(str) {
 
     let elemHtmls = parserTools.groupAwareSplit(str, ">", { doGroups: true, doQuotes: true, groupEnter: ["<"], groupExit: ["</"] });
 
-    console.log("elH", elemHtmls);
     let elements = [];
     for (var i = 0; i < elemHtmls.length; i++) {
 
@@ -288,7 +287,6 @@ function parseHTML(str) {
             elemHtmls[i] = elemHtmls[i].substring(actualStart);
 
             elemHtmls.splice(i, 0, firstTextNodeText);
-            console.log("updated elH", elemHtmls, elemHtmls.length)
         }
 
         if (elemHtmls[i].indexOf("<") == -1) {
@@ -297,10 +295,8 @@ function parseHTML(str) {
 
             elements.push(module.exports.createTextNode(parseCharacterEntities(cleanedText)));
         } else {
-            console.log(elemHtmls[i]);
             let openTagEndIndex = elemHtmls[i].indexOf(">");
             let openTag = elemHtmls[i].substring(0, openTagEndIndex);
-            console.log(openTag);
             if (openTag == "") continue;
 
             let tagName = /<(\w+)/.exec(openTag)[1];
@@ -310,7 +306,6 @@ function parseHTML(str) {
 
             let attrs = parserTools.groupAwareSplit(attrList, " ", { doGroups: false, doQuotes: true });
 
-            console.log(attrList, attrs);
             for (var j = 0; j < attrs.length; j++) {
                 let attr = attrs[j].trim();
 
