@@ -1,7 +1,5 @@
-let generator = require("./railroad-svg-generator.js");
-let parse5 = require("parse5");
-let parse5DomAdapter = require("parse5/lib/tree-adapters/default");
-let xmlserializer = require('xmlserializer');
+let generator = require(__dirname + "/railroad-svg-generator.js");
+let parserTools = require(__dirname + "/parser-tools.js");
 
 var fs = require('fs');
 
@@ -33,61 +31,15 @@ module.exports = function(ebnf) {
 function splitLinesAccountingForQuotes(string) {
     let lines = [];
 
-    let lineBreakIndex = findUngroupedCharRegex(string, /[;\n]/);
+    let lineBreakIndex = parserTools.findUngroupedCharRegex(string, /[;\n]/);
     while(lineBreakIndex != -1) {
         lines.push(string.substring(0,lineBreakIndex));
         string = string.substring(lineBreakIndex+1);
-        lineBreakIndex = findUngroupedCharRegex(string, /[;\n]/);
+        lineBreakIndex = parserTools.findUngroupedCharRegex(string, /[;\n]/);
     }
 
     return lines;
 }
-
-function removeAllChildren(node) {
-    while(node.childNodes[0]) {
-        node.childNodes.splice(0,1);
-    }
-}
-
-function findRailroadDiagrams(document, accumulator) {
-    if(accumulator === undefined) accumulator = [];
-    document.childNodes&&document.childNodes.forEach(node => {
-        if(node.tagName == "pre" &&
-           (node.attrs.find(x=>x.name == "class") || {value:""}).value.match(/( |^)railroad-diagram( |$)/)
-           ) {
-               accumulator.push(node);
-           }
-           accumulator.push(...findRailroadDiagrams(node));
-    });
-    return accumulator;
-}
-
-function findByClass(document, cssClass) {
-    if(document.childNodes) {
-        for(var i = 0; i < document.childNodes.length; i++) {
-            if(!document.childNodes[i].attrs) continue;
-            if((document.childNodes[i].attrs.find(x=>x.name == "class") || {value:""}).value.includes(cssClass)) {
-                return document.childNodes[i]
-            }
-
-            let scanChildren = findByClass(document.childNodes[i], cssClass);
-
-            if(scanChildren) return scanChildren;
-        }
-    }
-}
-
-function getTextContent(node, content) {
-    if(content === undefined) content = "";
-    node.childNodes&&node.childNodes.forEach(childNode => {
-        if(childNode.nodeName == "#text") {
-            content += childNode.value;
-        } else {
-            content += getTextContent(childNode);
-        }
-    });
-    return content;
-    }
 
 function idAnize(str) {
     return str.replace(/\W/g,"-").toLowerCase();
@@ -142,8 +94,8 @@ function ruleToSequence(rule) {
 }
 
 function parseRhs(rightHandSide) {
-    if (hasUngroupedChar(rightHandSide,",")) {
-        let indexOfFirstComma = findUngroupedChar(rightHandSide, ",");
+    if (parserTools.hasUngroupedChar(rightHandSide,",")) {
+        let indexOfFirstComma = parserTools.findUngroupedSubstring(rightHandSide, ",");
 
         return {
             type: "concatenation",
@@ -152,8 +104,8 @@ function parseRhs(rightHandSide) {
                 parseRhs(rightHandSide.substring(indexOfFirstComma + 1).trim())
             ]
         };
-    } else if (hasUngroupedChar(rightHandSide,"|")) {
-        let indexOfFirstPipe = findUngroupedChar(rightHandSide, "|");
+    } else if (parserTools.hasUngroupedChar(rightHandSide,"|")) {
+        let indexOfFirstPipe = parserTools.findUngroupedSubstring(rightHandSide, "|");
 
         return {
             type: "alternation",
@@ -212,61 +164,4 @@ function parseRhs(rightHandSide) {
             content: rightHandSide
         };
     }
-}
-
-function findUngroupedCharRegex(str, regex) {
-    let inGroup = 0;
-    let inSingleQuote = false;
-    let inDoubleQuote = false;
-
-    for(var i = 0; i < str.length; i++) {
-        if(str[i] == "\"" && str[i-1] != "\\" && !inSingleQuote) inDoubleQuote = !inDoubleQuote;
-        if(str[i] == "'" && str[i-1] != "\\" && !inDoubleQuote) inSingleQuote = !inSingleQuote;
-
-        let inQuote = inSingleQuote || inDoubleQuote;
-
-        if((str[i] == "{" || str[i] == "[" || str[i] == "(") && !inQuote) inGroup++;
-        else if ((str[i] == "}" || str[i] == "]" || str[i] == ")") && !inQuote) inGroup--;
-
-        if(str[i].match(regex) && inGroup == 0 && inQuote == false) return i;
-    }
-    return -1;
-}
-
-function findUngroupedChar(str, char) {
-    let inGroup = 0;
-    let inSingleQuote = false;
-    let inDoubleQuote = false;
-
-    for(var i = 0; i < str.length; i++) {
-        if(str[i] == "\"" && str[i-1] != "\\" && !inSingleQuote) inDoubleQuote = !inDoubleQuote;
-        if(str[i] == "'" && str[i-1] != "\\" && !inDoubleQuote) inSingleQuote = !inSingleQuote;
-
-        let inQuote = inSingleQuote || inDoubleQuote;
-
-        if((str[i] == "{" || str[i] == "[" || str[i] == "(") && !inQuote) inGroup++;
-        else if ((str[i] == "}" || str[i] == "]" || str[i] == ")") && !inQuote) inGroup--;
-
-        if(str[i] == char && inGroup == 0 && inQuote == false) return i;
-    }
-    return -1;
-}
-
-function hasUngroupedChar(str, char) {
-    let inGroup = 0;
-    let inSingleQuote = false;
-    let inDoubleQuote = false;
-
-    for(var i = 0; i < str.length; i++) {
-        if(str[i] == "\"" && str[i-1] != "\\" && !inSingleQuote) inDoubleQuote = !inDoubleQuote;
-        if(str[i] == "'" && str[i-1] != "\\" && !inDoubleQuote) inSingleQuote = !inSingleQuote;
-
-        let inQuote = inSingleQuote || inDoubleQuote;
-
-        if((str[i] == "{" || str[i] == "[" || str[i] == "(") && !inQuote) inGroup++;
-        else if ((str[i] == "}" || str[i] == "]" || str[i] == ")") && !inQuote) inGroup--;
-
-        if(str[i] == char && inGroup == 0 && !inQuote) return true;
-    }
-    return false;
 }

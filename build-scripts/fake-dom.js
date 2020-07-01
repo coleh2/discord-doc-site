@@ -1,139 +1,231 @@
+var parserTools = require(__dirname + "/parser-tools.js");
+
 module.exports = {
     createTextNode(content) {
-        var el = createElement("#text");
-        el.value = content;
-        return el;
+        return new Node("#text", content);
     },
     createElement: function (tag) {
-        return {
-            appendChild: function (child) {
-                this.childNodes.push(child);
-                child.parentNode = this;
+        return new Node(tag);
+    },
 
-                return child;
-            },
-            insertBefore: function (newChild, reference) {
-                let index = this.childNodes.indexOf(reference);
-                if(index == -1) index = this.childNodes.length;
+    parseHTML: parseHTML
+};
 
-                this.childNodes.splice(index, 0, newChild);
-                newChild.parentNode = this;
+function Node(tag, value) {
+    let self = this;
 
-                return newChild;
-            },
-            removeChild: function (child) {
-                this.childNodes.splice(this.childNodes.indexOf(child), 1);
-                child.parentNode = null;
+    this.nodeName = tag;
+    if (tag == "#text") this.value = value;
 
-                return child;
-            },
-            get offsetWidth() {
-                return 10 * Math.max(arrayMax(this.textContent.split("\n")).length,
-                                     (this.attributes.text || "").length);
-            },
-            get offsetHeight() {
-                return this.textContent.split("\n").length*20;
-            },
-            get offsetTop() {
-                return this.attributes.y || this.attributes.top || 0
-            },
-            get offsetLeft() {
-                return this.attributes.x || this.attributes.left || 0;
-            },
-            _innerHTML: "",
-            nodeName: tag,
-            getBoundingClientRect: function () {
-                return {
-                    top: 0,
-                    left: 0,
-                    width: this.offsetWidth,
-                    height: this.offsetHeight,
-                    x: 0,
-                    y: 0
-                };
-            },
-            cloneNode: function() {
-                let copy = H.merge({}, this);
-                copy.parentNode = null;
-                return copy;
-            },
-            setAttribute: function (attr, val) {
-                if (val.toString() == "NaN") throw problem;
-                this.attributes[attr] = val;
-            },
-            setAttributeNS: function(ns, attr, val) {
-                this.setAttribute(attr, val);
-            },
-            get textContent() {
-                if (this.nodeName == "#text") return this.value;
+    this.parentNode = null;
+    this.childNodes = [];
+    this.attributes = {
+        get style() {
+            return self.style.__buildAsAttribute();
+        },
+        set style(val) {
+            self.style.clear();
 
-                return this.childNodes.map(node => {
-                    return node.textContent;
-                }).join("");
-            },
-            set textContent(val) {
-                this.childNodes = [
-                    createTextNode(val)
-                ];
-            },
-            get innerHTML() {
-                return this.__buildInnerHTML(true);
-            },
-            set innerHTML(val) {
-                this.childNodes = [];
-            },
-            __buildInnerHTML: function(includeStyles) {
-                if (this.nodeName == "#text") return encodeCharacterEntities(this.value || "");
-                let attrs = Object.keys(this.attributes).map(attribute => {
-                    return `${attribute}="${this.attributes[attribute]}"`
-                });
-                
-                if(includeStyles) {
-                    let styles = Object.keys(this.style).map(style => {
-                        if(["setProperty","getComputed","getPropertyValue"].includes(style)) return "";
-                        return `${camelToKebab(style)}: ${encodeCharacterEntities(this.style[style].toString())};`;
-                    });
+            let styles = val.split(";");
 
-                    attrs.push(`style="${styles.join("")}"`);
-                }
+            //parse and apply each style
+            for (var i = 0; i < styles.length; i++) {
+                let trimmed = styles[i].trim();
+                if (!trimmed) continue;
 
-                return "<"+this.nodeName +" "+attrs.join(" ") + ">" + 
-                        this.childNodes.map(node => node.__buildInnerHTML(includeStyles)).join("") + 
-                        "</" + this.nodeName + ">";
-            },
-            getElementsByTagName: function (tagName) {
-                let children = this.childNodes.filter(node => {
-                    return node.nodeName == tagName;
-                });
+                let styleName = trimmed.split(":")[0];
+                let styleVal = trimed.substring(styleName.length, trimmed.length - 1);
 
-                this.childNodes.forEach(node => {
-                    children = children.concat(node.getElementsByTagName(tagName));
-                });
-
-                return children;
-            },
-            getAttribute: function (attr) {
-                return this.attributes[attr];
-            },
-            removeAttribute: function (attr) {
-                delete this.attributes[attr];
-            },
-            attributes: {},
-            childNodes: [],
-            parentNode: null,
-            style: {
-                setProperty: function (prop, val, attr) {
-                    this[prop] = val + (attr && " !" + attr);
-                },
-                getComputed: function () {
-                    return this;
-                },
-                getPropertyValue: function (prop) {
-                    return this[prop];
-                }
+                self.style.setProperty(styleName, styleVal);
             }
-        };
+        }
+    };
+
+    this.style = {
+        setProperty: function (prop, val, attr) {
+            this[prop] = val + (attr && " !" + attr);
+        },
+        getComputed: function () {
+            return this;
+        },
+        getPropertyValue: function (prop) {
+            return this[prop];
+        },
+        __buildAsAttribute: function () {
+            let styles = Object.keys(this).map(style => {
+                if (typeof this[style] == "function") return "";
+                return `${camelToKebab(style)}: ${encodeCharacterEntities(this[style].toString())};`;
+            });
+
+            return styles.join("");
+        },
+        clear: function () {
+            let keys = Object.keys(this);
+            for (var i = 0; i < keys.length; i++) {
+                if (typeof this[keys[i]] == "string") delete this[keys[i]];
+            }
+        }
+    };
+
+    return this;
+}
+
+Node.prototype.childNodes = [];
+Node.prototype.parentNode = undefined;
+Node.prototype.nodeName = undefined;
+Node.prototype.value = undefined;
+
+Node.prototype.hideCircular = function () {
+    return {
+        childNodes: this.childNodes.map(x => x.hideCircular()),
+        nodeName: this.nodeName,
+        attributes: this.attributes
     }
+}
+Node.prototype.appendChild = function (child) {
+    this.childNodes.push(child);
+    child.parentNode = this;
+
+    return child;
+};
+Node.prototype.insertBefore = function (newChild, reference) {
+    let index = this.childNodes.indexOf(reference);
+    if (index == -1) index = this.childNodes.length;
+
+    this.childNodes.splice(index, 0, newChild);
+    newChild.parentNode = this;
+
+    return newChild;
+};
+Node.prototype.removeChild = function (child) {
+    this.childNodes.splice(this.childNodes.indexOf(child), 1);
+    child.parentNode = null;
+
+    return child;
+};
+
+Object.defineProperty(Node.prototype, "offsetWidth", {
+    get: function () {
+        return this.attributes.width ||
+            10 * Math.max(arrayMax(this.textContent.split("\n")).length,
+            (this.attributes.text || "").length);
+    }
+});
+
+Object.defineProperty(Node.prototype, "offsetHeight", {
+    get: function () {
+        return this.attributes.height || this.textContent.split("\n").length*20;
+    }
+});
+
+Object.defineProperty(Node.prototype, "offsetLeft", {
+    get: function () {
+        return this.attributes.x || this.attributes.left || 0;
+    }
+});
+
+Object.defineProperty(Node.prototype, "offsetTop", {
+    get: function () {
+        return this.attributes.y || this.attributes.top || 0;
+    }
+});
+
+Object.defineProperty(Node.prototype, "offsetParent", {
+    get: function () {
+        return this.parentNode;
+    }
+});
+
+Node.prototype.getBoundingClientRect = function () {
+    return {
+        top: this.offsetTop,
+        left: this.offsetLeft,
+        width: this.offsetWidth,
+        height: this.offsetHeight,
+        x: this.offsetLeft,
+        y: this.offsetTop
+    };
+};
+Node.prototype.cloneNode = function () {
+    let copy = H.merge({}, this);
+    copy.parentNode = null;
+    return copy;
+};
+Node.prototype.setAttribute = function (attr, val) {
+    if (val.toString() == "NaN") throw problem;
+    this.attributes[attr] = val;
+};
+Node.prototype.setAttributeNS = function (ns, attr, val) {
+    this.setAttribute(attr, val);
+};
+
+
+Object.defineProperty(Node.prototype, "textContent", {
+    get: function () {
+        if (this.nodeName == "#text") return this.value;
+
+        return this.childNodes.map(node => {
+            return node.textContent;
+        }).join("");
+    },
+    set: function (val) {
+        this.childNodes = [
+            createTextNode(val)
+        ];
+    }
+});
+Object.defineProperty(Node.prototype, "innerHTML", {
+    get: function () {
+        return this.__buildInnerHTML(true);
+    },
+    set: function (val) {
+        if(val === "") {
+            this.childNodes = [];
+        }
+        let parsed = parseHTML(val);
+        for (var i = 0; i < parsed.length; i++) {
+            this.appendChild(parsed[i]);
+        }
+    }
+});
+Node.prototype.__buildInnerHTML = function(includeStyles) {
+    return this.childNodes.map(node => node.__buildOuterHTML(includeStyles)).join("");
+};
+
+Node.prototype.__buildOuterHTML = function (includeStyles) {
+    if (this.nodeName == "#text") return encodeCharacterEntities(this.value || "");
+    let attrs = Object.keys(this.attributes).map(attribute => {
+        if (attribute == "style" && !includeStyles) return "";
+        //since getters are defined, it always has style; drop it if not needed
+        if (attribute == "style" && this.attributes.style == "") return "";
+
+
+        else return `${attribute}="${this.attributes[attribute]}"`
+    });
+
+    return "<" + this.nodeName + " " + attrs.join(" ") + ">" +
+        this.childNodes.map(node => node.__buildOuterHTML(includeStyles)).join("") +
+        "</" + this.nodeName + ">";
+};
+Node.prototype.getElementsByTagName = function (tagName) {
+    let children = this.childNodes.filter(node => {
+        return node.nodeName == tagName;
+    });
+
+    this.childNodes.forEach(node => {
+        children = children.concat(node.getElementsByTagName(tagName));
+    });
+
+    return children;
+};
+Node.prototype.getAttribute = function (attr) {
+    return this.attributes[attr];
+};
+Node.prototype.removeAttribute = function (attr) {
+    delete this.attributes[attr];
+};
+Node.prototype.isConnected = function () {
+    return this.parentNode == true;
 };
 
 function camelToKebab(str) {
@@ -152,11 +244,20 @@ function camelToKebab(str) {
 }
 
 function encodeCharacterEntities(str) {
-    return str.replace(/&/g,"&amp;")
-              .replace(/"/g,"&quot;")
-              .replace(/'/g,"&apos;")
-              .replace(/</g,"&lt;")
-              .replace(/>/g,"&gt;");
+    return str.replace(/&/g, "&amp;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&apos;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+}
+
+function parseCharacterEntities(str) {
+    return str.replace(/&amp;/g, "&")
+        .replace(/&quot;/g, "\"")
+        .replace(/&apos;/g, "'")
+        .replace(/&lt;/g, "<")
+        .replace(/&gt;/g, ">")
+        .replace(/&#39;/g, "'");
 }
 
 function arrayMax(arr) {
@@ -167,4 +268,87 @@ function arrayMax(arr) {
     };
 
     return max;
+}
+
+function parseHTML(str) {
+    //remove leading/trailing whitespace and comments
+    str = parserTools.stripComments(str.trim(), { start: "<!--", end: "-->" });
+
+    let elemHtmls = parserTools.groupAwareSplit(str, ">", { doGroups: true, doQuotes: true, groupEnter: ["<"], groupExit: ["</"] });
+
+    console.log("elH", elemHtmls);
+    let elements = [];
+    for (var i = 0; i < elemHtmls.length; i++) {
+
+        //handle parsing error when there's a text node that isn't split
+        if (elemHtmls[i].trim()[0] != "<" && elemHtmls[i].indexOf("<") > 0) {
+            let actualStart = elemHtmls[i].indexOf("<");
+
+            let firstTextNodeText = elemHtmls[i].substring(0, actualStart - 1);
+            elemHtmls[i] = elemHtmls[i].substring(actualStart);
+
+            elemHtmls.splice(i, 0, firstTextNodeText);
+            console.log("updated elH", elemHtmls, elemHtmls.length)
+        }
+
+        if (elemHtmls[i].indexOf("<") == -1) {
+            let cleanedText = elemHtmls[i].replace(/>/g, "").trim();
+            if (cleanedText == "") continue;
+
+            elements.push(module.exports.createTextNode(parseCharacterEntities(cleanedText)));
+        } else {
+            console.log(elemHtmls[i]);
+            let openTagEndIndex = elemHtmls[i].indexOf(">");
+            let openTag = elemHtmls[i].substring(0, openTagEndIndex);
+            console.log(openTag);
+            if (openTag == "") continue;
+
+            let tagName = /<(\w+)/.exec(openTag)[1];
+
+            let elem = module.exports.createElement(tagName);
+            let attrList = openTag.substring(tagName.length + 2);
+
+            let attrs = parserTools.groupAwareSplit(attrList, " ", { doGroups: false, doQuotes: true });
+
+            console.log(attrList, attrs);
+            for (var j = 0; j < attrs.length; j++) {
+                let attr = attrs[j].trim();
+
+                //for self-closing tags, if there isn't an optional space between the close and the last attr
+                if (attr.endsWith("/")) attr = attr.substring(0, attr.length - 1);
+
+                //attributes must start with an alphabetical char
+                if (!attr.match(/^\w/)) continue;
+
+                let attrName = /^(\w+)/.exec(attr)[1];
+                let attrValue = parserTools.unQuote(attr.substring(attrName.length + 1));
+
+                elem.setAttribute(attrName, attrValue);
+            }
+
+            //if there's a self-closing tag, close it by moving its "children" up one level
+            if (isSelfClosingTag(tagName)) {
+                elemHtmls = elemHtmls.concat(
+                    elemHtmls,
+                    parserTools.groupAwareSplit(elemHtmls[i].substring(openTagEndIndex), ">", { doGroups: true, doQuotes: true, groupEnter: ["<"], groupExit: ["</", "/>"] })
+                );
+                continue;
+            }
+
+            let closingTagIndex = elemHtmls[i].indexOf("</" + tagName);
+            if (closingTagIndex < 0) closingTagIndex = elemHtmls[i].length - 2;
+
+            elem.innerHTML = elemHtmls[i].substring(openTagEndIndex, closingTagIndex);
+
+            elements.push(elem);
+        }
+    }
+
+    return elements;
+}
+
+function isSelfClosingTag(tagName) {
+    return ["area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta",
+        "param", "source", "track", "wbr", "command", "keygen",
+        "menuitem"].includes(tagName.toLowerCase());
 }
