@@ -8,6 +8,7 @@ This is a description of how to count with friends (specifically in the #countin
 2. Only send a message when the last messenger is not you-- you can count up from others' numbers, but not your own.
 3. You may only include alphabetical messages through edits. Common practice is to use parentheses after your number when doing this.
     a. If the last two digits of your message are "69", after sending, you are strongly advised to edit your message to include "(nice)" after.
+4. Use of bots, macros, and other counting machines is not allowed. That's not being a good sport.
 
 ## Useful Things to Know
 
