@@ -199,7 +199,8 @@
         position: relative;
     }
 
-    header form#search input {
+    header form#search input,
+    #search-large input {
         background: #EBF9FE;
         padding: 0.5em;
         border-radius: 5px;
@@ -207,7 +208,14 @@
         display: none;
     }
 
-    header form#search button {
+    #search-large input {
+        background: none;
+        display: initial;
+        border: 1px solid #444;
+    }
+
+    header form#search button,
+    #search-large button {
         background: none;
         border: none;
         margin: 0;
@@ -325,6 +333,12 @@
         margin-left: 0.2em;
         height: 1em;
     }
+
+    .center-self {
+        margin: auto;
+    }
+
+    #
 
     @media only screen and (min-width: 600px) {
         .syntax-checker-widget .drag-handle {

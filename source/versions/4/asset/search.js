@@ -3,7 +3,18 @@
 
     var params = new URLSearchParams(window.location.search);
 
-    if(!params.has("q")) return;
+    let serpList = document.getElementById("serp-list");
+    let serpQuery = document.getElementById("serp-query");
+    let serpLoading = document.getElementById("serp-loading");
+
+
+    if(!params.has("q") || params.get("q") == "") {
+        serpQuery.textContent = "Enter a query and hit the button to search!";
+        serpLoading.hidden = true;
+        return;
+    };
+
+    serpLoading.hidden = false;
 
     var searchIndex = lunr(function() {
         let index = this;
@@ -25,19 +36,16 @@
 
     var results = searchIndex.search(params.get("q"));
 
-    console.log(results);
-
-    let serpList = document.getElementById("serp-list");
-    let serpQuery = document.getElementById("serp-query");
-
     serpQuery.textContent = `${results.length} results for "${params.get("q")}"`
 
     for(var i = 0; i < results.length; i++) {
         serpList.appendChild(buildResult(pageIndex[results[i].ref],results[i].matchData));
     }
 
+    serpLoading.hidden = true;
 
-    function buildResult(resultDocObject,matchData) {
+
+    function buildResult(resultDocObject, matchData) {
         let li = document.createElement("li");
         let resultId = results[i].ref;
 
