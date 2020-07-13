@@ -1,6 +1,4 @@
 # Netlify redirects file; https://docs.netlify.com/routing/redirects/#syntax-for-the-redirects-file
 
 /versions/latest  /versions/4
-
-
-
+/versions/latest/*  /versions/4/:splat
