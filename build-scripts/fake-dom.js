@@ -170,7 +170,7 @@ Object.defineProperty(Node.prototype, "textContent", {
     },
     set: function (val) {
         this.childNodes = [
-            createTextNode(val)
+            module.exports.createTextNode(val)
         ];
     }
 });

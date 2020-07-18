@@ -10,7 +10,7 @@ var path = require("path");
 let parseRailroad = require(path.resolve(__dirname, "parse-railroad-diagram.js"));
 let parseExpression = require(path.resolve(__dirname, "parse-js-expression.js"));
 let Highcharts = require(path.resolve(__dirname, "highcharts-server-version.js"))();
-
+let buildDiscord = require(path.resolve(__dirname, "build-discord-messages.js"));
 //initialize additional charts
 let additionalChartDir = path.resolve(__dirname, "highcharts-more-chart-types");
 let additionalCharts = fs.readdirSync(additionalChartDir);
@@ -335,6 +335,15 @@ function parseDiagrams(html, data) {
             break;
         }
     }
+
+    //also test for discord-messages
+    if(dom.attribs.class && /( |^)discord-messages( |$)/.test(dom.attribs.class)) {
+        let innerText = data.domUtils.getText(dom),
+            parsableText = parseCharacterEntities(innerText);
+
+            return buildDiscord(parsableText);
+    }
+
 }
 
 function parseCharacterEntities(str) {
