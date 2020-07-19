@@ -2,7 +2,7 @@ var parserTools = require(__dirname + "/parser-tools.js");
 
 module.exports = {
     createTextNode(content) {
-        return new Node("#text", content);
+        return new Node("#text", content===undefined?"undefined":content.toString());
     },
     createElement: function (tag) {
         return new Node(tag);
@@ -43,7 +43,7 @@ function Node(tag, value) {
 
     this.style = {
         setProperty: function (prop, val, attr) {
-            this[prop] = val + (attr && " !" + attr);
+            this[prop] = val + (attr ? " !" + attr : "");
         },
         getComputed: function () {
             return this;
@@ -55,6 +55,7 @@ function Node(tag, value) {
             let styles = Object.keys(this).map(style => {
                 if (typeof this[style] == "function") return "";
                 return `${camelToKebab(style)}: ${encodeCharacterEntities(this[style].toString())};`;
+                return "";
             });
 
             return styles.join("");
@@ -83,12 +84,14 @@ Node.prototype.hideCircular = function () {
     }
 }
 Node.prototype.appendChild = function (child) {
+    if(child == this) throw "You cannot append a node to itself";
     this.childNodes.push(child);
     child.parentNode = this;
 
     return child;
 };
 Node.prototype.insertBefore = function (newChild, reference) {
+    if(newChild == this) throw "You cannot append a node to itself";
     let index = this.childNodes.indexOf(reference);
     if (index == -1) index = this.childNodes.length;
 
@@ -170,7 +173,7 @@ Object.defineProperty(Node.prototype, "textContent", {
     },
     set: function (val) {
         this.childNodes = [
-            createTextNode(val)
+            module.exports.createTextNode(val)
         ];
     }
 });

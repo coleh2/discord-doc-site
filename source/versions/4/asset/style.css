@@ -43,7 +43,7 @@
         margin-bottom: 2em;
     }
     pre {
-        font-family: 'Fira Code', monospace;
+        font-family: 'Fira Mono', monospace;
         background: #424B54;
         color: #FFFCF9;
         padding: 0.5em;
@@ -54,9 +54,11 @@
         font: inherit;
     }
 
-    main p,
-    main li {
+    main p {
         line-height: 1.6;
+    }
+    main li {
+        margin-bottom: 0.12em;
     }
     table {
         border-collapse: collapse;
@@ -123,7 +125,7 @@
       background: #2D242E;
       color: inherit;
       border: 0;
-      font-family: 'Fira Code', monospace;
+      font-family: 'Fira Mono', monospace;
       flex-basis: 100px;
       flex-grow: 1.5;
       min-width: 350px;
@@ -147,6 +149,11 @@
 
     .syntax-checker-widget .drag-handle {
         display: none;
+    }
+
+    figure {
+        max-width:100%;
+        overflow-x: auto;
     }
 
     figcaption {
@@ -267,6 +274,10 @@
     footer ul {
         list-style-type: none;
         padding: 0;
+    }
+
+    footer ul li {
+        margin-bottom: 0.25rem;
     }
 
     footer ul a {

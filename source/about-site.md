@@ -18,7 +18,7 @@ I'd be glad to accept help! You don't really need technical experience, but a ba
 
 ## Is this affiliated with {person or group}?
 
-This is made & maintained by @coleh. That's it :) 
+This is made & maintained by @coleh. Any pages that have been written or edited by others will say so.
 
 ## This page looks bad
 
