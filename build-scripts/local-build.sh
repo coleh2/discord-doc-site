@@ -7,3 +7,4 @@ rm -rf './build'
 cp -r './source/' './build'
 
 node build-scripts/build-markdown.js
+node build-scripts/minify-scripts.js
