@@ -1,6 +1,20 @@
 const SEARCH_INDEX_FILE = "versions/4/asset/search.js"
 const REDIRECT_FILE = "_redirects";
 
+const RAILROAD_STYLE = `<style>
+svg.railroad-diagram {background-color: white;}
+svg.railroad-diagram path {stroke-width: 3;stroke: #444444;fill: rgba(0,0,0,0);}
+svg.railroad-diagram text {font: normal 14px 'Fira Code';text-anchor: middle;white-space: pre;}
+svg.railroad-diagram text.diagram-text {font-size: 12px;}
+svg.railroad-diagram text.diagram-arrow {font-size: 16px;}
+svg.railroad-diagram text.label {text-anchor: start;}
+svg.railroad-diagram text.comment {font-style: italic;}
+svg.railroad-diagram text.non-terminal {font-style: bold;}
+svg.railroad-diagram rect {stroke-width: 3;stroke: #444444;fill: white;}
+svg.railroad-diagram rect.group-box {stroke: gray;stroke-dasharray: 10 5;fill: none;}
+svg.railroad-diagram path.diagram-text {stroke-width: 3;stroke: #444444;fill: white;cursor: help;}
+svg.railroad-diagram g.diagram-text:hover path.diagram-text {fill: #eee;}
+</style>`
 
 let markedIt = require("marked-it-core");
 
@@ -90,11 +104,21 @@ redirectWriteStream.end();
 //remove all markdown files from build, where they may've been copied by the build process
 cleanMarkdownFilesFromFolder(mdBuildFolder);
 
-function compileMarkdown(mdSource, sourceFileName, cb) {    
+function compileMarkdown(mdSource, sourceFileName, cb) {
+    let fileDiagramContext = {}; 
+
     let compiledHtml = markedIt.generate(mdSource, {
         extensions: {
             html: {
-                onCode: parseDiagrams,
+                onCode: function(html, data) {
+                    let diagram = parseDiagrams(html, data, fileDiagramContext);
+                    if(!diagram) return undefined;
+
+                    if(!fileDiagramContext[diagram.type]) fileDiagramContext[diagram.type] = 0;
+                    fileDiagramContext[diagram.type]++;
+
+                    return diagram.html;
+                },
                 onList: function(html, data) {
                     if(html.startsWith("<ul toc>")) return "<ul toc></ul>";
                     else if(html.startsWith("<ul index>")) return "<ul index></ul>";
@@ -127,7 +151,7 @@ function compileMarkdown(mdSource, sourceFileName, cb) {
 
         let erbTemplate = fs.readFileSync(templateFileName, {encoding: "utf-8"});
 
-        resolveDocpageTemplate(compiledHtml, builtFileName, erbTemplate, function(erbHtml) {
+        resolveDocpageTemplate(compiledHtml, builtFileName, erbTemplate, fileDiagramContext, function(erbHtml) {
             cb(erbHtml,builtFileName);
         });
     } else {
@@ -191,7 +215,7 @@ function generateTocList(toc,maxLevel,parserProblemState,currentLevel) {
     return html;
 }
 
-function resolveDocpageTemplate(compiledHtml, fileName, erbTemplate, cb) {
+function resolveDocpageTemplate(compiledHtml, fileName, erbTemplate, fileDiagramContext, cb) {
         let title;
 
         if(compiledHtml.jsonToc.text.length > "{\"toc\":{}}".length) {
@@ -239,6 +263,7 @@ function resolveDocpageTemplate(compiledHtml, fileName, erbTemplate, cb) {
                     body: compiledHtml.html.text,
                     title: title,
                     generator: "markedIt",
+                    railroadStyle: fileDiagramContext.railroad>0?RAILROAD_STYLE:"",
                     logoImage: "https://cdn.discordapp.com/icons/392830469500043266/ec0abbd24cc285867bf1a0f98048d327.png",
                     breadcrumbs: breadcrumbHtml,
                     docVersion: version
@@ -302,7 +327,7 @@ function cleanMarkdownFilesFromFolder(folder) {
     }
 }
 
-function parseDiagrams(html, data) {
+function parseDiagrams(html, data, context) {
     let dom = data.htmlToDom(html)[0];
     
     //if it has a foo-diagram class, it's a diagram
@@ -313,7 +338,10 @@ function parseDiagrams(html, data) {
             parsableText = parseCharacterEntities(innerText);
         switch(diagramType) {
             case "railroad":
-                return parseRailroad(parsableText);
+                return {
+                    type: "railroad",
+                    html: parseRailroad(parsableText)
+                };
             break;
             case "highchart":
                 let chartParams = parseExpression(parsableText);
@@ -331,7 +359,10 @@ function parseDiagrams(html, data) {
 
                 let chart = Highcharts.chart(chartParams);
 
-                return `<figure>${chart.container.__buildInnerHTML(false)}</figure>`;
+                return {
+                    type: "highchart",
+                    html: `<figure>${chart.container.__buildInnerHTML(false)}</figure>`
+                };
             break;
         }
     }
@@ -341,7 +372,10 @@ function parseDiagrams(html, data) {
         let innerText = data.domUtils.getText(dom),
             parsableText = parseCharacterEntities(innerText);
 
-            return buildDiscord(parsableText);
+            return {
+                type: "discord",
+                html: buildDiscord(parsableText, context)
+            };
     }
 
 }
