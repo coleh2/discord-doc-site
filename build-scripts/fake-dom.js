@@ -191,6 +191,11 @@ Object.defineProperty(Node.prototype, "innerHTML", {
         }
     }
 });
+Object.defineProperty(Node.prototype, "outerHTML", {
+    get: function () {
+        return this.__buildOuterHTML(true);
+    }
+});
 Node.prototype.__buildInnerHTML = function(includeStyles) {
     return this.childNodes.map(node => node.__buildOuterHTML(includeStyles)).join("");
 };
