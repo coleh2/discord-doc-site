@@ -54,6 +54,7 @@ backreference = (singular backreference | plural backreference | filtered backre
 
 You can test out backreferences and see how they work in this interactive Syntax Explorer, which is pre-loaded with some messages to search.
 
+<script src="/versions/4/asset/syntax-check-widget.js" defer></script>
 <div class="syntax-checker-widget">
 </div>
 ---
