@@ -11,21 +11,21 @@ module.exports = function(parsable, context) {
         let messageTexts = parsable.split("\n[") //TODO: make a more robust parser
 
         let messagesRoot = fakeDom.createElement("ol");
-        messagesRoot.setAttribute("class", "embedded-discord-msgs chatContent-a9vAAp chat-3bRxxu theme-dark");
+        messagesRoot.setAttribute("class", "embedded-discord-msgs chatContent- chat-3 theme-dark");
 
         for(var i = 0; i < messageTexts.length; i++) {
             let li = buildMessageListItemFromText(messageTexts[i]);
             messagesRoot.appendChild(li);
         }
         
-        return (context.discord > 0 ? "" : `<link rel="stylesheet" href="/versions/4/asset/discordMessages.css">`) +
+        return (context.discord > 0 ? "" : `<link rel="stylesheet" href="/versions/4/asset/discord-messages.css">`) +
             messagesRoot.__buildOuterHTML(true);
     } else {
         //parse and put in ascending time order not descending
         let messages = JSON.parse(parsable).reverse();
 
         let messagesRoot = fakeDom.createElement("ol");
-        messagesRoot.setAttribute("class", "embedded-discord-msgs chatContent-a9vAAp chat-3bRxxu theme-dark group-spacing-0");
+        messagesRoot.setAttribute("class", "embedded-discord-msgs chatContent- chat-3 theme-dark group-spacing-0");
 
         for(var i = 0; i < messages.length; i++) {
 
@@ -37,7 +37,7 @@ module.exports = function(parsable, context) {
             messagesRoot.appendChild(li);
         }
         
-        return (context.discord > 0 ? "" : `<link rel="stylesheet" href="/versions/4/asset/discordMessages.css">`) + 
+        return (context.discord > 0 ? "" : `<link rel="stylesheet" href="/versions/4/asset/discord-messages.css">`) + 
             messagesRoot.__buildOuterHTML(true);
     }
 }
@@ -46,10 +46,10 @@ function buildDayDivider(timestamp) {
     let date = new Date(timestamp);
 
     let divider = fakeDom.createElement("li");
-    divider.setAttribute("class", "divider-JfaTT5 hasContent-1_DUdQ divider-JfaTT5 hasContent-1cNJDh");
+    divider.setAttribute("class", "divider hasContent-1");
 
     let dividerContent = fakeDom.createElement("span");
-    dividerContent.setAttribute("class", "content-1o0f9g");
+    dividerContent.setAttribute("class", "content-1");
     dividerContent.textContent = `${MONTHS[date.getMonth()]} ${date.getDate()} ${date.getFullYear()}`;
 
     divider.appendChild(dividerContent);
@@ -63,15 +63,15 @@ function buildMessageListItemFromJson(messageObj) {
     let messageContent = messageObj.content;
 
     let li = fakeDom.createElement("li");
-    li.setAttribute("class", "message-2qnXI6 cozyMessage-3V1Y8y groupStart-23k01U wrapper-2a6GCs cozy-3raOZG zalgo-jN1Ica");
+    li.setAttribute("class", "message-2 cozyMessage-3 groupStart-23 wrapper-2 cozy-3 zalgo");
     let contentsWrapper = fakeDom.createElement("div");
-    contentsWrapper.setAttribute("class", "contents-2mQqc9");
+    contentsWrapper.setAttribute("class", "contents");
 
     let avatar = fakeDom.createElement("img");
     avatar.setAttribute("loading", "lazy");
     avatar.setAttribute("alt", `${messageObj.author.username}'s avatar`);
     avatar.setAttribute("src",authorToAvatar(messageObj.author));
-    avatar.setAttribute("class", "avatar-1BDn8e clickable-1bVtEA");
+    avatar.setAttribute("class", "avatar-1 clickable-1");
 
     let msgHeader = buildMessageHeader(messageTime, messageAuthor);
 
@@ -95,14 +95,34 @@ function parseMessageContent(messageObj) {
     //loop through for links & mentions
     for(var i = 0; i < messageContent.length; i++) {
 
+        //links! get the next "word"
+        let nextWordBreak = messageContent.substring(i+1).indexOf(" ");
+        if(nextWordBreak == -1) nextWordBreak = messageContent.length;
+        let nextWord = messageContent.substring(i, nextWordBreak);
+        
+        if(nextWord.match(/^https?:\/\//)) {
+            //fill in text before here
+            components.push({
+                type: "text",
+                content: messageContent.substring(lastComponentIndex, i)
+            });
+
+            console.log(nextWord);
+            components.push({
+                type: "link",
+                content: nextWord
+            });
+            i = nextWordBreak;
+            lastComponentIndex = i;
+        }
         //mentions: all mentions need at least 21 characters, so don't test for them if there's less than 21 chars left
-        if(i + 21 <= messageContent.length) {
+        else if(i + 21 <= messageContent.length) {
             //username mentions
             if(/<@\d{18}>/.test(messageContent.substring(i, i + 21))) {
                 //fill in text before here
                 components.push({
                     type: "text",
-                    content: messageContent.substring(lastComponentIndex, i-1)
+                    content: messageContent.substring(lastComponentIndex, i)
                 });
 
                 let mentionText = messageContent.substring(i, i + 21);
@@ -121,7 +141,7 @@ function parseMessageContent(messageObj) {
                 //fill in text before here
                 components.push({
                     type: "text",
-                    content: messageContent.substring(lastComponentIndex, i-1)
+                    content: messageContent.substring(lastComponentIndex, i)
                 });
 
                 let mentionText = messageContent.substring(i, i + 22);
@@ -187,25 +207,35 @@ function parseMessageContent(messageObj) {
 
 function buildMessageContents(components) {
     let content = fakeDom.createElement("div");
-    content.setAttribute("class", "markup-2BOw-j messageContent-2qWWxC");
+    content.setAttribute("class", "markup messageContent");
     
     for(var i = 0; i < components.length; i++) {
         let component = components[i];
-        let mention;
+        let mention, link;
         switch(component.type) {
             case "text":
                 content.appendChild(fakeDom.createTextNode(component.content));
             break;
+            case "link":
+                link = fakeDom.createElement("a");
+                link.setAttribute("class", "anchor anchorUnderlineOnHover");
+                link.setAttribute("title", component.content);
+                link.setAttribute("href", component.content);
+                link.setAttribute("target", "_blank");
+                link.setAttribute("rel", "noreferrer noopener");
+                link.textContent = component.content;
+                content.appendChild(link);
+            break;
             case "userMention":
             case "roleMention":
                 mention = fakeDom.createElement("span");
-                mention.setAttribute("class", "mention wrapper-3WhCwL mention interactive");
+                mention.setAttribute("class", "mention mentionWrapper interactive");
                 mention.textContent = `@${component.mention.username || component.mention.name || "Unknown Role"}`;
                 content.appendChild(mention);
             break;
             case "channelMention":
                 mention = fakeDom.createElement("span");
-                mention.setAttribute("class", "mention wrapper-3WhCwL mention interactive");
+                mention.setAttribute("class", "mention mentionWrapper interactive");
                 mention.textContent = `@${component.mention.username || component.mention.name || "Unknown Role"}`;
                 content.appendChild(mention);
             break;
@@ -226,7 +256,7 @@ function buildEmbedsContainer(messageObj) {
             let imageWidth = messageObj.attachments[i].width / messageObj.attachments[i].height * imageHeight;
 
             let imageWrapper = fakeDom.createElement("a");
-            imageWrapper.setAttribute("class", "anchor-3Z-8Bb anchorUnderlineOnHover-2ESHQB imageWrapper-2p5ogY imageZoom-1n-ADA clickable-3Ya1ho embedWrapper-lXpS3L");
+            imageWrapper.setAttribute("class", "anchor anchorUnderlineOnHover imageWrapper imageZoom clickable embedWrapper");
             imageWrapper.style.setProperty("width", imageWidth + "px");
             imageWrapper.style.setProperty("height", imageHeight + "px");
 
@@ -246,17 +276,17 @@ function buildEmbedsContainer(messageObj) {
             let embedObj = messageObj.embeds[i];
             
             let embedContainer = fakeDom.createElement("div");
-            embedContainer.setAttribute("class", "embedWrapper-lXpS3L embedFull-2tM8-- embed-IeVjo6 markup-2BOw-j");
+            embedContainer.setAttribute("class", "embedWrapper embedFull embed markup");
             //set color of embed side to hex value
             if(embedObj.color) embedContainer.style.setProperty("borderLeftColor", "#" + embedObj.color.toString(16));
 
             let embedGrid = fakeDom.createElement("div");
             //only give hasThumbnail class if it actually does
-            embedGrid.setAttribute("class", `grid-1nZz7S ${embedObj.thumbnail ? "hasThumbnail-3FJf1w" : ""}`);
+            embedGrid.setAttribute("class", `grid ${embedObj.thumbnail ? "hasThumbnail" : ""}`);
 
             if(embedObj.provider) {
                 let embedProvider = fakeDom.createElement("div");
-                embedProvider.setAttribute("class", "embedProvider-3k5pfl embedMargin-UO5XwE");
+                embedProvider.setAttribute("class", "embedProvider embedMargin");
                 
                 let providerSpan = fakeDom.createElement("span");
                 providerSpan.textContent = embedObj.provider.name;
@@ -267,10 +297,10 @@ function buildEmbedsContainer(messageObj) {
 
             if(embedObj.title) {
                 let embedTitle = fakeDom.createElement("div");
-                embedTitle.setAttribute("class", "embedTitle-3OXDkz embedMargin-UO5XwE");
+                embedTitle.setAttribute("class", "embedTitle embedMargin");
                 
                 let titleLink = fakeDom.createElement("a");
-                titleLink.setAttribute("class", "anchor-3Z-8Bb anchorUnderlineOnHover-2ESHQB embedTitleLink-1Zla9e embedLink-1G1K1D embedTitle-3OXDkz");
+                titleLink.setAttribute("class", "anchor anchorUnderlineOnHover embedTitleLink embedLink embedTitle");
                 titleLink.setAttribute("href", embedObj.url);
                 titleLink.setAttribute("target", "_blank");
                 titleLink.setAttribute("rel", "noreferrer noopener");
@@ -282,14 +312,14 @@ function buildEmbedsContainer(messageObj) {
 
             if(embedObj.description) {
                 let embedDesc = fakeDom.createElement("div");
-                embedDesc.setAttribute("class", "embedDescription-1Cuq9a embedMargin-UO5XwE");
+                embedDesc.setAttribute("class", "embedDescription embedMargin");
                 embedDesc.textContent = embedObj.description;
                 embedGrid.appendChild(embedDesc);
             }
 
             if(embedObj.thumbnail) {
                 let embedThumbLink = fakeDom.createElement("a");
-                embedThumbLink.setAttribute("class", "anchor-3Z-8Bb anchorUnderlineOnHover-2ESHQB imageWrapper-2p5ogY imageZoom-1n-ADA clickable-3Ya1ho embedThumbnail-2Y84-K");
+                embedThumbLink.setAttribute("class", "anchor anchorUnderlineOnHover imageWrapper imageZoom clickable embedThumbnail");
                 embedThumbLink.setAttribute("href", embedObj.thumbnail.url);
                 embedThumbLink.setAttribute("target", "_blank");
                 embedThumbLink.setAttribute("rel", "noreferrer noopener");
@@ -310,17 +340,17 @@ function buildEmbedsContainer(messageObj) {
 
     if(messageObj.reactions) {
         let reactions = fakeDom.createElement("div");
-        reactions.setAttribute("class", "reactions-12N0jA");
+        reactions.setAttribute("class", "reactions");
 
         for(var i = 0; i < messageObj.reactions.length; i++) {
             let reactionWrapperWrapper = fakeDom.createElement("div");
             let reactionWrapper = fakeDom.createElement("div");
-            reactionWrapper.setAttribute("class", "reaction-1hd86g");
+            reactionWrapper.setAttribute("class", "reaction");
             
             let reactionAriaPopout = fakeDom.createElement("div");
 
             let reactionInner = fakeDom.createElement("div");
-            reactionInner.setAttribute("class", "reactionInner-15NvIl focusable-1YV_-H");
+            reactionInner.setAttribute("class", "reactionInner focusable");
             
             let emojiText = messageObj.reactions[i].emoji.name
             //if it's 2 characters or more, treat it as a utf-16 emoji and do Confusing Bitwise Math to convert it to a single codepoint
@@ -334,7 +364,7 @@ function buildEmbedsContainer(messageObj) {
             reactionEmoji.setAttribute("src", `https://twemoji.maxcdn.com/v/13.0.0/svg/${reactionEmojiCode}.svg`);
 
             let reactionCount = fakeDom.createElement("div");
-            reactionCount.setAttribute("class", "reactionCount-2mvXRV");
+            reactionCount.setAttribute("class", "reactionCount");
             reactionCount.textContent = messageObj.reactions[i].count;
             reactionCount.style.setProperty("minWidth", reactionCount.offsetWidth + "px");
             reactionCount.style.setProperty("marginRight", "0.125rem");
@@ -364,7 +394,7 @@ function buildMessageListItemFromText(messageText) {
     let messageContent = messageRegexRes[3];
 
     let li = fakeDom.createElement("li");
-    li.setAttribute("class", "message-2qnXI6 cozyMessage-3V1Y8y groupStart-23k01U wrapper-2a6GCs cozy-3raOZG zalgo-jN1Ica");
+    li.setAttribute("class", "message-2 cozyMessage-3 groupStart-23 wrapper-2 cozy-3 zalgo");
     let contentsWrapper = fakeDom.createElement("div");
     contentsWrapper.setAttribute("class", "contents-2mQqc9");
 
@@ -372,12 +402,12 @@ function buildMessageListItemFromText(messageText) {
     avatar.setAttribute("loading", "lazy");
     avatar.setAttribute("alt", `${messageAuthor}'s avatar`);
     avatar.setAttribute("src",authorToPlaceholderAvatar(messageAuthor));
-    avatar.setAttribute("class", "avatar-1BDn8e clickable-1bVtEA");
+    avatar.setAttribute("class", "avatar-1 clickable-1bVtEA");
 
     let msgHeader = buildMessageHeader(messageTime, messageAuthor);
 
     let content = fakeDom.createElement("div");
-    content.setAttribute("class", "markup-2BOw-j messageContent-2qWWxC");
+    content.setAttribute("class", "markup messageContent");
     content.textContent = messageContent;
 
     li.appendChild(contentsWrapper);
@@ -390,10 +420,10 @@ function buildMessageListItemFromText(messageText) {
 
 function buildMessageHeader(messageTime, messageAuthor) {
     let msgHeader = fakeDom.createElement("h5");
-    msgHeader.setAttribute("class", "header-23xsNx");
+    msgHeader.setAttribute("class", "header-23");
     
     let timestamp = fakeDom.createElement("span");
-    timestamp.setAttribute("class", "latin24CompactTimeStamp-2V7XIQ timestamp-3ZCmNB");
+    timestamp.setAttribute("class", "latin24CompactTimeStamp timestamp");
     
     let timestampAriaSpan = fakeDom.createElement("span");
     timestampAriaSpan.setAttribute("aria-label", messageTime);
@@ -401,7 +431,7 @@ function buildMessageHeader(messageTime, messageAuthor) {
     timestamp.appendChild(timestampAriaSpan);
 
     let username = fakeDom.createElement("span");
-    username.setAttribute("class", "username-1A8OIy clickable-1bVtEA focusable-1YV_-H");
+    username.setAttribute("class", "username-1 clickable-1 focusable");
     username.textContent = messageAuthor;
 
     msgHeader.appendChild(username);
