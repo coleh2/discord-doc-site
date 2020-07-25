@@ -1,0 +1,31 @@
+@font-face {
+	font-family: 'Montserrat';
+	font-style: normal;
+	font-weight: 300;
+    src: local('Montserrat Light'), url(https://brick.freetls.fastly.net/fonts/montserrat/300.woff) format('woff');
+    font-display: swap
+}
+
+@font-face {
+	font-family: 'Montserrat';
+	font-style: normal;
+	font-weight: 400;
+	src: local('Montserrat Regular'), url(https://brick.freetls.fastly.net/fonts/montserrat/400.woff) format('woff');
+    font-display: swap
+}
+
+@font-face {
+	font-family: 'Montserrat';
+	font-style: normal;
+	font-weight: 600;
+	src: local('Montserrat SemiBold'), url(https://brick.freetls.fastly.net/fonts/montserrat/600.woff) format('woff');
+    font-display: swap
+}
+
+@font-face {
+	font-family: 'Fira Mono';
+	font-style: normal;
+	font-weight: 400;
+	src: local('Fira Mono'), url(https://brick.freetls.fastly.net/fonts/firamono/400.woff) format('woff');
+    font-display: swap
+}

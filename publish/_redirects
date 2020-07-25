@@ -1,0 +1,21 @@
+# Netlify redirects file; https://docs.netlify.com/routing/redirects/#syntax-for-the-redirects-file
+
+/versions/latest  /versions/4
+/versions/latest/*  /versions/4/:splat
+# Begin auto-generated short link redirects
+/.0  /about-semver
+/.1  /about-site
+/.2  /versions/1-1-0
+/.3  /versions/1-2-0
+/.4  /versions/2-1-0
+/.5  /versions/2-1-1
+/.6  /versions/2-1-2
+/.7  /versions/3-1-0
+/.8  /versions/3-2-0
+/.9  /versions/4/changelog
+/.a  /versions/4/counting-guidelines
+/.b  /versions/4
+/.c  /versions/4/message-backreference-specification
+/.d  /versions/4/rules
+/.e  /versions
+/.f  /widget-examples

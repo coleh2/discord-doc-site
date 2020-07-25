@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+    <title>Message Backreference Specification</title>
+
+    <meta name="generator" content="kramdown markedIt" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <meta name="description" content="A helpful documentation page for NHS!" />
+
+    <link rel="preconnect" href="https://brick.freetls.fastly.net">
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+
+    <meta name="theme-color" content="#EBF9FE"/>
+
+    <script src="/versions/4/asset/download-file-widget.js" defer></script>
+    <script src="/versions/4/asset/heading-select.js" defer></script>
+    <script src="/versions/4/asset/sticky-footer.js" defer></script>
+
+    <style>
+svg.railroad-diagram {background-color: white;}
+svg.railroad-diagram path {stroke-width: 3;stroke: #444444;fill: rgba(0,0,0,0);}
+svg.railroad-diagram text {font: normal 14px 'Fira Code';text-anchor: middle;white-space: pre;}
+svg.railroad-diagram text.diagram-text {font-size: 12px;}
+svg.railroad-diagram text.diagram-arrow {font-size: 16px;}
+svg.railroad-diagram text.label {text-anchor: start;}
+svg.railroad-diagram text.comment {font-style: italic;}
+svg.railroad-diagram text.non-terminal {font-style: bold;}
+svg.railroad-diagram rect {stroke-width: 3;stroke: #444444;fill: white;}
+svg.railroad-diagram rect.group-box {stroke: gray;stroke-dasharray: 10 5;fill: none;}
+svg.railroad-diagram path.diagram-text {stroke-width: 3;stroke: #444444;fill: white;cursor: help;}
+svg.railroad-diagram g.diagram-text:hover path.diagram-text {fill: #eee;}
+</style>
+
+    <link rel="stylesheet" href="/versions/4/asset/fonts.css">
+
+    <link rel="stylesheet" href="/versions/4/asset/style.css">
+</head>
+<body>
+    <header>
+        <h1 class="logo"><img src="/logo-256.png" alt="logo" id="logoimg"><a href="/"
+                id="logo-header">NHS Docs</a></h1>
+                <form id="search" action="/search" method="GET">
+                    <label>
+                        <input type="search" name="q" aria-label="Search Term" placeholder="Search">
+                        <button type="submit" aria-label="Search">
+                            <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#eee" d="M23.822 20.88l-6.353-6.354c.93-1.465 1.467-3.2 1.467-5.059.001-5.219-4.247-9.467-9.468-9.467s-9.468 4.248-9.468 9.468c0 5.221 4.247 9.469 9.468 9.469 1.768 0 3.421-.487 4.839-1.333l6.396 6.396 3.119-3.12zm-20.294-11.412c0-3.273 2.665-5.938 5.939-5.938 3.275 0 5.94 2.664 5.94 5.938 0 3.275-2.665 5.939-5.94 5.939-3.274 0-5.939-2.664-5.939-5.939z"/></svg>
+                        </button>
+                    </label>
+                </form>
+
+    </header>
+    <main>
+        <ul class="breadcrumb">
+            <li><a href="/">Home</a></li><li><a href="/versions">
+                Versions</a>
+            </li><li><a href="/versions/4">
+                4</a>
+            </li><li><a href="/versions/4/message-backreference-specification">
+                Message Backreference Specification</a>
+            </li>
+            </ul>
+        <h1 id="message-backreference-specification">Message Backreference Specification</h1>
+<ul toc><li><a href="#message-backreference-specification">Message Backreference Specification</a><ul><li><a href="#purpose">Purpose</a></li><li><a href="#required-technical-knowledge">Required Technical Knowledge</a></li><li><a href="#definitions">Definitions</a></li><li><a href="#general-backreference-specification">General Backreference Specification</a><ul><li><a href="#backreference-usage">Backreference Usage</a></li><li><a href="#syntax">Syntax</a></li></li><li><a href="#i-m-a-computer-how-do-i-read-these-">I&#39;m a Computer; How Do I Read These?</a></li><li><a href="#future-backreference-usage">Future Backreference Usage</a></li></ul><li><a href="#singular-backreferences">Singular Backreferences</a><ul><li><a href="#caret-count-backreference">Caret Count Backreference</a></li><li><a href="#caret-quantity-backreference">Caret Quantity Backreference</a></li><li><a href="#quote-backreference">Quote Backreference</a></li></ul></li><li><a href="#plural-backreferences">Plural Backreferences</a><ul><li><a href="#backreference-ranges">Backreference Ranges</a></li><li><a href="#backreference-sequences">Backreference Sequences</a></li></ul></li><li><a href="#backreference-filters">Backreference Filters</a><ul><li><a href="#author-backreference-filter">Author Backreference Filter</a></li><li><a href="#quote-backreference-filter">Quote Backreference Filter</a></li></ul></li></ul></li></ul>
+<h2 id="purpose">Purpose</h2>
+<p>In the interest of clear communication and conversation, it is beneficial to have a unified syntax for referring to previously sent messages. Currently, there is an unspecified syntax that serves this purpose, but it has several unclear parts, such as: </p>
+<ul>
+<li>Scope (when quoting should be used instead)</li>
+<li>Subtypes and their intended usages (e.g. <code>^^^</code> vs <code>^3</code>)</li>
+<li>Extensions to the current unspoken standard (e.g.<code>^name</code>)</li>
+<li>Meaning (agreement vs. simple reference)</li>
+</ul>
+<p>Despite these, this specification will attempt to be backwards-compatible with the majority of current usage. This document should be by no means considered to be a new, mandatory specification to follow, but rather a clarifying document for confusion and an formal explaination for the current syntax. &quot;Incorrect&quot; usage should not be construed as an offensive or negative action.</p>
+<p>As such, this specification is established as a clear way to unambiguously reference a previous message on instant messaging platforms, whether for agreement, additional
+discussion, indication as context, or for other purposes.</p>
+<h2 id="required-technical-knowledge">Required Technical Knowledge</h2>
+<p>This document has been written to require little to no additional knowledge in order to understand properly. The diagrams that describe the syntax are <a href="https://en.wikipedia.org/wiki/Syntax_diagram">railroad diagrams</a>, a visual representation of syntax intended to be easy to understand. Each diagram defines a part of the syntax, and then may be referred to by other railroad diagrams. If you don&#39;t understand any part, feel free to ask; any questions are very helpful to improve the document.</p>
+<h2 id="definitions">Definitions</h2>
+<p>backreference
+: A string of text that indicates a previous message</p>
+<p>current message
+: The message that has the backreference in it.</p>
+<p>youngest message
+: most recently sent, not counting the current message</p>
+<p>oldest message
+: least recently sent, not counting the current message</p>
+<h2 id="general-backreference-specification">General Backreference Specification</h2>
+<h3 id="backreference-usage">Backreference Usage</h3>
+<p>All backreferences must start with a caret character (<code>^</code>). All backreferences should be formatted as a seperate word to avoid ambiguity with other uses of the caret character, such as exponents. A message solely consisting of a backreference should be seen as a general agreement with the message it refers to. However, if there is any other text in the message, its meaning takes precedence over the implicit agreement. </p>
+<hr>
+<h3 id="syntax">Syntax</h3>
+<figure id="fig-backreference"><figcaption>backreference:</figcaption><svg class="railroad-diagram" width="367" height="122" viewBox="0 0 367 122">
+<g transform="translate(.5 .5)">
+<g>
+<path d="M20 21m 10 13 a 5 5 0 1 1 1 1 Z"/>
+</g>
+<g>
+<path d="M40 31h0"/>
+<path d="M327 31h0"/>
+<path d="M40 31h20"/>
+<g class="non-terminal">
+<path d="M60 31h20"/>
+<path d="M287 31h20"/>
+<rect x="80" y="20" width="207" height="22"/>
+<text x="183.5" y="35">singular backreference</text>
+</g>
+<path d="M307 31h20"/>
+<path d="M40 31a10 10 0 0 1 10 10v10a10 10 0 0 0 10 10"/>
+<g>
+<path d="M60 61h0"/>
+<path d="M307 61h0"/>
+<path d="M60 61h20"/>
+<g class="non-terminal">
+<path d="M80 61h8.5"/>
+<path d="M278.5 61h8.5"/>
+<rect x="88.5" y="50" width="190" height="22"/>
+<text x="183.5" y="65">plural backreference</text>
+</g>
+<path d="M287 61h20"/>
+<path d="M60 61a10 10 0 0 1 10 10v10a10 10 0 0 0 10 10"/>
+<g class="non-terminal">
+<path d="M80 91h0"/>
+<path d="M287 91h0"/>
+<rect x="80" y="80" width="207" height="22"/>
+<text x="183.5" y="95">filtered backreference</text>
+</g>
+<path d="M287 91a10 10 0 0 0 10 -10v-10a10 10 0 0 1 10 -10"/>
+</g>
+<path d="M307 61a10 10 0 0 0 10 -10v-10a10 10 0 0 1 10 -10"/>
+</g>
+<path d="M 327 31 m 0 3 a 5 5 0 1 1 1 1 Z"/>
+</g>
+</svg>
+</figure>
+<p>You can test out backreferences and see how they work in this interactive Syntax Explorer, which is pre-loaded with some messages to search.</p>
+<p><script src="/versions/4/asset/syntax-check-widget.js" defer></script></p>
+<p><div class="syntax-checker-widget"></div></p>
+<h2 id="-div-"></h2>
+<h3 id="i-m-a-computer-how-do-i-read-these-">I&#39;m a Computer; How Do I Read These?</h3>
+<p>You can get an <a href="https://en.wikipedia.org/wiki/Extended_Backus%E2%80%93Naur_form">EBNF</a> syntax for backreferences here:</p>
+<pre class="language-ebnf railroad-diagram-source-collection download-file-instead-of-display" data-filename="backreference.ebnf"><code>digit = &quot;0&quot; | &quot;1&quot; | &quot;2&quot; | &quot;3&quot; | &quot;4&quot; | &quot;5&quot; | &quot;6&quot; | &quot;7&quot; | &quot;8&quot; | &quot;9&quot;;
+number = { digit };
+letter = &quot;A&quot; | &quot;B&quot; | &quot;C&quot; | &quot;D&quot; | &quot;E&quot; | &quot;F&quot; | &quot;G&quot; | &quot;H&quot; | &quot;I&quot; | &quot;J&quot; | &quot;K&quot; | &quot;L&quot; | &quot;M&quot; | &quot;N&quot; | &quot;O&quot; | &quot;P&quot; | &quot;Q&quot; | &quot;R&quot; | &quot;S&quot; | &quot;T&quot; | &quot;U&quot; | &quot;V&quot; | &quot;W&quot; | &quot;X&quot; | &quot;Y&quot; | &quot;Z&quot; | &quot;a&quot; | &quot;b&quot; | &quot;c&quot; | &quot;d&quot; | &quot;e&quot; | &quot;f&quot; | &quot;g&quot; | &quot;h&quot; | &quot;i&quot; | &quot;j&quot; | &quot;k&quot; | &quot;l&quot; | &quot;m&quot; | &quot;n&quot; | &quot;o&quot; | &quot;p&quot; | &quot;q&quot; | &quot;r&quot; | &quot;s&quot; | &quot;t&quot; | &quot;u&quot; | &quot;v&quot; | &quot;w&quot; | &quot;x&quot; | &quot;y&quot; | &quot;z&quot; ;
+symbol = &quot;[&quot; | &quot;]&quot; | &quot;{&quot; | &quot;}&quot; | &quot;(&quot; | &quot;)&quot; | &quot;&lt;&quot; | &quot;&gt;&quot; | &quot;&#39;&quot; | &#39;&quot;&#39; | &quot;=&quot; | &quot;|&quot; | &quot;.&quot; | &quot;,&quot; | &quot;;&quot;;
+character = symbol | digit | letter;
+word = { letter };
+phrase = { word | &quot; &quot; | symbol };
+name = word;
+subject = word;
+message text = phrase;
+
+singular backreference = caret count backreference | caret quantity backreference | quote;
+caret count backreference = { &quot;^&quot; } ;
+caret quantity backreference = &quot;^&quot;, number ;
+quote = &quot;^&quot; , &quot;\&quot;&quot; , message text , &quot;\&quot;&quot;;
+plural backreference = backreference range | backreference sequence;
+backreference range = singular backreference , &quot;-&quot; , singular backreference
+backreference sequence = backreference , { &quot;,&quot; , backreference }
+filtered backreference = { backreference filter } , (* treat as ^ *) | singular backreference | plural backreference;
+backreference filter = author backreference filter | message subject filter;
+author backreference filter = &quot;^&quot; , [ &quot;@&quot; ], name;
+</code></pre>
+<hr>
+<h3 id="future-backreference-usage">Future Backreference Usage</h3>
+<p>The caret character is part of Markdown, the formatting language that Discord uses; it is used to convey superscript. Currently, superscript is disabled, but should Discord activate this functionality, an escape character (specifically the backslash, <code>\</code>) may be used in front of carets to continue using backreferences normally. If that is considered too annoying for a day-to-day basis at the time, a revision of the syntax will be made.</p>
+<h2 id="singular-backreferences">Singular Backreferences</h2>
+<p>Singular backreferences are the building blocks that serve as a base to construct other backrefernces. Each one references only one single message. Backreferences are specified here in terms of relativity, with relative backreferences at the start and absolute backreferences at the end.</p>
+<figure id="fig-singular-backreference"><figcaption>singular backreference:</figcaption><svg class="railroad-diagram" width="418" height="122" viewBox="0 0 418 122">
+<g transform="translate(.5 .5)">
+<g>
+<path d="M20 21m 10 13 a 5 5 0 1 1 1 1 Z"/>
+</g>
+<g>
+<path d="M40 31h0"/>
+<path d="M378 31h0"/>
+<path d="M40 31h20"/>
+<g class="non-terminal">
+<path d="M60 31h32.75"/>
+<path d="M325.25 31h32.75"/>
+<rect x="92.75" y="20" width="232.5" height="22"/>
+<text x="209" y="35">caret count backreference</text>
+</g>
+<path d="M358 31h20"/>
+<path d="M40 31a10 10 0 0 1 10 10v10a10 10 0 0 0 10 10"/>
+<g>
+<path d="M60 61h0"/>
+<path d="M358 61h0"/>
+<path d="M60 61h20"/>
+<g class="non-terminal">
+<path d="M80 61h0"/>
+<path d="M338 61h0"/>
+<rect x="80" y="50" width="258" height="22"/>
+<text x="209" y="65">caret quantity backreference</text>
+</g>
+<path d="M338 61h20"/>
+<path d="M60 61a10 10 0 0 1 10 10v10a10 10 0 0 0 10 10"/>
+<g class="non-terminal">
+<path d="M80 91h97.75"/>
+<path d="M240.25 91h97.75"/>
+<rect x="177.75" y="80" width="62.5" height="22"/>
+<text x="209" y="95">quote</text>
+</g>
+<path d="M338 91a10 10 0 0 0 10 -10v-10a10 10 0 0 1 10 -10"/>
+</g>
+<path d="M358 61a10 10 0 0 0 10 -10v-10a10 10 0 0 1 10 -10"/>
+</g>
+<path d="M 378 31 m 0 3 a 5 5 0 1 1 1 1 Z"/>
+</g>
+</svg>
+</figure>
+<h3 id="caret-count-backreference">Caret Count Backreference</h3>
+<p>Caret count backreferences reference a message relative to the message that they are sent in. A single caret references the message directly before the current one, a double caret references the message two messages previous, etc. </p>
+<h4 id="syntax">Syntax</h4>
+<figure id="fig-caret-count-backreference"><figcaption>caret count backreference:</figcaption><svg class="railroad-diagram" width="148.5" height="71" viewBox="0 0 148.5 71">
+<g transform="translate(.5 .5)">
+<g>
+<path d="M20 21m 10 13 a 5 5 0 1 1 1 1 Z"/>
+</g>
+<path d="M40 31h10"/>
+<g>
+<path d="M50 31h0"/>
+<path d="M98.5 31h0"/>
+<path d="M50 31h10"/>
+<g class="terminal">
+<path d="M60 31h0"/>
+<path d="M88.5 31h0"/>
+<rect x="60" y="20" width="28.5" height="22" rx="10" ry="10"/>
+<text x="74.25" y="35">^</text>
+</g>
+<path d="M88.5 31h10"/>
+<path d="M60 31a10 10 0 0 0 -10 10v0a10 10 0 0 0 10 10"/>
+<g>
+<path d="M60 51h28.5"/>
+</g>
+<path d="M88.5 51a10 10 0 0 0 10 -10v0a10 10 0 0 0 -10 -10"/>
+</g>
+<path d="M98.5 31h10"/>
+<path d="M 108.5 31 m 0 3 a 5 5 0 1 1 1 1 Z"/>
+</g>
+</svg>
+</figure>
+<h4 id="examples-">Examples:</h4>
+<pre class="language-backreference"><code>^
+</code></pre>
+<p>This backreference refers to the youngest message.</p>
+<pre class="language-backreference"><code>^^
+</code></pre>
+<p>This backreference refers to the second youngest message.</p>
+<h4 id="inconsistencies-to-note">Inconsistencies to Note</h4>
+<p>In some internet dialects, carets are used to reference in agreement the directly previous message, with more carets representing a stronger agreement. This is not the syntax used here, but it may be carried over when images are posted. The default number of carets in such usages is 3.</p>
+<h4 id="scope">Scope</h4>
+<p>Caret count backreferences should not be used when the message referenced is over five messages ago. If an older reference is to be referenced, <a href="#caret-quantity-backreference">caret quantities</a> should be used. However, any number of carets is technically valid.</p>
+<hr>
+<h3 id="caret-quantity-backreference">Caret Quantity Backreference</h3>
+<p>Caret quantities reference a message relative to the message that they are sent in. They are different from caret count backreferences in that they use a single caret, followed by a number; this allows them to reference older messages without causing annoyance by the necessity of counting the carets. In order to be distinct from exponents in mathematical equations, they must be in their own word.</p>
+<h4 id="syntax">Syntax</h4>
+<figure id="fig-caret-quantity-backreference"><figcaption>caret quantity backreference:</figcaption><svg class="railroad-diagram" width="219.5" height="62" viewBox="0 0 219.5 62">
+<g transform="translate(.5 .5)">
+<g>
+<path d="M20 21m 10 13 a 5 5 0 1 1 1 1 Z"/>
+</g>
+<path d="M40 31h10"/>
+<g>
+<path d="M50 31h0"/>
+<path d="M169.5 31h0"/>
+<g class="terminal">
+<path d="M50 31h0"/>
+<path d="M78.5 31h0"/>
+<rect x="50" y="20" width="28.5" height="22" rx="10" ry="10"/>
+<text x="64.25" y="35">^</text>
+</g>
+<path d="M78.5 31h10"/>
+<path d="M88.5 31h10"/>
+<g class="non-terminal">
+<path d="M98.5 31h0"/>
+<path d="M169.5 31h0"/>
+<rect x="98.5" y="20" width="71" height="22"/>
+<text x="134" y="35">number</text>
+</g>
+</g>
+<path d="M169.5 31h10"/>
+<path d="M 179.5 31 m 0 3 a 5 5 0 1 1 1 1 Z"/>
+</g>
+</svg>
+</figure>
+<h4 id="examples">Examples</h4>
+<pre class="language-backreference"><code>^2
+</code></pre>
+<p>This backreference refers to the second-youngest message.</p>
+<pre class="language-backreference"><code>^7
+</code></pre>
+<p>This backreference refers to the seventh-youngest message.</p>
+<h4 id="scope">Scope</h4>
+<p>Caret quantities may be used for reference to messages as recent as the second-youngest (i.e. <code>^2</code>). For brevity, referring to the youngest message (with <code>^1</code>) is discouraged, as this may be accomplished easier with a single <a href="#caret-count-backreference">caret count</a> backreference. Caret quantities should not be used to reference messages older than the 12th-youngest (e.g. <code>^12</code>)-- if an older message should be referenced, an <a href="#author-backreference-filter">author backreference</a> or a <a href="#quote">quote</a> should be used. However, any number is technically valid.</p>
+<hr>
+<h3 id="quote-backreference">Quote Backreference</h3>
+<p>Quotes unambiguously refer to a message by its content. Quotes may be done in a Discord-sanctioned format by right-clicking a message and hitting the &quot;Quote&quot; option. As such, there is no defined syntax for this backreference method when it is used alone. However, for combining with other backreferences, there is a <a href="#quote-backreference-filter">seperate syntax</a>.</p>
+<h4 id="scope">Scope</h4>
+<p>Quotes may be used to refer to any message, but in order to prevent the clogging of chat, if any relative backreference method (<a href="#caret-count-backreference">caret count</a> or  <a href="#caret-quantity-backreference">caret quantity</a>) is recommended for the message, that should be used instead.</p>
+<h2 id="plural-backreferences">Plural Backreferences</h2>
+<p>All backreference types above this entry are singular; they reference only one message. In some cases, a user may wish to indicate more than one message at once. To do this, plural backreferences can be used, which combine multiple singular singular backreferences in order to reference more than one.</p>
+<figure id="fig-plural-backreference"><figcaption>plural backreference:</figcaption><svg class="railroad-diagram" width="327" height="92" viewBox="0 0 327 92">
+<g transform="translate(.5 .5)">
+<g>
+<path d="M20 21m 10 13 a 5 5 0 1 1 1 1 Z"/>
+</g>
+<g>
+<path d="M40 31h0"/>
+<path d="M287 31h0"/>
+<path d="M40 31h20"/>
+<g class="non-terminal">
+<path d="M60 31h12.75"/>
+<path d="M254.25 31h12.75"/>
+<rect x="72.75" y="20" width="181.5" height="22"/>
+<text x="163.5" y="35">backreference range</text>
+</g>
+<path d="M267 31h20"/>
+<path d="M40 31a10 10 0 0 1 10 10v10a10 10 0 0 0 10 10"/>
+<g class="non-terminal">
+<path d="M60 61h0"/>
+<path d="M267 61h0"/>
+<rect x="60" y="50" width="207" height="22"/>
+<text x="163.5" y="65">backreference sequence</text>
+</g>
+<path d="M267 61a10 10 0 0 0 10 -10v-10a10 10 0 0 1 10 -10"/>
+</g>
+<path d="M 287 31 m 0 3 a 5 5 0 1 1 1 1 Z"/>
+</g>
+</svg>
+</figure>
+<h3 id="backreference-ranges">Backreference Ranges</h3>
+<p>Ranges can be used to indicate more than one message at once. To make a range, join two backreferences with a hyphen. The first backreference indicates the first message that is referenced, and the second indicates the last message. Ranges may be defined chronologically (oldest-youngest) or anti-chronologically (youngest-oldest); they are the same. Any singular backreferences may be used.</p>
+<h4 id="syntax">Syntax</h4>
+<figure id="fig-backreference-range"><figcaption>backreference range:</figcaption><svg class="railroad-diagram" width="582.5" height="62" viewBox="0 0 582.5 62">
+<g transform="translate(.5 .5)">
+<g>
+<path d="M20 21m 10 13 a 5 5 0 1 1 1 1 Z"/>
+</g>
+<path d="M40 31h10"/>
+<g>
+<path d="M50 31h0"/>
+<path d="M532.5 31h0"/>
+<g class="non-terminal">
+<path d="M50 31h0"/>
+<path d="M257 31h0"/>
+<rect x="50" y="20" width="207" height="22"/>
+<text x="153.5" y="35">singular backreference</text>
+</g>
+<path d="M257 31h10"/>
+<path d="M267 31h10"/>
+<g>
+<path d="M277 31h0"/>
+<path d="M532.5 31h0"/>
+<g class="terminal">
+<path d="M277 31h0"/>
+<path d="M305.5 31h0"/>
+<rect x="277" y="20" width="28.5" height="22" rx="10" ry="10"/>
+<text x="291.25" y="35">-</text>
+</g>
+<path d="M305.5 31h10"/>
+<path d="M315.5 31h10"/>
+<g class="non-terminal">
+<path d="M325.5 31h0"/>
+<path d="M532.5 31h0"/>
+<rect x="325.5" y="20" width="207" height="22"/>
+<text x="429" y="35">singular backreference</text>
+</g>
+</g>
+</g>
+<path d="M532.5 31h10"/>
+<path d="M 542.5 31 m 0 3 a 5 5 0 1 1 1 1 Z"/>
+</g>
+</svg>
+</figure>
+<h4 id="examples">Examples</h4>
+<pre class="language-backreference"><code>^3-^5
+</code></pre>
+<p>This range refers to the all messages from the third-youngest to fifth-youngest messages.</p>
+<pre class="language-backreference"><code>^@sam-^@nick^4
+</code></pre>
+<p>This backreference refers to all messages from the youngest message by Sam through the fourth-youngest message by Nick.</p>
+<h4 id="scope">Scope</h4>
+<p>As a combination of other backreferences, ranges have no defined scope of their own, but the recommendations of each endpoint should be satisfied.</p>
+<h3 id="backreference-sequences">Backreference Sequences</h3>
+<p>Backreference sequences are an alternate method of indicating multiple messages. It allows more fine-grained control than ranges, but is longer. To make a sequence, join backreferences to each referenced message with a comma. <em>Any</em> backreference may be used in a sequence, including ranges and sequences themselves.</p>
+<h4 id="syntax">Syntax</h4>
+<figure id="fig-backreference-sequence"><figcaption>backreference sequence:</figcaption><svg class="railroad-diagram" width="449.5" height="71" viewBox="0 0 449.5 71">
+<g transform="translate(.5 .5)">
+<g>
+<path d="M20 21m 10 13 a 5 5 0 1 1 1 1 Z"/>
+</g>
+<path d="M40 31h10"/>
+<g>
+<path d="M50 31h0"/>
+<path d="M399.5 31h0"/>
+<g class="non-terminal">
+<path d="M50 31h0"/>
+<path d="M180.5 31h0"/>
+<rect x="50" y="20" width="130.5" height="22"/>
+<text x="115.25" y="35">backreference</text>
+</g>
+<path d="M180.5 31h10"/>
+<path d="M190.5 31h10"/>
+<g>
+<path d="M200.5 31h0"/>
+<path d="M399.5 31h0"/>
+<path d="M200.5 31h10"/>
+<g>
+<path d="M210.5 31h0"/>
+<path d="M389.5 31h0"/>
+<g class="terminal">
+<path d="M210.5 31h0"/>
+<path d="M239 31h0"/>
+<rect x="210.5" y="20" width="28.5" height="22" rx="10" ry="10"/>
+<text x="224.75" y="35">,</text>
+</g>
+<path d="M239 31h10"/>
+<path d="M249 31h10"/>
+<g class="non-terminal">
+<path d="M259 31h0"/>
+<path d="M389.5 31h0"/>
+<rect x="259" y="20" width="130.5" height="22"/>
+<text x="324.25" y="35">backreference</text>
+</g>
+</g>
+<path d="M389.5 31h10"/>
+<path d="M210.5 31a10 10 0 0 0 -10 10v0a10 10 0 0 0 10 10"/>
+<g>
+<path d="M210.5 51h179"/>
+</g>
+<path d="M389.5 51a10 10 0 0 0 10 -10v0a10 10 0 0 0 -10 -10"/>
+</g>
+</g>
+<path d="M399.5 31h10"/>
+<path d="M 409.5 31 m 0 3 a 5 5 0 1 1 1 1 Z"/>
+</g>
+</svg>
+</figure>
+<h4 id="examples">Examples</h4>
+<pre class="language-backreference"><code>^^,^^^^
+</code></pre>
+<p>This range refers to the second-youngest and fourth-youngest messages.</p>
+<pre class="language-backreference"><code>^,^^^,^5-^7
+</code></pre>
+<p>This backreference refers to the youngest message, the fourth-youngest message, and the fifth-youngest through seventh-youngest messages.</p>
+<h4 id="scope">Scope</h4>
+<p>As a combination of other backreferences, sequences have no defined scope of their own, but the recommendations of each endpoint should be satisfied.</p>
+<h2 id="backreference-filters">Backreference Filters</h2>
+<p>Backreference filters may be used on their own, or put in front of a <a href="#singular-backreference">singular backreference</a>; this is called a &quot;filtered backreference&quot;. Multiple backreference filters can be stacked on a single base backreference, but there can only be one base. Any Filter used on its own should be treated as filtering on <code>^</code> (youngest message). When counting the messages for a filtered backreference, messages that do not match (e.g. messages by other authors) should not be counted.</p>
+<figure id="fig-filtered-backreference"><figcaption>filtered backreference:</figcaption><svg class="railroad-diagram" width="567" height="92" viewBox="0 0 567 92">
+<g transform="translate(.5 .5)">
+<g>
+<path d="M20 21m 10 13 a 5 5 0 1 1 1 1 Z"/>
+</g>
+<path d="M40 31h10"/>
+<g>
+<path d="M50 31h0"/>
+<path d="M517 31h0"/>
+<g>
+<path d="M50 31h0"/>
+<path d="M260 31h0"/>
+<path d="M50 31h10"/>
+<g class="non-terminal">
+<path d="M60 31h0"/>
+<path d="M250 31h0"/>
+<rect x="60" y="20" width="190" height="22"/>
+<text x="155" y="35">backreference filter</text>
+</g>
+<path d="M250 31h10"/>
+<path d="M60 31a10 10 0 0 0 -10 10v0a10 10 0 0 0 10 10"/>
+<g>
+<path d="M60 51h190"/>
+</g>
+<path d="M250 51a10 10 0 0 0 10 -10v0a10 10 0 0 0 -10 -10"/>
+</g>
+<path d="M260 31h10"/>
+<g>
+<path d="M270 31h0"/>
+<path d="M517 31h0"/>
+<path d="M270 31h20"/>
+<g>
+<path d="M290 31h56.5"/>
+<path d="M440.5 31h56.5"/>
+<text x="393.5" y="36" class="comment"> treat as ^ </text>
+</g>
+<path d="M497 31h20"/>
+<path d="M270 31a10 10 0 0 1 10 10v10a10 10 0 0 0 10 10"/>
+<g class="non-terminal">
+<path d="M290 61h0"/>
+<path d="M497 61h0"/>
+<rect x="290" y="50" width="207" height="22"/>
+<text x="393.5" y="65">singular backreference</text>
+</g>
+<path d="M497 61a10 10 0 0 0 10 -10v-10a10 10 0 0 1 10 -10"/>
+</g>
+</g>
+<path d="M517 31h10"/>
+<path d="M 527 31 m 0 3 a 5 5 0 1 1 1 1 Z"/>
+</g>
+</svg>
+</figure><figure id="fig-backreference-filter"><figcaption>backreference filter:</figcaption><svg class="railroad-diagram" width="369.5" height="92" viewBox="0 0 369.5 92">
+<g transform="translate(.5 .5)">
+<g>
+<path d="M20 21m 10 13 a 5 5 0 1 1 1 1 Z"/>
+</g>
+<g>
+<path d="M40 31h0"/>
+<path d="M329.5 31h0"/>
+<path d="M40 31h20"/>
+<g class="non-terminal">
+<path d="M60 31h0"/>
+<path d="M309.5 31h0"/>
+<rect x="60" y="20" width="249.5" height="22"/>
+<text x="184.75" y="35">author backreference filter</text>
+</g>
+<path d="M309.5 31h20"/>
+<path d="M40 31a10 10 0 0 1 10 10v10a10 10 0 0 0 10 10"/>
+<g class="non-terminal">
+<path d="M60 61h29.75"/>
+<path d="M279.75 61h29.75"/>
+<rect x="89.75" y="50" width="190" height="22"/>
+<text x="184.75" y="65">message quote filter</text>
+</g>
+<path d="M309.5 61a10 10 0 0 0 10 -10v-10a10 10 0 0 1 10 -10"/>
+</g>
+<path d="M 329.5 31 m 0 3 a 5 5 0 1 1 1 1 Z"/>
+</g>
+</svg>
+</figure>
+<h3 id="author-backreference-filter">Author Backreference Filter</h3>
+<p>Author backreferences reference a message by its author. The syntax of an author backreference is a caret, followed by the name of the author (either as a ping, or with a dot after the &quot;@&quot; symbol). An author filter matches on messages that are sent by the specified author.</p>
+<h4 id="syntax">Syntax</h4>
+<figure id="fig-author-backreference-filter"><figcaption>author backreference filter:</figcaption><svg class="railroad-diagram" width="329.5" height="82" viewBox="0 0 329.5 82">
+<g transform="translate(.5 .5)">
+<g>
+<path d="M20 21m 10 13 a 5 5 0 1 1 1 1 Z"/>
+</g>
+<path d="M40 31h10"/>
+<g>
+<path d="M50 31h0"/>
+<path d="M279.5 31h0"/>
+<g class="terminal">
+<path d="M50 31h0"/>
+<path d="M78.5 31h0"/>
+<rect x="50" y="20" width="28.5" height="22" rx="10" ry="10"/>
+<text x="64.25" y="35">^</text>
+</g>
+<path d="M78.5 31h10"/>
+<path d="M88.5 31h10"/>
+<g>
+<path d="M98.5 31h0"/>
+<path d="M279.5 31h0"/>
+<g class="terminal">
+<path d="M98.5 31h0"/>
+<path d="M127 31h0"/>
+<rect x="98.5" y="20" width="28.5" height="22" rx="10" ry="10"/>
+<text x="112.75" y="35">@</text>
+</g>
+<path d="M127 31h10"/>
+<path d="M137 31h10"/>
+<g>
+<path d="M147 31h0"/>
+<path d="M279.5 31h0"/>
+<g>
+<path d="M147 31h0"/>
+<path d="M215.5 31h0"/>
+<path d="M147 31h20"/>
+<g>
+<path d="M167 31h28.5"/>
+</g>
+<path d="M195.5 31h20"/>
+<path d="M147 31a10 10 0 0 1 10 10v0a10 10 0 0 0 10 10"/>
+<g class="terminal">
+<path d="M167 51h0"/>
+<path d="M195.5 51h0"/>
+<rect x="167" y="40" width="28.5" height="22" rx="10" ry="10"/>
+<text x="181.25" y="55">.</text>
+</g>
+<path d="M195.5 51a10 10 0 0 0 10 -10v0a10 10 0 0 1 10 -10"/>
+</g>
+<path d="M215.5 31h10"/>
+<g class="non-terminal">
+<path d="M225.5 31h0"/>
+<path d="M279.5 31h0"/>
+<rect x="225.5" y="20" width="54" height="22"/>
+<text x="252.5" y="35">name</text>
+</g>
+</g>
+</g>
+</g>
+<path d="M279.5 31h10"/>
+<path d="M 289.5 31 m 0 3 a 5 5 0 1 1 1 1 Z"/>
+</g>
+</svg>
+</figure>
+<h4 id="examples">Examples</h4>
+<pre class="language-backreference"><code>^@nick
+</code></pre>
+<p>This backreference refers to the youngest message by Nick.</p>
+<pre class="language-backreference"><code>^@.sam^3
+</code></pre>
+<p>This backreference refers to the third-youngest message by Sam, while not pinging.</p>
+<h4 id="scope">Scope</h4>
+<p>Author backreferences should not be used for messages that are over 75 messages (total) old, or 15 messages (of the author) old. Author backreferences should also not be used to reference messages that are younger than 5 messages old, but this may be disregarded in fast-moving chats.</p>
+<hr>
+<h3 id="quote-backreference-filter">Quote Backreference Filter</h3>
+<p>Quote filters refer to a message by its content. Quotes may be done in a <a href="#quote-backreference">Discord-sanctioned format</a> for usage alone, but this syntax is included for combination or for inline usage. This filter matches on messages that contain the string specified by <code>message text</code> below.</p>
+<h4 id="syntax">Syntax</h4>
+<figure id="fig-quote"><figcaption>quote:</figcaption><svg class="railroad-diagram" width="367.5" height="62" viewBox="0 0 367.5 62">
+<g transform="translate(.5 .5)">
+<g>
+<path d="M20 21m 10 13 a 5 5 0 1 1 1 1 Z"/>
+</g>
+<path d="M40 31h10"/>
+<g>
+<path d="M50 31h0"/>
+<path d="M317.5 31h0"/>
+<g class="terminal">
+<path d="M50 31h0"/>
+<path d="M78.5 31h0"/>
+<rect x="50" y="20" width="28.5" height="22" rx="10" ry="10"/>
+<text x="64.25" y="35">^</text>
+</g>
+<path d="M78.5 31h10"/>
+<path d="M88.5 31h10"/>
+<g>
+<path d="M98.5 31h0"/>
+<path d="M317.5 31h0"/>
+<g class="terminal">
+<path d="M98.5 31h0"/>
+<path d="M127 31h0"/>
+<rect x="98.5" y="20" width="28.5" height="22" rx="10" ry="10"/>
+<text x="112.75" y="35">"</text>
+</g>
+<path d="M127 31h10"/>
+<path d="M137 31h10"/>
+<g>
+<path d="M147 31h0"/>
+<path d="M317.5 31h0"/>
+<g class="non-terminal">
+<path d="M147 31h0"/>
+<path d="M269 31h0"/>
+<rect x="147" y="20" width="122" height="22"/>
+<text x="208" y="35">message text</text>
+</g>
+<path d="M269 31h10"/>
+<path d="M279 31h10"/>
+<g class="terminal">
+<path d="M289 31h0"/>
+<path d="M317.5 31h0"/>
+<rect x="289" y="20" width="28.5" height="22" rx="10" ry="10"/>
+<text x="303.25" y="35">"</text>
+</g>
+</g>
+</g>
+</g>
+<path d="M317.5 31h10"/>
+<path d="M 327.5 31 m 0 3 a 5 5 0 1 1 1 1 Z"/>
+</g>
+</svg>
+</figure>
+<h4 id="scope">Scope</h4>
+<p>Quotes may be used to refer to any message, but in order to prevent the clogging of chat, if any relative backreference method (<a href="#caret-count-backreference">caret count</a> or  <a href="#caret-quantity-backreference">caret quantity</a>) is recommended for the message, that should be used instead.</p>
+    </main>
+    <footer>
+        <img aria-hidden="true" alt="" class="footer-splash" src="/versions/4/asset/footer-splash.svg">
+        <div id="footer-body">
+            <div style="margin-right:1em;">
+                <h2>Doc Versioning</h2>
+                <ul>
+                    <li><a href="/versions">Version List</a></li>
+                    <li><a rel="noreferrer" href="https://github.com/coleh2/discord-doc-site/network">Change Chart</a></li>
+                    <li><a href="/about-semver">Version Number Style</a></li>
+                    <li><a href="/about-site">About</a></li>
+                </ul>
+            </div>
+            <div>
+                <h2>Plumbing</h2>
+                <ul>
+                    <li><a rel="noreferrer" href="https://github.com/coleh2/discord-doc-site" target="_blank">View Source on GitHub</a>
+                    </li>
+                    <li>Join Discord</li>
+                    <li><a rel="noreferrer" href="https://github.com/coleh2/discord-doc-site/issues" target="_blank">Report Issues</a>
+                    </li>
+                    <li><a rel="noreferrer" href="https://github.com/coleh2/discord-doc-site/blob/master/contributing.md"
+                            target="_blank">Contribute Documentation</a></li>
+                </ul>
+            </div>
+        </div>
+        <img aria-hidden="true" alt="" class="footer-splash" src="/versions/4/asset/footer-splash.svg">
+    </footer>
+</body>
+
+</html>
