@@ -21,10 +21,18 @@
     <meta name="theme-color" content="#EBF9FE"/>
 
     <script src="/versions/4/asset/sticky-footer.js" defer></script>
+    <script src="/versions/4/asset/hero-splash.js" defer></script>
 
     <link rel="stylesheet" href="/versions/4/asset/fonts.css">
 
+    <link rel="preload" href="/img/splash-user-avatar/ham.svg" as="image">
+    <link rel="preload" href="/img/splash-user-avatar/abee.svg" as="image">
+    <link rel="preload" href="/img/splash-user-avatar/fossilbot.svg" as="image">
+    <link rel="preload" href="/img/splash-user-avatar/harry-potter.svg" as="image">
+    <link rel="preload" href="/img/splash-user-avatar/mr-gorbachev.svg" as="image">
+
     <link rel="stylesheet" href="/versions/4/asset/style.css">
+    <link rel="stylesheet" href="/versions/4/asset/discord-messages.css">
     <style>
         #hero {
             height: 80vh;
@@ -93,6 +101,30 @@
             transition: transform 0.2s;
         }
 
+        #hero-splash {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            color: #eee;
+            font-family: Whitney,Helvetica Neue,Helvetica,Arial,sans-serif;
+            text-rendering: optimizeLegibility;
+            overflow: hidden;
+            opacity: 0.5;
+        }
+
+        
+        #hero-splash .chat-3 {
+            display: inline-block;
+            position: absolute;
+            animation: fade-in 1s 1;
+        }
+
+        #hero-splash .chat-3.fading {
+            animation: fade-out 5s;
+        }
+
         #hero-carousel li:hover {
             transform: scale(1.025) skew(-1.25deg);
         }
@@ -108,6 +140,10 @@
         #hero-carousel li h3 {
             display: flex;
             align-items: center;
+        }
+
+        .avatar-1 {
+            border: solid 0.5px #eee;
         }
 
         @keyframes float {
@@ -129,13 +165,32 @@
                 background-position: -20vw 140vw;
             }
         }
+
+        @keyframes fade-out {
+            from {
+                opacity: 1;
+            }
+
+            to {
+                opacity: 0;
+            }
+        }
+        @keyframes fade-in {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
     </style>
 </head>
 
 <body>
     <header>
         <h1 class="logo"><img
-                src="/logo-256.png"
+                src="/img/logo-256.png"
                 alt="logo" id="logoimg"><a href="/" id="logo-header">NHS Docs</a></h1>
                 <form id="search" action="/search" method="GET">
                     <label>
@@ -147,6 +202,9 @@
                 </form>
     </header>
     <div id="hero">
+        <div id="hero-splash">
+
+        </div>
         <div id="hero-cta">
             <h2>Learn what you can do</h2>
             <p>Reference rules, bot features, and other documentation.</p>
@@ -196,7 +254,7 @@
                 <ul>
                     <li><a rel="noreferrer" href="https://github.com/coleh2/discord-doc-site" target="_blank">View Source on GitHub</a>
                     </li>
-                    <li>Join Discord</li>
+                    <li><a href="/join">Join Discord</a></li>
                     <li><a rel="noreferrer" href="https://github.com/coleh2/discord-doc-site/issues" target="_blank">Report Issues</a>
                     </li>
                     <li><a rel="noreferrer" href="https://github.com/coleh2/discord-doc-site/blob/master/contributing.md"
