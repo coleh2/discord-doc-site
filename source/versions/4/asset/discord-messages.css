@@ -131,7 +131,7 @@
 .compact- .header-23 {display: inline
 }
 
-.cozy-3 .header-23 {position: relative;line-height: 1.375rem;min-height: 1.375rem;color: var(--text-muted);white-space: break-spaces;word-wrap: pre-wrap
+.cozy-3 .header-23 {position: relative;line-height: 1.375rem;min-height: 1.375rem;color: var(--text-muted);white-space: nowrap;word-wrap: pre-wrap
 }
 
 .zalgo.cozy-3 .header-23 {overflow: hidden
