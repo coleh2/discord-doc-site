@@ -14,7 +14,43 @@ svg.railroad-diagram rect {stroke-width: 3;stroke: #444444;fill: white;}
 svg.railroad-diagram rect.group-box {stroke: gray;stroke-dasharray: 10 5;fill: none;}
 svg.railroad-diagram path.diagram-text {stroke-width: 3;stroke: #444444;fill: white;cursor: help;}
 svg.railroad-diagram g.diagram-text:hover path.diagram-text {fill: #eee;}
-</style>`
+</style>`;
+
+const DEVENV_ANALYTICS = `<!-- Matomo -->
+<script type="text/javascript">
+  var _paq = window._paq = window._paq || [];
+  /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+  _paq.push(['disableCookies']);
+  _paq.push(['trackPageView']);
+  _paq.push(['enableLinkTracking']);
+  (function() {
+    var u="https://counter.clh.sh/";
+    _paq.push(['setTrackerUrl', u+'counter.php']);
+    _paq.push(['setSiteId', '2']);
+    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+    g.type='text/javascript'; g.async=true; g.src=u+'counter.js'; s.parentNode.insertBefore(g,s);
+  })();
+</script>
+<!-- End Matomo Code -->
+
+`;
+const PRODUCTION_ANALYTICS = `<!-- Matomo -->
+<script type="text/javascript">
+  var _paq = window._paq = window._paq || [];
+  /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+  _paq.push(['disableCookies']);
+  _paq.push(['trackPageView']);
+  _paq.push(['enableLinkTracking']);
+  (function() {
+    var u="https://counter.clh.sh/";
+    _paq.push(['setTrackerUrl', u+'counter.php']);
+    _paq.push(['setSiteId', '1']);
+    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+    g.type='text/javascript'; g.async=true; g.src=u+'counter.js'; s.parentNode.insertBefore(g,s);
+  })();
+</script>
+<!-- End Matomo Code -->`;
+
 
 let markedIt = require("marked-it-core");
 
@@ -44,6 +80,13 @@ let projectFolder = process.env.NHS_RULES_DIR || path.resolve(__dirname,"..");
 
 let mdSourceFolder = path.resolve(projectFolder, "source");
 let mdBuildFolder = path.resolve(projectFolder, "build");
+
+//replace analytics scripts
+let htmlFiles = loadHtmlFilesFromFolder(mdBuildFolder);
+for(var i = 0; i < htmlFiles.length; i++) {
+    let source = fs.readFileSync(htmlFiles[i], {encoding: "utf-8"});
+    fs.writeFileSync(htmlFiles[i], source.replace("<analyticsScript/>", (process.env.CI=="true")?PRODUCTION_ANALYTICS:DEVENV_ANALYTICS));
+}
 
 let mdFiles = loadMarkdownFilesFromFolder(mdSourceFolder);
 
@@ -266,7 +309,8 @@ function resolveDocpageTemplate(compiledHtml, fileName, erbTemplate, fileDiagram
                     railroadStyle: fileDiagramContext.railroad>0?RAILROAD_STYLE:"",
                     logoImage: "https://cdn.discordapp.com/icons/392830469500043266/ec0abbd24cc285867bf1a0f98048d327.png",
                     breadcrumbs: breadcrumbHtml,
-                    docVersion: version
+                    docVersion: version,
+                    analyticsScript: (process.env.CI=="true")?PRODUCTION_ANALYTICS:DEVENV_ANALYTICS
                 }
             },
             template: erbTemplate
@@ -303,6 +347,26 @@ function loadMarkdownFilesFromFolder(folder) {
         if(subfile.isDirectory()) {
             results = results.concat(loadMarkdownFilesFromFolder(path.resolve(folder, subfile.name)));
         } else if(subfile.isFile() && subfile.name.endsWith(".md")) {
+            results.push(path.resolve(folder, subfile.name));
+        }
+    }
+
+    return results;
+}
+
+function loadHtmlFilesFromFolder(folder) {
+    let results = [];
+
+    let folderContents = fs.readdirSync(folder, {
+        withFileTypes: true
+    });
+
+    for(var i = 0; i < folderContents.length; i++) {
+        let subfile = folderContents[i];
+
+        if(subfile.isDirectory()) {
+            results = results.concat(loadHtmlFilesFromFolder(path.resolve(folder, subfile.name)));
+        } else if(subfile.isFile() && subfile.name.endsWith(".html")) {
             results.push(path.resolve(folder, subfile.name));
         }
     }
