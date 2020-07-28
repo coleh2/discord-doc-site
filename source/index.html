@@ -135,10 +135,14 @@
             display: inline-block;
             animation: fade-in 1s 1;
             flex-grow: 0;
-            width: max-content;
+            width: min-content;
             height: min-content;
             transform-style: preserve-3d;
             box-shadow: -10px 0 30px -10px #222;
+        }
+
+        #hero-splash .chat-3 .markup {
+            white-space: nowrap;
         }
 
         #hero-splash-perspective-move-container {
@@ -161,10 +165,9 @@
             -webkit-transform: translate3d(0, 0, -8em);
         }
 
-
         #hero-splash .msg-wrapper:nth-child(3n) {
-            transform: translateZ(-10em);
-            -webkit-transform: translateZ(-10em);
+            transform: translate3d(0, 0, -10em);
+            -webkit-transform: translate3d(0, 0, -10em);
         }
 
         #hero-splash .msg-wrapper:nth-child(4n) {
