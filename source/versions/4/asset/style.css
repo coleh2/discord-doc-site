@@ -38,6 +38,81 @@
         animation: flashIndicate 2s;
     }
 
+    h1 #share-button {
+        float: right;
+        cursor: pointer;
+        padding: 0;
+        border: 0;
+        background: none;
+    }
+
+    #share-popup {
+        position: fixed;
+        background: #fff;
+        font-size: 1rem;
+        max-width: 20em;
+        min-height: 3em;
+        padding: 0.75em;
+        border-radius: 5px;
+        box-sizing: border-box;
+        box-shadow: 0 0 10px 1px #000a;
+        font-weight: initial;
+    }
+
+    .url-copy-parent {
+        border-radius: 5px;
+        border: 1px solid #333;
+        max-width: 100%;
+        padding: 0.25em;
+        display: flex;
+        position: relative;
+        white-space: nowrap;
+    }
+
+    .url-copy-parent.copied::after {
+        content: "Copied!";
+        position: absolute;
+        top: -1em;
+        right: 0;
+        left: 0;
+        width: min-content;
+        text-align: center;
+        margin: auto;
+        padding: 3px;
+        background: #000a;
+        border-radius: 5px;
+        color: #eee;
+        animation: fade-up 1.5s;
+    }
+
+    .url-copy-parent input {
+        border: 0;
+        padding: 0;
+        background: none;
+        font: inherit;
+        flex-grow: 1;
+        flex-shrink: 1;
+        color: #585858;
+        display: inline-block;
+        flex-basis: 0px;
+        overflow: hidden;
+    }
+
+    .url-copy-parent button {
+        background: #fff;
+        margin-left: 0.25em;
+        cursor: pointer;
+        border: 0;
+        padding: 0;
+        height: 1.5em;
+        width: 1.5em;
+    }
+
+    .url-copy-parent button svg {
+        height: 1.5em;
+        width: 1.5em;
+    }
+
     hr {
         margin-top: 2em;
         margin-bottom: 2em;
@@ -397,4 +472,9 @@
     @keyframes flashIndicate {
         from {background:#E1CE7A;}
         to {background:unset;}
+    }
+
+    @keyframes fade-up {
+        from {transform:translateY(0); opacity: 1;}
+        to {transform:translateY(-0.5em); opacity: 0;}
     }
