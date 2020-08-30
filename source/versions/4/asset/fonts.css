@@ -33,9 +33,9 @@
 @font-face {
     font-family: 'Domine';
     src: local('Domine Bold'), local('Domine-Bold'),
-        url('img/font/Domine-Bold.woff2') format('woff2'),
-        url('img/font/Domine-Bold.woff') format('woff'),
-        url('img/font/Domine-Bold.ttf') format('truetype');
+        url('/img/font/Domine-Bold.woff2') format('woff2'),
+        url('/img/font/Domine-Bold.woff') format('woff'),
+        url('/img/font/Domine-Bold.ttf') format('truetype');
     font-weight: bold;
     font-style: normal;
     font-display: swap;
@@ -44,9 +44,9 @@
 @font-face {
     font-family: 'Domine';
     src: local('Domine'), local('Domine-Regular'),
-        url('img/font/Domine-Regular.woff2') format('woff2'),
-        url('img/font/Domine-Regular.woff') format('woff'),
-        url('img/font/Domine-Regular.ttf') format('truetype');
+        url('/img/font/Domine-Regular.woff2') format('woff2'),
+        url('/img/font/Domine-Regular.woff') format('woff'),
+        url('/img/font/Domine-Regular.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
     font-display: swap;
