@@ -1,22 +1,25 @@
 :root {
-    font-size: 13pt;
+    font-size: 1.2em;
 }
     body {
-        font-family: 'Montserrat', sans-serif;
         font-weight: 300;
         color: #444;
         margin: 0;
-        padding-bottom: 12em;
+        font-family: 'Montserrat', sans-serif;
         position: relative;
         min-height: 100vh;
+        display: flex;
+        flex-direction: column;
         height: max-content;
         box-sizing: border-box;
     }
 
     main {
         margin: 40px auto;
-        max-width: 12.5in;
+        width: 12.5in;
+        max-width: 100vw;
         padding: 0 10px;
+        flex-grow: 1;
     }
     main h1,h2,h3 {
         font-weight: 600;
@@ -129,12 +132,31 @@
         font: inherit;
     }
 
-    main p {
+    main p, main li {
         line-height: 1.6;
+        font-family: 'Domine', 'Cambria', 'Cochin', Georgia, Times, 'Times New Roman', serif;
     }
+
+    main a:link {
+        color: #0095dd;
+    }
+
+    main a:visited {
+        color: #ac2a9a
+    }
+
+    main a:hover, main a:focus {
+        color: #b9a445;
+    }
+
     main li {
-        margin-bottom: 0.12em;
+        margin-bottom: 0.1em;
     }
+
+    ul[index] li, ul[toc] li, ul.breadcrumb li, main div li {
+        font-family: 'Montserrat', sans-serif;
+    }
+
     table {
         border-collapse: collapse;
     }
@@ -334,8 +356,7 @@
         height: min-content;
         min-height: 12em;
         display: flex;
-        position: absolute;
-        bottom: 0;
+        position: relative;
         box-sizing: border-box;
         padding: 0.5em;
         width: 100%;

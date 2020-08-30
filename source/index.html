@@ -20,7 +20,6 @@
 
     <meta name="theme-color" content="#EBF9FE" />
 
-    <script src="/versions/4/asset/sticky-footer.js" defer></script>
     <script src="/versions/4/asset/hero-splash.js" defer></script>
 
     <link rel="stylesheet" href="/versions/4/asset/fonts.css">
@@ -44,7 +43,7 @@
         main {
             margin: 0;
             padding: 0;
-            max-width: 100vw;
+            width: 100vw;
             overflow: hidden;
         }
 
@@ -53,7 +52,7 @@
         }
 
         #hero {
-            height: 80vh;
+            height: 70vh;
             display: flex;
             align-items: center;
             padding: 2em;
@@ -114,16 +113,19 @@
             flex-grow: 1;
             border-radius: 4px;
             background: #eee;
+            font-family: 'Montserrat', sans-serif;
             transition: transform 0.2s;
         }
 
         #hero-splash {
+            display: none;
             position: absolute;
             color: #eee;
+            width: 100vw;
+            min-width: 100vmax;
             top: 0;
             bottom: 0;
-            right: 0;
-            left: 0;
+            margin: auto;
             perspective: 20em;
             font-family: Whitney, Helvetica Neue, Helvetica, Arial, sans-serif;
             text-rendering: optimizeLegibility;
@@ -151,66 +153,32 @@
             position: absolute;
             top: 0;
             bottom: 0;
+            left: 0;
+            right: 0;
             display: flex;
             justify-content: center;
             flex-wrap: wrap;
-            left: 0;
-            right: 0;
+            transform: translateZ(-4em);
         }
 
         #hero-splash .msg-wrapper {
 
             transform-style: preserve-3d;
-            transform: translate3d(0, 0, -8em);
-            -webkit-transform: translate3d(0, 0, -8em);
+            transform-origin: center;
         }
 
-        #hero-splash .msg-wrapper:nth-child(3n) {
-            transform: translate3d(0, 0, -10em);
-            -webkit-transform: translate3d(0, 0, -10em);
+        #hero-splash .msg-wrapper:hover .chat-3 {
+            transform: translateZ(-5em);
         }
 
-        #hero-splash .msg-wrapper:nth-child(4n) {
-            transform: translate3d(0, 0, -1em);
-            -webkit-transform: translate3d(0, 0, -1em);
-        }
-
-        #hero-splash .msg-wrapper:nth-child(2n) {
-            transform: translate3d(0, 0, -10em);
-            -webkit-transform: translate3d(0, 0, -10em);
-        }
-
-        #hero-splash .msg-wrapper:nth-child(6n) {
-            transform: translate3d(0, 0, -4em);
-            -webkit-transform: translate3d(0, 0, -4em);
-        }
-
-        #hero-splash .msg-wrapper:nth-child(2n) .chat-3 {
-            transform: rotate3d(0, 1, 1, 45deg);
-            -webkit-transform: rotate3d(0, 1, 1, 45deg);
-        }
-
-        #hero-splash .msg-wrapper .chat-3 {
-            transform: rotate3d(1, 2, 0, -30deg);
-            -webkit-transform: rotate3d(1, 2, 0, -30deg);
-        }
-
-        #hero-splash .msg-wrapper:nth-child(4n) .chat-3 {
-            transform: rotate3d(0, 1, 0.3, -45deg);
-            -webkit-transform: rotate3d(0, 1, 0.3, -45deg);
-        }
-
-        #hero-carousel li:hover {
-            transform: scale(1.025) skew(-1.25deg);
-            -webkit-transform: scale(1.025) skew(-1.25deg);
-        }
-
-        #hero-carousel li>a {
+        #hero-carousel li > a {
             padding: 1em;
+            width: 100%;
             display: inline-block;
             font: inherit;
             color: inherit;
             text-decoration: inherit;
+            background-image: none;
         }
 
         #hero-carousel li h3 {
@@ -267,6 +235,16 @@
                 opacity: 1;
             }
         }
+
+        @media only screen and (min-width: 600px) {
+            #hero {
+                height: 80vh;
+            }
+            #hero-splash {
+                display: initial;
+            }
+
+        }
     </style>
 
     <analyticsScript/>
@@ -290,398 +268,26 @@
     </header>
     <main>
         <div id="hero">
-            <div id="hero-splash">
+            <div id="hero-splash" aria-hidden="true">
                 <div id="hero-splash-perspective-move-container">
-                    <div class="msg-wrapper">
-                        <ol class="embedded-discord-msgs chatContent- chat-3 theme-dark">
-                            <li class="message-2 cozyMessage-3 groupStart-23 wrapper-2 cozy-3 zalgo">
-                                <div class="contents-2mQqc9"><img loading="lazy" alt="Mr. Gorbachev's avatar"
-                                        src="https://cdn.discordapp.com/embed/avatars/2.png?size=128"
-                                        class="avatar-1 clickable-1bVtEA">
-                                    <h5 class="header-23"><span class="username-1 clickable-1 focusable"
-                                            style="color:#E73827">Mr. Gorbachev</span></h5>
-                                    <div class="markup messageContent">&gt;namecolor blood orange</div>
-                                </div>
-                            </li>
-                            <li class="message-2 cozyMessage-3 groupStart-23 wrapper-2 cozy-3 zalgo">
-                                <div class="contents-2mQqc9"><img loading="lazy" alt="fossilbot's avatar"
-                                        src="/img/splash-user-avatar/fossilbot.svg" class="avatar-1 clickable-1bVtEA">
-                                    <h5 class="header-23"><span
-                                            class="username-1 clickable-1 focusable">fossilbot</span></h5>
-                                    <div class="markup messageContent">Your nametag color has been set!</div>
-                                </div>
-                            </li>
-                        </ol>
-                    </div>
-                    <div class="msg-wrapper">
-                        <ol class="embedded-discord-msgs chatContent- chat-3 theme-dark">
-                            <li class="message-2 cozyMessage-3 groupStart-23 wrapper-2 cozy-3 zalgo">
-                                <div class="contents-2mQqc9"><img loading="lazy" alt="Mr. Gorbachev's avatar"
-                                        src="https://cdn.discordapp.com/embed/avatars/2.png?size=128"
-                                        class="avatar-1 clickable-1bVtEA">
-                                    <h5 class="header-23"><span class="username-1 clickable-1 focusable"
-                                            style="color:#AF70C2">Mr. Gorbachev</span></h5>
-                                    <div class="markup messageContent">&gt;namecolor purple</div>
-                                </div>
-                            </li>
-                            <li class="message-2 cozyMessage-3 groupStart-23 wrapper-2 cozy-3 zalgo">
-                                <div class="contents-2mQqc9"><img loading="lazy" alt="fossilbot's avatar"
-                                        src="/img/splash-user-avatar/fossilbot.svg" class="avatar-1 clickable-1bVtEA">
-                                    <h5 class="header-23"><span
-                                            class="username-1 clickable-1 focusable">fossilbot</span></h5>
-                                    <div class="markup messageContent">Your nametag color has been set!</div>
-                                </div>
-                            </li>
-                        </ol>
-                    </div>
-                    <div class="msg-wrapper">
-                        <ol class="embedded-discord-msgs chatContent- chat-3 theme-dark">
-                            <li class="message-2 cozyMessage-3 groupStart-23 wrapper-2 cozy-3 zalgo">
-                                <div class="contents-2mQqc9"><img loading="lazy" alt="Mr. Gorbachev's avatar"
-                                        src="https://cdn.discordapp.com/embed/avatars/2.png?size=128"
-                                        class="avatar-1 clickable-1bVtEA">
-                                    <h5 class="header-23"><span class="username-1 clickable-1 focusable"
-                                            style="color:#F092DD">Mr. Gorbachev</span></h5>
-                                    <div class="markup messageContent">&gt;namecolor orchid</div>
-                                </div>
-                            </li>
-                            <li class="message-2 cozyMessage-3 groupStart-23 wrapper-2 cozy-3 zalgo">
-                                <div class="contents-2mQqc9"><img loading="lazy" alt="fossilbot's avatar"
-                                        src="/img/splash-user-avatar/fossilbot.svg" class="avatar-1 clickable-1bVtEA">
-                                    <h5 class="header-23"><span
-                                            class="username-1 clickable-1 focusable">fossilbot</span></h5>
-                                    <div class="markup messageContent">Your nametag color has been set!</div>
-                                </div>
-                            </li>
-                        </ol>
-                    </div>
-                    <div class="msg-wrapper">
-                        <ol class="embedded-discord-msgs chatContent- chat-3 theme-dark">
-                            <li class="message-2 cozyMessage-3 groupStart-23 wrapper-2 cozy-3 zalgo">
-                                <div class="contents-2mQqc9"><img loading="lazy" alt="rATs's avatar"
-                                        src="https://cdn.discordapp.com/embed/avatars/3.png?size=128"
-                                        class="avatar-1 clickable-1bVtEA">
-                                    <h5 class="header-23"><span class="username-1 clickable-1 focusable"
-                                            style="color:#d6d4a0">rATs</span></h5>
-                                    <div class="markup messageContent">&gt;namecolor #d6d4a0</div>
-                                </div>
-                            </li>
-                            <li class="message-2 cozyMessage-3 groupStart-23 wrapper-2 cozy-3 zalgo">
-                                <div class="contents-2mQqc9"><img loading="lazy" alt="fossilbot's avatar"
-                                        src="/img/splash-user-avatar/fossilbot.svg" class="avatar-1 clickable-1bVtEA">
-                                    <h5 class="header-23"><span
-                                            class="username-1 clickable-1 focusable">fossilbot</span></h5>
-                                    <div class="markup messageContent">Your nametag color has been set!</div>
-                                </div>
-                            </li>
-                        </ol>
-                    </div>
-                    <div class="msg-wrapper">
-                        <ol class="embedded-discord-msgs chatContent- chat-3 theme-dark">
-                            <li class="message-2 cozyMessage-3 groupStart-23 wrapper-2 cozy-3 zalgo">
-                                <div class="contents-2mQqc9"><img loading="lazy" alt="rATs's avatar"
-                                        src="https://cdn.discordapp.com/embed/avatars/3.png?size=128"
-                                        class="avatar-1 clickable-1bVtEA">
-                                    <h5 class="header-23"><span class="username-1 clickable-1 focusable"
-                                            style="color:#ffb30f">rATs</span></h5>
-                                    <div class="markup messageContent">&gt;namecolor #ffb30f</div>
-                                </div>
-                            </li>
-                            <li class="message-2 cozyMessage-3 groupStart-23 wrapper-2 cozy-3 zalgo">
-                                <div class="contents-2mQqc9"><img loading="lazy" alt="fossilbot's avatar"
-                                        src="/img/splash-user-avatar/fossilbot.svg" class="avatar-1 clickable-1bVtEA">
-                                    <h5 class="header-23"><span
-                                            class="username-1 clickable-1 focusable">fossilbot</span></h5>
-                                    <div class="markup messageContent">Your nametag color has been set!</div>
-                                </div>
-                            </li>
-                        </ol>
-                    </div>
-                    <div class="msg-wrapper">
-                        <ol class="embedded-discord-msgs chatContent- chat-3 theme-dark">
-                            <li class="message-2 cozyMessage-3 groupStart-23 wrapper-2 cozy-3 zalgo">
-                                <div class="contents-2mQqc9"><img loading="lazy" alt="ham's avatar"
-                                        src="https://cdn.discordapp.com/embed/avatars/0.png?size=128"
-                                        class="avatar-1 clickable-1bVtEA">
-                                    <h5 class="header-23"><span class="username-1 clickable-1 focusable"
-                                            style="color:#849324">ham</span></h5>
-                                    <div class="markup messageContent">&gt;namecolor #849324</div>
-                                </div>
-                            </li>
-                            <li class="message-2 cozyMessage-3 groupStart-23 wrapper-2 cozy-3 zalgo">
-                                <div class="contents-2mQqc9"><img loading="lazy" alt="fossilbot's avatar"
-                                        src="/img/splash-user-avatar/fossilbot.svg" class="avatar-1 clickable-1bVtEA">
-                                    <h5 class="header-23"><span
-                                            class="username-1 clickable-1 focusable">fossilbot</span></h5>
-                                    <div class="markup messageContent">Your nametag color has been set!</div>
-                                </div>
-                            </li>
-                        </ol>
-                    </div>
-                    <div class="msg-wrapper">
-                        <ol class="embedded-discord-msgs chatContent- chat-3 theme-dark">
-                            <li class="message-2 cozyMessage-3 groupStart-23 wrapper-2 cozy-3 zalgo">
-                                <div class="contents-2mQqc9"><img loading="lazy" alt="ham's avatar"
-                                        src="https://cdn.discordapp.com/embed/avatars/0.png?size=128"
-                                        class="avatar-1 clickable-1bVtEA">
-                                    <h5 class="header-23"><span class="username-1 clickable-1 focusable"
-                                            style="color:#ff3cc7">ham</span></h5>
-                                    <div class="markup messageContent">&gt;namecolor #ff3cc7</div>
-                                </div>
-                            </li>
-                            <li class="message-2 cozyMessage-3 groupStart-23 wrapper-2 cozy-3 zalgo">
-                                <div class="contents-2mQqc9"><img loading="lazy" alt="fossilbot's avatar"
-                                        src="/img/splash-user-avatar/fossilbot.svg" class="avatar-1 clickable-1bVtEA">
-                                    <h5 class="header-23"><span
-                                            class="username-1 clickable-1 focusable">fossilbot</span></h5>
-                                    <div class="markup messageContent">Your nametag color has been set!</div>
-                                </div>
-                            </li>
-                        </ol>
-                    </div>
-                    <div class="msg-wrapper">
-                        <ol class="embedded-discord-msgs chatContent- chat-3 theme-dark">
-                            <li class="message-2 cozyMessage-3 groupStart-23 wrapper-2 cozy-3 zalgo">
-                                <div class="contents-2mQqc9"><img loading="lazy" alt="rATs's avatar"
-                                        src="https://cdn.discordapp.com/embed/avatars/3.png?size=128"
-                                        class="avatar-1 clickable-1bVtEA">
-                                    <h5 class="header-23"><span class="username-1 clickable-1 focusable"
-                                            style="color:#214e34">rATs</span></h5>
-                                    <div class="markup messageContent">&gt;namecolor #214e34</div>
-                                </div>
-                            </li>
-                            <li class="message-2 cozyMessage-3 groupStart-23 wrapper-2 cozy-3 zalgo">
-                                <div class="contents-2mQqc9"><img loading="lazy" alt="fossilbot's avatar"
-                                        src="/img/splash-user-avatar/fossilbot.svg" class="avatar-1 clickable-1bVtEA">
-                                    <h5 class="header-23"><span
-                                            class="username-1 clickable-1 focusable">fossilbot</span></h5>
-                                    <div class="markup messageContent">Your nametag color has been set!</div>
-                                </div>
-                            </li>
-                        </ol>
-                    </div>
-                    <div class="msg-wrapper">
-                        <ol class="embedded-discord-msgs chatContent- chat-3 theme-dark">
-                            <li class="message-2 cozyMessage-3 groupStart-23 wrapper-2 cozy-3 zalgo">
-                                <div class="contents-2mQqc9"><img loading="lazy" alt="ham's avatar"
-                                        src="https://cdn.discordapp.com/embed/avatars/0.png?size=128"
-                                        class="avatar-1 clickable-1bVtEA">
-                                    <h5 class="header-23"><span class="username-1 clickable-1 focusable"
-                                            style="color:#214e34">ham</span></h5>
-                                    <div class="markup messageContent">&gt;namecolor #214e34</div>
-                                </div>
-                            </li>
-                            <li class="message-2 cozyMessage-3 groupStart-23 wrapper-2 cozy-3 zalgo">
-                                <div class="contents-2mQqc9"><img loading="lazy" alt="fossilbot's avatar"
-                                        src="/img/splash-user-avatar/fossilbot.svg" class="avatar-1 clickable-1bVtEA">
-                                    <h5 class="header-23"><span
-                                            class="username-1 clickable-1 focusable">fossilbot</span></h5>
-                                    <div class="markup messageContent">Your nametag color has been set!</div>
-                                </div>
-                            </li>
-                        </ol>
-                    </div>
-                    <div class="msg-wrapper">
-                        <ol class="embedded-discord-msgs chatContent- chat-3 theme-dark">
-                            <li class="message-2 cozyMessage-3 groupStart-23 wrapper-2 cozy-3 zalgo">
-                                <div class="contents-2mQqc9"><img loading="lazy" alt="Mr. Gorbachev's avatar"
-                                        src="https://cdn.discordapp.com/embed/avatars/2.png?size=128"
-                                        class="avatar-1 clickable-1bVtEA">
-                                    <h5 class="header-23"><span class="username-1 clickable-1 focusable">Mr.
-                                            Gorbachev</span></h5>
-                                    <div class="markup messageContent">&gt;namecolor #fcff6c</div>
-                                </div>
-                            </li>
-                            <li class="message-2 cozyMessage-3 groupStart-23 wrapper-2 cozy-3 zalgo">
-                                <div class="contents-2mQqc9"><img loading="lazy" alt="fossilbot's avatar"
-                                        src="/img/splash-user-avatar/fossilbot.svg" class="avatar-1 clickable-1bVtEA">
-                                    <h5 class="header-23"><span
-                                            class="username-1 clickable-1 focusable">fossilbot</span></h5>
-                                    <div class="markup messageContent">Your nametag color has been set!</div>
-                                </div>
-                            </li>
-                        </ol>
-                    </div>
-                    <div class="msg-wrapper">
-                        <ol class="embedded-discord-msgs chatContent- chat-3 theme-dark">
-                            <li class="message-2 cozyMessage-3 groupStart-23 wrapper-2 cozy-3 zalgo">
-                                <div class="contents-2mQqc9"><img loading="lazy" alt="ham's avatar"
-                                        src="https://cdn.discordapp.com/embed/avatars/0.png?size=128"
-                                        class="avatar-1 clickable-1bVtEA">
-                                    <h5 class="header-23"><span class="username-1 clickable-1 focusable">ham</span></h5>
-                                    <div class="markup messageContent">@CS:GO Notifications anyone want to play?</div>
-                                </div>
-                            </li>
-                            <li class="message-2 cozyMessage-3 groupStart-23 wrapper-2 cozy-3 zalgo">
-                                <div class="contents-2mQqc9"><img loading="lazy" alt="abee's avatar"
-                                        src="https://cdn.discordapp.com/embed/avatars/2.png?size=128"
-                                        class="avatar-1 clickable-1bVtEA">
-                                    <h5 class="header-23"><span class="username-1 clickable-1 focusable">abee</span>
-                                    </h5>
-                                    <div class="markup messageContent">comp if we get 3+</div>
-                                </div>
-                            </li>
-                        </ol>
-                    </div>
-                    <div class="msg-wrapper">
-                        <ol class="embedded-discord-msgs chatContent- chat-3 theme-dark">
-                            <li class="message-2 cozyMessage-3 groupStart-23 wrapper-2 cozy-3 zalgo">
-                                <div class="contents-2mQqc9"><img loading="lazy" alt="ham's avatar"
-                                        src="https://cdn.discordapp.com/embed/avatars/0.png?size=128"
-                                        class="avatar-1 clickable-1bVtEA">
-                                    <h5 class="header-23"><span class="username-1 clickable-1 focusable">ham</span></h5>
-                                    <div class="markup messageContent">@Minecraft Notifications I finished the farm!!
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="message-2 cozyMessage-3 groupStart-23 wrapper-2 cozy-3 zalgo">
-                                <div class="contents-2mQqc9"><img loading="lazy" alt="Harry Potter's avatar"
-                                        src="https://cdn.discordapp.com/embed/avatars/1.png?size=128"
-                                        class="avatar-1 clickable-1bVtEA">
-                                    <h5 class="header-23"><span class="username-1 clickable-1 focusable">Harry
-                                            Potter</span></h5>
-                                    <div class="markup messageContent">2 stacks of melon blocks</div>
-                                </div>
-                            </li>
-                        </ol>
-                    </div>
-                    <div class="msg-wrapper">
-                        <ol class="embedded-discord-msgs chatContent- chat-3 theme-dark">
-                            <li class="message-2 cozyMessage-3 groupStart-23 wrapper-2 cozy-3 zalgo">
-                                <div class="contents-2mQqc9"><img loading="lazy" alt="abee's avatar"
-                                        src="https://cdn.discordapp.com/embed/avatars/2.png?size=128"
-                                        class="avatar-1 clickable-1bVtEA">
-                                    <h5 class="header-23"><span class="username-1 clickable-1 focusable">abee</span>
-                                    </h5>
-                                    <div class="markup messageContent">@Movie Night Notifications time for movie night-- join #voice-1!</div>
-                                </div>
-                            </li>
-                            <li class="message-2 cozyMessage-3 groupStart-23 wrapper-2 cozy-3 zalgo">
-                                <div class="contents-2mQqc9"><img loading="lazy" alt="abee's avatar"
-                                        src="https://cdn.discordapp.com/embed/avatars/2.png?size=128"
-                                        class="avatar-1 clickable-1bVtEA">
-                                    <h5 class="header-23"><span class="username-1 clickable-1 focusable">abee</span>
-                                    </h5>
-                                    <div class="markup messageContent">We&apos;re watching HPGOF</div>
-                                </div>
-                            </li>
-                        </ol>
-                    </div>
-                    <div class="msg-wrapper">
-                        <ol class="embedded-discord-msgs chatContent- chat-3 theme-dark">
-                            <li class="message-2 cozyMessage-3 groupStart-23 wrapper-2 cozy-3 zalgo">
-                                <div class="contents-2mQqc9"><img loading="lazy" alt="rATs's avatar"
-                                        src="https://cdn.discordapp.com/embed/avatars/3.png?size=128"
-                                        class="avatar-1 clickable-1bVtEA">
-                                    <h5 class="header-23"><span class="username-1 clickable-1 focusable">rATs</span>
-                                    </h5>
-                                    <div class="markup messageContent">&gt;notify cs:go</div>
-                                </div>
-                            </li>
-                            <li class="message-2 cozyMessage-3 groupStart-23 wrapper-2 cozy-3 zalgo">
-                                <div class="contents-2mQqc9"><img loading="lazy" alt="fossilbot's avatar"
-                                        src="/img/splash-user-avatar/fossilbot.svg" class="avatar-1 clickable-1bVtEA">
-                                    <h5 class="header-23"><span
-                                            class="username-1 clickable-1 focusable">fossilbot</span></h5>
-                                    <div class="markup messageContent">You&apos;ve been added to the notification role for CS:GO</div>
-                                </div>
-                            </li>
-                        </ol>
-                    </div>
-                    <div class="msg-wrapper">
-                        <ol class="embedded-discord-msgs chatContent- chat-3 theme-dark">
-                            <li class="message-2 cozyMessage-3 groupStart-23 wrapper-2 cozy-3 zalgo">
-                                <div class="contents-2mQqc9"><img loading="lazy" alt="rATs's avatar"
-                                        src="https://cdn.discordapp.com/embed/avatars/3.png?size=128"
-                                        class="avatar-1 clickable-1bVtEA">
-                                    <h5 class="header-23"><span class="username-1 clickable-1 focusable">rATs</span>
-                                    </h5>
-                                    <div class="markup messageContent">&gt;notify movie night</div>
-                                </div>
-                            </li>
-                            <li class="message-2 cozyMessage-3 groupStart-23 wrapper-2 cozy-3 zalgo">
-                                <div class="contents-2mQqc9"><img loading="lazy" alt="fossilbot's avatar"
-                                        src="/img/splash-user-avatar/fossilbot.svg" class="avatar-1 clickable-1bVtEA">
-                                    <h5 class="header-23"><span
-                                            class="username-1 clickable-1 focusable">fossilbot</span></h5>
-                                    <div class="markup messageContent">You&apos;ve been added to the notification role for Movie Night</div>
-                                </div>
-                            </li>
-                        </ol>
-                    </div>
-                    <div class="msg-wrapper">
-                        <ol class="embedded-discord-msgs chatContent- chat-3 theme-dark">
-                            <li class="message-2 cozyMessage-3 groupStart-23 wrapper-2 cozy-3 zalgo">
-                                <div class="contents-2mQqc9"><img loading="lazy" alt="Mr. Gorbachev's avatar"
-                                        src="https://cdn.discordapp.com/embed/avatars/2.png?size=128"
-                                        class="avatar-1 clickable-1bVtEA">
-                                    <h5 class="header-23"><span class="username-1 clickable-1 focusable">Mr. Gorbachev</span></h5>
-                                    <div class="markup messageContent">&gt;notify Valorant</div>
-                                </div>
-                            </li>
-                            <li class="message-2 cozyMessage-3 groupStart-23 wrapper-2 cozy-3 zalgo">
-                                <div class="contents-2mQqc9"><img loading="lazy" alt="fossilbot's avatar"
-                                        src="/img/splash-user-avatar/fossilbot.svg" class="avatar-1 clickable-1bVtEA">
-                                    <h5 class="header-23"><span
-                                            class="username-1 clickable-1 focusable">fossilbot</span></h5>
-                                    <div class="markup messageContent">You&apos;ve been added to the notification role for Valorant</div>
-                                </div>
-                            </li>
-                        </ol>
-                    </div>
-                    <div class="msg-wrapper">
-                        <ol class="embedded-discord-msgs chatContent- chat-3 theme-dark">
-                            <li class="message-2 cozyMessage-3 groupStart-23 wrapper-2 cozy-3 zalgo">
-                                <div class="contents-2mQqc9"><img loading="lazy" alt="rATs's avatar"
-                                        src="https://cdn.discordapp.com/embed/avatars/3.png?size=128"
-                                        class="avatar-1 clickable-1bVtEA">
-                                    <h5 class="header-23"><span class="username-1 clickable-1 focusable">rATs</span>
-                                    </h5>
-                                    <div class="markup messageContent">&lt;p Can you go to the Junction?</div>
-                                </div>
-                                <div class="container-1ov-mD">
-                                    <div class="reactions">
-                                        <div>
-                                            <div class="reaction">
-                                                <div>
-                                                    <div class="reactionInner focusable"><img class="emoji"
-                                                            alt="Emoji reaction ✔️" loading="lazy"
-                                                            src="https://twemoji.maxcdn.com/v/13.0.1/svg/2705.svg">
-                                                        <div style="min-width: 10px;margin-right: 0.125rem;"
-                                                            class="reactionCount">5</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <div class="reaction">
-                                                <div>
-                                                    <div class="reactionInner focusable"><img class="emoji"
-                                                            alt="Emoji reaction ❤" loading="lazy"
-                                                            src="https://twemoji.maxcdn.com/v/13.0.1/svg/1f538.svg">
-                                                        <div style="min-width: 10px;margin-right: 0.125rem;"
-                                                            class="reactionCount">3</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <div class="reaction">
-                                                <div>
-                                                    <div class="reactionInner focusable"><img class="emoji"
-                                                            alt="Emoji reaction ❌" loading="lazy"
-                                                            src="https://twemoji.maxcdn.com/v/13.0.1/svg/274c.svg">
-                                                        <div style="min-width: 10px;margin-right: 0.125rem;"
-                                                            class="reactionCount">2</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                        </ol>
-                    </div>
+                    <div class="msg-wrapper"> <ol class="embedded-discord-msgs chatContent- chat-3 theme-dark"> <li class="message-2 cozyMessage-3 groupStart-23 wrapper-2 cozy-3 zalgo"> <div class="contents-2mQqc9"><img loading="lazy" alt="abee's avatar" src="https://cdn.discordapp.com/embed/avatars/2.png?size=128" class="avatar-1 clickable-1bVtEA"> <h5 class="header-23"><span class="username-1 clickable-1 focusable">abee</span> </h5> <div class="markup messageContent">@Movie Night Notifications time for movie night-- join #voice-1!</div> </div> </li> <li class="message-2 cozyMessage-3 groupStart-23 wrapper-2 cozy-3 zalgo"> <div class="contents-2mQqc9"><img loading="lazy" alt="abee's avatar" src="https://cdn.discordapp.com/embed/avatars/2.png?size=128" class="avatar-1 clickable-1bVtEA"> <h5 class="header-23"><span class="username-1 clickable-1 focusable">abee</span> </h5> <div class="markup messageContent">We're watching HPGOF</div> </div> </li> </ol> </div> 
+                    <div class="msg-wrapper"> <ol class="embedded-discord-msgs chatContent- chat-3 theme-dark"> <li class="message-2 cozyMessage-3 groupStart-23 wrapper-2 cozy-3 zalgo"> <div class="contents-2mQqc9"><img loading="lazy" alt="rATs's avatar" src="https://cdn.discordapp.com/embed/avatars/3.png?size=128" class="avatar-1 clickable-1bVtEA"> <h5 class="header-23"><span class="username-1 clickable-1 focusable" style="color:#d6d4a0">rATs</span></h5> <div class="markup messageContent">>namecolor #d6d4a0</div> </div> </li> <li class="message-2 cozyMessage-3 groupStart-23 wrapper-2 cozy-3 zalgo"> <div class="contents-2mQqc9"><img loading="lazy" alt="fossilbot's avatar" src="/img/splash-user-avatar/fossilbot.svg" class="avatar-1 clickable-1bVtEA"> <h5 class="header-23"><span class="username-1 clickable-1 focusable">fossilbot</span></h5> <div class="markup messageContent">Your nametag color has been set!</div> </div> </li> </ol> </div> 
+                    <div class="msg-wrapper"> <ol class="embedded-discord-msgs chatContent- chat-3 theme-dark"> <li class="message-2 cozyMessage-3 groupStart-23 wrapper-2 cozy-3 zalgo"> <div class="contents-2mQqc9"><img loading="lazy" alt="ham's avatar" src="https://cdn.discordapp.com/embed/avatars/0.png?size=128" class="avatar-1 clickable-1bVtEA"> <h5 class="header-23"><span class="username-1 clickable-1 focusable" style="color:#214e34">ham</span></h5> <div class="markup messageContent">>namecolor #214e34</div> </div> </li> <li class="message-2 cozyMessage-3 groupStart-23 wrapper-2 cozy-3 zalgo"> <div class="contents-2mQqc9"><img loading="lazy" alt="fossilbot's avatar" src="/img/splash-user-avatar/fossilbot.svg" class="avatar-1 clickable-1bVtEA"> <h5 class="header-23"><span class="username-1 clickable-1 focusable">fossilbot</span></h5> <div class="markup messageContent">Your nametag color has been set!</div> </div> </li> </ol> </div> 
+                    <div class="msg-wrapper"> <ol class="embedded-discord-msgs chatContent- chat-3 theme-dark"> <li class="message-2 cozyMessage-3 groupStart-23 wrapper-2 cozy-3 zalgo"> <div class="contents-2mQqc9"><img loading="lazy" alt="ham's avatar" src="https://cdn.discordapp.com/embed/avatars/0.png?size=128" class="avatar-1 clickable-1bVtEA"> <h5 class="header-23"><span class="username-1 clickable-1 focusable" style="color:#849324">ham</span></h5> <div class="markup messageContent">>namecolor #849324</div> </div> </li> <li class="message-2 cozyMessage-3 groupStart-23 wrapper-2 cozy-3 zalgo"> <div class="contents-2mQqc9"><img loading="lazy" alt="fossilbot's avatar" src="/img/splash-user-avatar/fossilbot.svg" class="avatar-1 clickable-1bVtEA"> <h5 class="header-23"><span class="username-1 clickable-1 focusable">fossilbot</span></h5> <div class="markup messageContent">Your nametag color has been set!</div> </div> </li> </ol> </div> 
+                    <div class="msg-wrapper"> <ol class="embedded-discord-msgs chatContent- chat-3 theme-dark"> <li class="message-2 cozyMessage-3 groupStart-23 wrapper-2 cozy-3 zalgo"> <div class="contents-2mQqc9"><img loading="lazy" alt="Mr. Gorbachev's avatar" src="https://cdn.discordapp.com/embed/avatars/2.png?size=128" class="avatar-1 clickable-1bVtEA"> <h5 class="header-23"><span class="username-1 clickable-1 focusable" style="color:#E73827">Mr. Gorbachev</span></h5> <div class="markup messageContent">>namecolor blood orange</div> </div> </li> <li class="message-2 cozyMessage-3 groupStart-23 wrapper-2 cozy-3 zalgo"> <div class="contents-2mQqc9"><img loading="lazy" alt="fossilbot's avatar" src="/img/splash-user-avatar/fossilbot.svg" class="avatar-1 clickable-1bVtEA"> <h5 class="header-23"><span class="username-1 clickable-1 focusable">fossilbot</span></h5> <div class="markup messageContent">Your nametag color has been set!</div> </div> </li> </ol> </div> 
+                    <div class="msg-wrapper"> <ol class="embedded-discord-msgs chatContent- chat-3 theme-dark"> <li class="message-2 cozyMessage-3 groupStart-23 wrapper-2 cozy-3 zalgo"> <div class="contents-2mQqc9"><img loading="lazy" alt="ham's avatar" src="https://cdn.discordapp.com/embed/avatars/0.png?size=128" class="avatar-1 clickable-1bVtEA"> <h5 class="header-23"><span class="username-1 clickable-1 focusable">ham</span></h5> <div class="markup messageContent">@Minecraft Notifications I finished the farm!! </div> </div> </li> <li class="message-2 cozyMessage-3 groupStart-23 wrapper-2 cozy-3 zalgo"> <div class="contents-2mQqc9"><img loading="lazy" alt="Harry Potter's avatar" src="https://cdn.discordapp.com/embed/avatars/1.png?size=128" class="avatar-1 clickable-1bVtEA"> <h5 class="header-23"><span class="username-1 clickable-1 focusable">Harry Potter</span></h5> <div class="markup messageContent">2 stacks of melon blocks</div> </div> </li> </ol> </div> 
+                    <div class="msg-wrapper"> <ol class="embedded-discord-msgs chatContent- chat-3 theme-dark"> <li class="message-2 cozyMessage-3 groupStart-23 wrapper-2 cozy-3 zalgo"> <div class="contents-2mQqc9"><img loading="lazy" alt="ham's avatar" src="https://cdn.discordapp.com/embed/avatars/0.png?size=128" class="avatar-1 clickable-1bVtEA"> <h5 class="header-23"><span class="username-1 clickable-1 focusable">ham</span></h5> <div class="markup messageContent">@CS:GO Notifications anyone want to play?</div> </div> </li> <li class="message-2 cozyMessage-3 groupStart-23 wrapper-2 cozy-3 zalgo"> <div class="contents-2mQqc9"><img loading="lazy" alt="abee's avatar" src="https://cdn.discordapp.com/embed/avatars/2.png?size=128" class="avatar-1 clickable-1bVtEA"> <h5 class="header-23"><span class="username-1 clickable-1 focusable">abee</span> </h5> <div class="markup messageContent">comp if we get 3+</div> </div> </li> </ol> </div> 
+                    <div class="msg-wrapper"> <ol class="embedded-discord-msgs chatContent- chat-3 theme-dark"> <li class="message-2 cozyMessage-3 groupStart-23 wrapper-2 cozy-3 zalgo"> <div class="contents-2mQqc9"><img loading="lazy" alt="Mr. Gorbachev's avatar" src="https://cdn.discordapp.com/embed/avatars/2.png?size=128" class="avatar-1 clickable-1bVtEA"> <h5 class="header-23"><span class="username-1 clickable-1 focusable" style="color:#F092DD">Mr. Gorbachev</span></h5> <div class="markup messageContent">>namecolor orchid</div> </div> </li> <li class="message-2 cozyMessage-3 groupStart-23 wrapper-2 cozy-3 zalgo"> <div class="contents-2mQqc9"><img loading="lazy" alt="fossilbot's avatar" src="/img/splash-user-avatar/fossilbot.svg" class="avatar-1 clickable-1bVtEA"> <h5 class="header-23"><span class="username-1 clickable-1 focusable">fossilbot</span></h5> <div class="markup messageContent">Your nametag color has been set!</div> </div> </li> </ol> </div> 
+                    <div class="msg-wrapper"> <ol class="embedded-discord-msgs chatContent- chat-3 theme-dark"> <li class="message-2 cozyMessage-3 groupStart-23 wrapper-2 cozy-3 zalgo"> <div class="contents-2mQqc9"><img loading="lazy" alt="Mr. Gorbachev's avatar" src="https://cdn.discordapp.com/embed/avatars/2.png?size=128" class="avatar-1 clickable-1bVtEA"> <h5 class="header-23"><span class="username-1 clickable-1 focusable">Mr. Gorbachev</span></h5> <div class="markup messageContent">>notify Valorant</div> </div> </li> <li class="message-2 cozyMessage-3 groupStart-23 wrapper-2 cozy-3 zalgo"> <div class="contents-2mQqc9"><img loading="lazy" alt="fossilbot's avatar" src="/img/splash-user-avatar/fossilbot.svg" class="avatar-1 clickable-1bVtEA"> <h5 class="header-23"><span class="username-1 clickable-1 focusable">fossilbot</span></h5> <div class="markup messageContent">You've been added to the notification role for Valorant</div> </div> </li> </ol> </div> 
+                    <div class="msg-wrapper"> <ol class="embedded-discord-msgs chatContent- chat-3 theme-dark"> <li class="message-2 cozyMessage-3 groupStart-23 wrapper-2 cozy-3 zalgo"> <div class="contents-2mQqc9"><img loading="lazy" alt="ham's avatar" src="https://cdn.discordapp.com/embed/avatars/0.png?size=128" class="avatar-1 clickable-1bVtEA"> <h5 class="header-23"><span class="username-1 clickable-1 focusable" style="color:#ff3cc7">ham</span></h5> <div class="markup messageContent">>namecolor #ff3cc7</div> </div> </li> <li class="message-2 cozyMessage-3 groupStart-23 wrapper-2 cozy-3 zalgo"> <div class="contents-2mQqc9"><img loading="lazy" alt="fossilbot's avatar" src="/img/splash-user-avatar/fossilbot.svg" class="avatar-1 clickable-1bVtEA"> <h5 class="header-23"><span class="username-1 clickable-1 focusable">fossilbot</span></h5> <div class="markup messageContent">Your nametag color has been set!</div> </div> </li> </ol> </div> 
+                    <div class="msg-wrapper"> <ol class="embedded-discord-msgs chatContent- chat-3 theme-dark"> <li class="message-2 cozyMessage-3 groupStart-23 wrapper-2 cozy-3 zalgo"> <div class="contents-2mQqc9"><img loading="lazy" alt="Mr. Gorbachev's avatar" src="https://cdn.discordapp.com/embed/avatars/2.png?size=128" class="avatar-1 clickable-1bVtEA"> <h5 class="header-23"><span class="username-1 clickable-1 focusable" style="color:#AF70C2">Mr. Gorbachev</span></h5> <div class="markup messageContent">>namecolor purple</div> </div> </li> <li class="message-2 cozyMessage-3 groupStart-23 wrapper-2 cozy-3 zalgo"> <div class="contents-2mQqc9"><img loading="lazy" alt="fossilbot's avatar" src="/img/splash-user-avatar/fossilbot.svg" class="avatar-1 clickable-1bVtEA"> <h5 class="header-23"><span class="username-1 clickable-1 focusable">fossilbot</span></h5> <div class="markup messageContent">Your nametag color has been set!</div> </div> </li> </ol> </div> 
+                    <div class="msg-wrapper"> <ol class="embedded-discord-msgs chatContent- chat-3 theme-dark"> <li class="message-2 cozyMessage-3 groupStart-23 wrapper-2 cozy-3 zalgo"> <div class="contents-2mQqc9"><img loading="lazy" alt="Mr. Gorbachev's avatar" src="https://cdn.discordapp.com/embed/avatars/2.png?size=128" class="avatar-1 clickable-1bVtEA"> <h5 class="header-23"><span class="username-1 clickable-1 focusable">Mr. Gorbachev</span></h5> <div class="markup messageContent">>namecolor #fcff6c</div> </div> </li> <li class="message-2 cozyMessage-3 groupStart-23 wrapper-2 cozy-3 zalgo"> <div class="contents-2mQqc9"><img loading="lazy" alt="fossilbot's avatar" src="/img/splash-user-avatar/fossilbot.svg" class="avatar-1 clickable-1bVtEA"> <h5 class="header-23"><span class="username-1 clickable-1 focusable">fossilbot</span></h5> <div class="markup messageContent">Your nametag color has been set!</div> </div> </li> </ol> </div> 
+                    <div class="msg-wrapper"> <ol class="embedded-discord-msgs chatContent- chat-3 theme-dark"> <li class="message-2 cozyMessage-3 groupStart-23 wrapper-2 cozy-3 zalgo"> <div class="contents-2mQqc9"><img loading="lazy" alt="rATs's avatar" src="https://cdn.discordapp.com/embed/avatars/3.png?size=128" class="avatar-1 clickable-1bVtEA"> <h5 class="header-23"><span class="username-1 clickable-1 focusable">rATs</span> </h5> <div class="markup messageContent">&gt;notify movie night</div> </div> </li> <li class="message-2 cozyMessage-3 groupStart-23 wrapper-2 cozy-3 zalgo"> <div class="contents-2mQqc9"><img loading="lazy" alt="fossilbot's avatar" src="/img/splash-user-avatar/fossilbot.svg" class="avatar-1 clickable-1bVtEA"> <h5 class="header-23"><span class="username-1 clickable-1 focusable">fossilbot</span></h5> <div class="markup messageContent">You've been added to the notification role for Movie Night</div> </div> </li> </ol> </div> 
+                    <div class="msg-wrapper"> <ol class="embedded-discord-msgs chatContent- chat-3 theme-dark"> <li class="message-2 cozyMessage-3 groupStart-23 wrapper-2 cozy-3 zalgo"> <div class="contents-2mQqc9"><img loading="lazy" alt="rATs's avatar" src="https://cdn.discordapp.com/embed/avatars/3.png?size=128" class="avatar-1 clickable-1bVtEA"> <h5 class="header-23"><span class="username-1 clickable-1 focusable" style="color:#ffb30f">rATs</span></h5> <div class="markup messageContent">>namecolor #ffb30f</div> </div> </li> <li class="message-2 cozyMessage-3 groupStart-23 wrapper-2 cozy-3 zalgo"> <div class="contents-2mQqc9"><img loading="lazy" alt="fossilbot's avatar" src="/img/splash-user-avatar/fossilbot.svg" class="avatar-1 clickable-1bVtEA"> <h5 class="header-23"><span class="username-1 clickable-1 focusable">fossilbot</span></h5> <div class="markup messageContent">Your nametag color has been set!</div> </div> </li> </ol> </div> 
+                    <div class="msg-wrapper"> <ol class="embedded-discord-msgs chatContent- chat-3 theme-dark"> <li class="message-2 cozyMessage-3 groupStart-23 wrapper-2 cozy-3 zalgo"> <div class="contents-2mQqc9"><img loading="lazy" alt="rATs's avatar" src="https://cdn.discordapp.com/embed/avatars/3.png?size=128" class="avatar-1 clickable-1bVtEA"> <h5 class="header-23"><span class="username-1 clickable-1 focusable">rATs</span> </h5> <div class="markup messageContent">Who wants to get icecream?</div> </div> <div class="container-1ov-mD"> <div class="reactions"> <div> <div class="reaction"> <div> <div class="reactionInner focusable"><img class="emoji" alt="Emoji reaction ✔️" loading="lazy" src="https://twemoji.maxcdn.com/v/13.0.1/svg/2705.svg"> <div style="min-width: 10px;margin-right: 0.125rem;" class="reactionCount">5</div> </div> </div> </div> </div> <div> <div class="reaction"> <div> <div class="reactionInner focusable"><img class="emoji" alt="Emoji reaction ❤" loading="lazy" src="https://twemoji.maxcdn.com/v/13.0.1/svg/1f538.svg"> <div style="min-width: 10px;margin-right: 0.125rem;" class="reactionCount">3</div> </div> </div> </div> </div> <div> <div class="reaction"> <div> <div class="reactionInner focusable"><img class="emoji" alt="Emoji reaction ❌" loading="lazy" src="https://twemoji.maxcdn.com/v/13.0.1/svg/274c.svg"> <div style="min-width: 10px;margin-right: 0.125rem;" class="reactionCount">2</div> </div> </div> </div> </div> </div> </div> </li> </ol> </div>
+                    <div class="msg-wrapper"> <ol class="embedded-discord-msgs chatContent- chat-3 theme-dark"> <li class="message-2 cozyMessage-3 groupStart-23 wrapper-2 cozy-3 zalgo"> <div class="contents-2mQqc9"><img loading="lazy" alt="rATs's avatar" src="https://cdn.discordapp.com/embed/avatars/3.png?size=128" class="avatar-1 clickable-1bVtEA"> <h5 class="header-23"><span class="username-1 clickable-1 focusable" style="color:#214e34">rATs</span></h5> <div class="markup messageContent">>namecolor #214e34</div> </div> </li> <li class="message-2 cozyMessage-3 groupStart-23 wrapper-2 cozy-3 zalgo"> <div class="contents-2mQqc9"><img loading="lazy" alt="fossilbot's avatar" src="/img/splash-user-avatar/fossilbot.svg" class="avatar-1 clickable-1bVtEA"> <h5 class="header-23"><span class="username-1 clickable-1 focusable">fossilbot</span></h5> <div class="markup messageContent">Your nametag color has been set!</div> </div> </li> </ol> </div> 
+                    <div class="msg-wrapper"> <ol class="embedded-discord-msgs chatContent- chat-3 theme-dark"> <li class="message-2 cozyMessage-3 groupStart-23 wrapper-2 cozy-3 zalgo"> <div class="contents-2mQqc9"><img loading="lazy" alt="rATs's avatar" src="https://cdn.discordapp.com/embed/avatars/3.png?size=128" class="avatar-1 clickable-1bVtEA"> <h5 class="header-23"><span class="username-1 clickable-1 focusable">rATs</span> </h5> <div class="markup messageContent">>notify cs:go</div> </div> </li> <li class="message-2 cozyMessage-3 groupStart-23 wrapper-2 cozy-3 zalgo"> <div class="contents-2mQqc9"><img loading="lazy" alt="fossilbot's avatar" src="/img/splash-user-avatar/fossilbot.svg" class="avatar-1 clickable-1bVtEA"> <h5 class="header-23"><span class="username-1 clickable-1 focusable">fossilbot</span></h5> <div class="markup messageContent">You've been added to the notification role for CS:GO</div> </div> </li> </ol> </div> 
+
                 </div>
             </div>
             <div id="hero-cta">
