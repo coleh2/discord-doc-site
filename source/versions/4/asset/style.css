@@ -1,5 +1,5 @@
 :root {
-    font-size: 13pt;
+    font-size: 1.2em;
 }
     body {
         font-family: 'Montserrat', sans-serif;
@@ -129,12 +129,31 @@
         font: inherit;
     }
 
-    main p {
+    main p, main li {
         line-height: 1.6;
+        font-family: 'Domine', 'Cambria', 'Cochin', Georgia, Times, 'Times New Roman', serif;
     }
+
+    main a:link {
+        color: #0095dd;
+    }
+
+    main a:visited {
+        color: #ac2a9a
+    }
+
+    main a:hover, main a:focus {
+        color: #b9a445;
+    }
+
     main li {
-        margin-bottom: 0.12em;
+        margin-bottom: 0.1em;
     }
+
+    ul[index] li, ul[toc] li, ul.breadcrumb li, main div li {
+        font-family: 'Montserrat';
+    }
+
     table {
         border-collapse: collapse;
     }
