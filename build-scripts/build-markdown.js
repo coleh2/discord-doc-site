@@ -19,38 +19,13 @@ svg.railroad-diagram g.diagram-text:hover path.diagram-text {fill: #eee;}
 </style>`;
 
 const DEVENV_ANALYTICS = `<!-- Matomo -->
-<script type="text/javascript">
-  var _paq = window._paq = window._paq || [];
-  /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
-  _paq.push(['disableCookies']);
-  _paq.push(['trackPageView']);
-  _paq.push(['enableLinkTracking']);
-  (function() {
-    var u="https://counter.clh.sh/";
-    _paq.push(['setTrackerUrl', u+'counter.php']);
-    _paq.push(['setSiteId', '2']);
-    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-    g.type='text/javascript'; g.async=true; g.src=u+'counter.js'; s.parentNode.insertBefore(g,s);
-  })();
-</script>
-<!-- End Matomo Code -->
+<script type="text/javascript">var sitecode = 2;</script>
+<script async src="https://counter.clh.sh/counter.js"></script>
+<!-- End Matomo Code -->`;
 
-`;
 const PRODUCTION_ANALYTICS = `<!-- Matomo -->
-<script type="text/javascript">
-  var _paq = window._paq = window._paq || [];
-  /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
-  _paq.push(['disableCookies']);
-  _paq.push(['trackPageView']);
-  _paq.push(['enableLinkTracking']);
-  (function() {
-    var u="https://counter.clh.sh/";
-    _paq.push(['setTrackerUrl', u+'counter.php']);
-    _paq.push(['setSiteId', '1']);
-    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-    g.type='text/javascript'; g.async=true; g.src=u+'counter.js'; s.parentNode.insertBefore(g,s);
-  })();
-</script>
+<script type="text/javascript">var sitecode = 1;</script>
+<script async src="https://counter.clh.sh/counter.js"></script>
 <!-- End Matomo Code -->`;
 
 
