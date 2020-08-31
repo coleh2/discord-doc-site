@@ -1,0 +1,503 @@
+:root {
+    font-size: 1.075em;
+}
+    body {
+        font-weight: 300;
+        color: #444;
+        margin: 0;
+        font-family: 'Montserrat', sans-serif;
+        position: relative;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        height: max-content;
+        box-sizing: border-box;
+    }
+
+    main {
+        margin: 40px auto;
+        width: 12.5in;
+        max-width: 100vw;
+        padding: 0 10px;
+        flex-grow: 1;
+        box-sizing: border-box;
+    }
+    main h1,h2,h3 {
+        font-weight: 600;
+    }
+
+    main h2 {
+        border-bottom: #444 solid 1px;
+    }
+    main h4,h5,h6,dt {
+        font-weight: 400;
+        font-family: 'Montserrat', sans-serif;
+    }
+
+    h1.highlighted,
+    h2.highlighted,
+    h3.highlighted,
+    h4.highlighted,
+    h5.highlighted {
+        animation: flashIndicate 2s;
+    }
+
+    h1 #share-button {
+        float: right;
+        cursor: pointer;
+        padding: 0;
+        border: 0;
+        background: none;
+    }
+
+    #share-popup {
+        position: fixed;
+        background: #fff;
+        font-size: 1rem;
+        max-width: 20em;
+        min-height: 3em;
+        padding: 0.75em;
+        border-radius: 5px;
+        box-sizing: border-box;
+        box-shadow: 0 0 10px 1px #000a;
+        font-weight: initial;
+        z-index: 100;
+    }
+
+    .url-copy-parent {
+        border-radius: 5px;
+        border: 1px solid #333;
+        max-width: 100%;
+        padding: 0.25em;
+        display: flex;
+        position: relative;
+        white-space: nowrap;
+    }
+
+    .url-copy-parent.copied::after {
+        content: "Copied!";
+        position: absolute;
+        top: -1em;
+        right: 0;
+        left: 0;
+        width: min-content;
+        text-align: center;
+        margin: auto;
+        padding: 3px;
+        background: #000a;
+        border-radius: 5px;
+        color: #eee;
+        animation: fade-up 1.5s;
+    }
+
+    .url-copy-parent input {
+        border: 0;
+        padding: 0;
+        background: none;
+        font: inherit;
+        flex-grow: 1;
+        flex-shrink: 1;
+        color: #585858;
+        display: inline-block;
+        flex-basis: 0px;
+        overflow: hidden;
+    }
+
+    .url-copy-parent button {
+        background: #fff;
+        margin-left: 0.25em;
+        cursor: pointer;
+        border: 0;
+        padding: 0;
+        height: 1.5em;
+        width: 1.5em;
+    }
+
+    .url-copy-parent button svg {
+        height: 1.5em;
+        width: 1.5em;
+    }
+
+    hr {
+        margin-top: 2em;
+        margin-bottom: 2em;
+    }
+    pre {
+        font-family: 'Fira Mono', monospace;
+        background: #424B54;
+        color: #FFFCF9;
+        padding: 0.5em;
+        border-radius: 0.125em;
+        overflow-x: auto;
+    }
+    pre code {
+        font: inherit;
+    }
+
+    main p, main li {
+        line-height: 1.6;
+        font-family: 'Domine', 'Cambria', 'Cochin', Georgia, Times, 'Times New Roman', serif;
+    }
+
+    main a:link {
+        color: #0095dd;
+    }
+
+    main a:visited {
+        color: #ac2a9a
+    }
+
+    main a:hover, main a:focus {
+        color: #b9a445;
+    }
+
+    main li {
+        margin-bottom: 0.1em;
+    }
+
+    ul[index] li, ul[toc] li, ul.breadcrumb li, main div li {
+        font-family: 'Montserrat', sans-serif;
+    }
+
+    table {
+        border-collapse: collapse;
+    }
+    th, td {
+        border: 1px solid #444;
+        padding: 0.2em;
+    }
+
+    .syntax-checker-widget {
+      background: #524254;
+      color: #FFFCF9;
+      margin-top: 0.5em;
+      margin-bottom: 0.5em;
+      min-height: 6em;
+      height: max-content;
+      overflow: hidden;
+      border-radius: 0.25em;
+    }
+    
+    .syntax-checker-widget h5 {
+      padding:  0.25em;
+      padding-top: 0.3em;
+      margin: 0;
+      font-size: 0.95em;
+    }
+
+    .syntax-checker-widget .syntax-widget-messages {
+        list-style-type: none;
+        background: #372D39;
+        margin: 0;
+        padding: 0.5em;
+        position: relative;
+        scroll-behavior: smooth;
+        padding-bottom: 0;
+        max-height: 14em;
+        overflow-y: auto;
+    }
+
+    .syntax-checker-widget .syntax-widget-messages li {
+        padding: 0.2em;
+        display: block;
+    }
+
+    .syntax-checker-widget .syntax-widget-messages li.selected {
+        background: #4D2E54;
+    }
+
+    .syntax-checker-widget .syntax-widget-messages::after {
+        content: "";
+        display: block;
+        height: 0.5em;
+        width: 100%;
+    }
+
+    .syntax-checker-widget .widget-body {
+        display: flex;
+        flex-wrap: wrap;
+        position: relative;
+        height: 5em;
+    }
+    
+    .syntax-checker-widget textarea {
+      background: #2D242E;
+      color: inherit;
+      border: 0;
+      font-family: 'Fira Mono', monospace;
+      flex-basis: 100px;
+      flex-grow: 1.5;
+      min-width: 350px;
+      margin: 0;
+      resize: none;
+      padding: 0.2em;
+      box-sizing: border-box;
+    }
+    
+    .syntax-checker-widget output {
+      flex-basis: 100px;
+      flex-grow: 1.5;
+      min-width: 350px;
+      overflow-y: auto;
+      display: block;
+      padding: 0.2em;
+      margin: 0;
+      box-sizing: border-box;
+      background: #433645;
+    }
+
+    .syntax-checker-widget .drag-handle {
+        display: none;
+    }
+
+    figure {
+        max-width:100%;
+        overflow-x: auto;
+    }
+
+    figcaption {
+        font-size: 0.95em;
+        font-weight: bold;
+    }
+
+    pre.download-file-instead-of-display {
+        background: none;
+        border: solid 2px #35443E;
+        font-family: inherit;
+        color: inherit;
+        border-radius: 0.5em;
+        display: flex;
+        align-items: center;
+    }
+
+    pre.download-file-instead-of-display img {
+        height: 2em;
+        margin-right: 0.5em;
+    }
+
+    pre.download-file-instead-of-display h5 {
+        font-size: 0.95em;
+        margin: 0;
+    }
+
+    pre.download-file-instead-of-display span {
+        font-size: 0.75em;
+    }
+
+    pre.download-file-instead-of-display code {
+        display: none;
+    }
+
+    header {
+        background: #022B3A;
+        padding: 1em;
+        display: flex;
+        align-items: center;
+    }
+
+    header form#search {
+        margin-left: auto;
+    }
+
+    header form#search label {
+        display: flex;
+        align-items: center;
+        position: relative;
+    }
+
+    header form#search input,
+    #search-large input {
+        background: #EBF9FE;
+        padding: 0.5em;
+        border-radius: 5px;
+        border: none;
+        display: none;
+    }
+
+    #search-large input {
+        background: none;
+        display: initial;
+        border: 1px solid #444;
+    }
+
+    header form#search button,
+    #search-large button {
+        background: none;
+        border: none;
+        margin: 0;
+        font-size: inherit;
+        padding: 0;
+        cursor: pointer;
+        display: inline-block;
+        height: min-content;
+        width: min-content;
+    }
+
+    a#logo-header {
+        color: #eee;
+        display: inline-block;
+        text-decoration: none;
+    }
+
+    #logoimg {
+        max-height: 2em;
+        margin-right: 0.75em;
+        border-radius: 100%;
+    }
+
+    header h1 {
+        display: flex;
+        align-items: center;
+        margin: 0;
+    }
+
+    footer {
+        color: #eee;
+        background: #022B3A;
+        overflow: hidden;
+        height: min-content;
+        min-height: 12em;
+        display: flex;
+        position: relative;
+        box-sizing: border-box;
+        padding: 0.5em;
+        width: 100%;
+    }
+
+    footer h2 {
+        margin: 0;
+        font-size: 1.25em;
+    }
+
+    footer ul {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    footer ul li {
+        margin-bottom: 10px;
+    }
+
+    footer ul a {
+        color: inherit;
+        text-decoration: none;
+    }
+
+    .footer-splash {
+        position: absolute;
+        height: 12em;
+        top: 0;
+        z-index: 0;
+        opacity: 0.15;
+    }
+
+    .footer-splash:first-child {
+        transform: scale(2.5) rotate(22.5deg);
+        left: 0;
+    }
+
+    .footer-splash:last-child {
+        display: none;
+    }
+
+    #footer-body {
+        z-index: 1;
+        display: flex;
+        flex-grow: 1;
+        padding: 0 2em 0 2em;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+    .breadcrumb {
+        margin: 0;
+        padding: 0;
+        display: block;
+    }
+
+    .breadcrumb li {
+        display: inline-block;
+    }
+
+    .breadcrumb li a {
+        color: inherit;
+        text-decoration: none;
+    }
+
+    .breadcrumb li::before {
+        content: "\0000A0/";
+        font-weight: normal;
+    }
+
+    .breadcrumb li:first-child::before {
+        content: "";
+    }
+
+    .breadcrumb li:last-child {
+        font-weight: bold;
+    }
+
+    svg.icon {
+        margin-right: 0.2em;
+        margin-left: 0.2em;
+        height: 1em;
+    }
+
+    .center-self {
+        margin: auto;
+    }
+
+
+    @media only screen and (min-width: 600px) {
+        .syntax-checker-widget .drag-handle {
+            position: absolute;
+            right: 50%;
+            left: 50%;
+            top: 0px;
+            width: 5px;
+            height: 5em;
+            cursor: ew-resize;
+            display: block;
+            transform: translateX(-2.5px);
+        }  
+        
+        footer {
+            padding: 0.5em 12vw 0.5em 12vw;
+        }
+
+        header form#search input {
+            display: initial;
+        }
+
+        .footer-splash {
+            opacity: 0.35;
+        }
+
+        #footer-body {
+            flex-wrap: nowrap;
+            justify-content: space-around;
+            padding: 0px;
+        }
+
+        .footer-splash:last-child {
+            transform: scale(2.5) rotate(203.5deg);
+            right: 0;
+            display: initial;
+        }
+    }
+
+    @media only screen and (min-width: 1000px) {
+        footer {
+            padding: 0.5em 25vw 0.5em 25vw;
+        }
+    }
+
+    @keyframes flashIndicate {
+        from {background:#E1CE7A;}
+        to {background:unset;}
+    }
+
+    @keyframes fade-up {
+        from {transform:translateY(0); opacity: 1;}
+        to {transform:translateY(-0.5em); opacity: 0;}
+    }
