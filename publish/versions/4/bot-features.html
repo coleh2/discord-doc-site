@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+    <title>Bot Features</title>
+
+    <meta name="generator" content="kramdown markedIt" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    
+
+    <link rel="preconnect" href="https://brick.freetls.fastly.net">
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+
+    <meta name="theme-color" content="#EBF9FE"/>
+
+    <script src="/versions/4/asset/download-file-widget.js" defer></script>
+    <script src="/versions/4/asset/heading-select.js" defer></script>
+    <script src="/versions/4/asset/share-button.js" defer></script>
+
+    
+
+    <link rel="stylesheet" href="/versions/4/asset/fonts.css">
+
+    <link rel="stylesheet" href="/versions/4/asset/style.css">
+
+    <!-- Matomo -->
+<script type="text/javascript">var sitecode = 1;</script>
+<script async src="https://counter.clh.sh/counter.js"></script>
+<!-- End Matomo Code -->
+</head>
+<body>
+    <header>
+        <h1 class="logo"><img src="/img/logo-256.png" alt="logo" id="logoimg"><a href="/"
+                id="logo-header">NHS Docs</a></h1>
+                <form id="search" action="/search" method="GET">
+                    <label>
+                        <input type="search" name="q" aria-label="Search Term" placeholder="Search">
+                        <button type="submit" aria-label="Search">
+                            <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#eee" d="M23.822 20.88l-6.353-6.354c.93-1.465 1.467-3.2 1.467-5.059.001-5.219-4.247-9.467-9.468-9.467s-9.468 4.248-9.468 9.468c0 5.221 4.247 9.469 9.468 9.469 1.768 0 3.421-.487 4.839-1.333l6.396 6.396 3.119-3.12zm-20.294-11.412c0-3.273 2.665-5.938 5.939-5.938 3.275 0 5.94 2.664 5.94 5.938 0 3.275-2.665 5.939-5.94 5.939-3.274 0-5.939-2.664-5.939-5.939z"/></svg>
+                        </button>
+                    </label>
+                </form>
+
+    </header>
+    <main>
+        <ul class="breadcrumb">
+            <li><a href="/">Home</a></li><li><a href="/versions">
+                Versions</a>
+            </li><li><a href="/versions/4">
+                4</a>
+            </li><li><a href="/versions/4/bot-features">
+                Bot Features</a>
+            </li>
+            </ul>
+        <h1 id="bot-features">Bot Features
+<button id="share-button" tabindex="0" data-shorten-address="75fd8ec">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M5 7c2.761 0 5 2.239 5 5s-2.239 5-5 5-5-2.239-5-5 2.239-5 5-5zm11.122 12.065c-.073.301-.122.611-.122.935 0 2.209 1.791 4 4 4s4-1.791 4-4-1.791-4-4-4c-1.165 0-2.204.506-2.935 1.301l-5.488-2.927c-.23.636-.549 1.229-.943 1.764l5.488 2.927zm7.878-15.065c0-2.209-1.791-4-4-4s-4 1.791-4 4c0 .324.049.634.122.935l-5.488 2.927c.395.535.713 1.127.943 1.764l5.488-2.927c.731.795 1.77 1.301 2.935 1.301 2.209 0 4-1.791 4-4z"/></svg>
+</button></h1>
+<ul toc><li><a href="#bot-features">Bot Features</a><ul><li><a href="#fossilbot">Fossilbot</a><ul><li><a href="#nametag-colors">Nametag colors</a></li><li><a href="#notification-roles">Notification roles</a></li><li><a href="#images">Images</a></li></ul></li><li><a href="#voting-bot">Voting-Bot</a><ul><li><a href="#yes-no-maybe">Yes/No/Maybe</a></li><li><a href="#yes-no">Yes/No</a></li><li><a href="#pick-from-numbers">Pick from Numbers</a></li></ul></li><li><a href="#rythm-fredboat">Rythm &amp; FredBoat</a></li><li><a href="#mee6">Mee6</a></li></ul></li></ul>
+<p>On the NHS server, you can use several bot features to customize your experience. If you know of a cool bot that offers something we don&#39;t have yet, please feel free to suggest it to the admins!</p>
+<p>Most bot commands should be done in the <code>#bot-poking</code> channel, but this isn&#39;t strictly enforced. As long as you&#39;re not spamming, you shouldn&#39;t feel forced to move to <code>#bot-poking</code> for a single message.</p>
+<h2 id="fossilbot">Fossilbot</h2>
+<p>Fossilbot is @coleh&#39;s bot. It runs several useful features, such as nametag colors and notify roles. The prefix for Fossilbot commands is <code>&gt;</code>.</p>
+<h3 id="nametag-colors">Nametag colors</h3>
+<p>You can customize your nametag color to whatever you like! Use <code>&gt;namecolor &lt;color&gt;</code> to set the nametag, where <code>&lt;color&gt;</code> is either a color name or a hex code. 
+To get a hex code, use <a href="https://www.w3schools.com/colors/colors_picker.asp">this page</a>, or just google &quot;color picker&quot; (make sure the hashtag is in front!).</p>
+<p>If you want to clear your color and go back to the default, use <code>&gt;namecolor clear</code>.</p>
+<h3 id="notification-roles">Notification roles</h3>
+<p>Notification roles let you add yourself to a role. This can then be pinged for events, if someone&#39;s looking for a group, or announcements-- it all depends on the role! </p>
+<p>To add yourself to a notification role, use <code>&gt;notify &lt;role&gt;</code>. If it doesn&#39;t already exist, it&#39;ll be created! Later, you can remove yourself with <code>&gt;unnotify &lt;role&gt;</code>. </p>
+<p>If you want to see who you&#39;re pinging, use <code>&gt;notified &lt;role&gt;</code> to see a list of people who are in the role.</p>
+<h3 id="images">Images</h3>
+<p>Fossilbot can automatically Google images for you; just use <code>&gt;getme &lt;any image search terms&gt;</code>.</p>
+<h2 id="voting-bot">Voting-Bot</h2>
+<p>Voting-bot is made by Adam C. It mainly manages voting, and has several different types of vote available.</p>
+<h3 id="yes-no-maybe">Yes/No/Maybe</h3>
+<p>This command will add the Yes, No, and Maybe reactions to your message. Just use <code>&lt;p &lt;your message&gt;</code> to invoke it!</p>
+<h3 id="yes-no">Yes/No</h3>
+<p>This is like Yes/No/Maybe, but doesn&#39;t add maybe. Use <code>&lt;y &lt;your message&gt;</code> for this one.</p>
+<h3 id="pick-from-numbers">Pick from Numbers</h3>
+<p>This command lets you pick from a customizable multiple-choice. Use <code>&lt;m &lt;number&gt; &lt;your message&gt;</code>, where <code>&lt;number&gt;</code> is the amount of choices you&#39;d like.</p>
+<h2 id="rythm-fredboat">Rythm &amp; FredBoat</h2>
+<p>Rythm and FredBoat are public music bots; with them, you can play Youtube videos in voice chat. We have 2 on this server in case either one goes down, or if 2 people want to listen in different voice channels.</p>
+<p>You can play music with Rythm using <code>!p &lt;search terms&gt;</code> or play with FredBoat using <code>;;p &lt;search terms&gt;</code>. More detailed documentation (skipping songs, viewing the queue, etc.) can be found <a href="https://rythmbot.co/features">here for Rythm</a> or <a href="https://docs.fredboat.com/">here for FredBoat</a>.</p>
+<h2 id="mee6">Mee6</h2>
+<p>Mee6 is a multipurpose bot, but we use it mostly for XP. You recieve 15-25 XP for every minute you&#39;re active. You can view your XP with <code>!rank</code> or view the server&#39;s leaderboard with <code>!leaderboard</code>.</p>
+    </main>
+    <footer>
+        <img aria-hidden="true" alt="" class="footer-splash" src="/versions/4/asset/footer-splash.svg">
+        <div id="footer-body">
+            <div style="margin-right:1em;">
+                <h2>Doc Versioning</h2>
+                <ul>
+                    <li><a href="/versions">Version List</a></li>
+                    <li><a rel="noreferrer" href="https://github.com/coleh2/discord-doc-site/network">Change Chart</a></li>
+                    <li><a href="/about-semver">Version Number Style</a></li>
+                    <li><a href="/about-site">About</a></li>
+                </ul>
+            </div>
+            <div>
+                <h2>Plumbing</h2>
+                <ul>
+                    <li><a rel="noreferrer" href="https://github.com/coleh2/discord-doc-site" target="_blank">View Source on GitHub</a>
+                    </li>
+                    <li><a href="/join">Join Discord</a></li>
+                    <li><a rel="noreferrer" href="https://github.com/coleh2/discord-doc-site/issues" target="_blank">Report Issues</a>
+                    </li>
+                    <li><a rel="noreferrer" href="https://github.com/coleh2/discord-doc-site/blob/master/contributing.md"
+                            target="_blank">Contribute Documentation</a></li>
+                </ul>
+            </div>
+        </div>
+        <img aria-hidden="true" alt="" class="footer-splash" src="/versions/4/asset/footer-splash.svg">
+    </footer>
+</body>
+
+</html>

@@ -1,0 +1,53 @@
+@font-face {
+	font-family: 'Montserrat';
+	font-style: normal;
+	font-weight: 300;
+    src: local('Montserrat Light'), url(https://brick.freetls.fastly.net/fonts/montserrat/300.woff) format('woff');
+    font-display: swap
+}
+
+@font-face {
+	font-family: 'Montserrat';
+	font-style: normal;
+	font-weight: 400;
+	src: local('Montserrat Regular'), url(https://brick.freetls.fastly.net/fonts/montserrat/400.woff) format('woff');
+    font-display: swap
+}
+
+@font-face {
+	font-family: 'Montserrat';
+	font-style: normal;
+	font-weight: 600;
+	src: local('Montserrat SemiBold'), url(https://brick.freetls.fastly.net/fonts/montserrat/600.woff) format('woff');
+    font-display: swap
+}
+
+@font-face {
+	font-family: 'Fira Mono';
+	font-style: normal;
+	font-weight: 400;
+	src: local('Fira Mono'), url(https://brick.freetls.fastly.net/fonts/firamono/400.woff) format('woff');
+    font-display: swap
+}
+
+@font-face {
+    font-family: 'Domine';
+    src: local('Domine Bold'), local('Domine-Bold'),
+        url('/img/font/Domine-Bold.woff2') format('woff2'),
+        url('/img/font/Domine-Bold.woff') format('woff'),
+        url('/img/font/Domine-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Domine';
+    src: local('Domine'), local('Domine-Regular'),
+        url('/img/font/Domine-Regular.woff2') format('woff2'),
+        url('/img/font/Domine-Regular.woff') format('woff'),
+        url('/img/font/Domine-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
