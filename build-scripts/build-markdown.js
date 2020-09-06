@@ -19,38 +19,13 @@ svg.railroad-diagram g.diagram-text:hover path.diagram-text {fill: #eee;}
 </style>`;
 
 const DEVENV_ANALYTICS = `<!-- Matomo -->
-<script type="text/javascript">
-  var _paq = window._paq = window._paq || [];
-  /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
-  _paq.push(['disableCookies']);
-  _paq.push(['trackPageView']);
-  _paq.push(['enableLinkTracking']);
-  (function() {
-    var u="https://counter.clh.sh/";
-    _paq.push(['setTrackerUrl', u+'counter.php']);
-    _paq.push(['setSiteId', '2']);
-    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-    g.type='text/javascript'; g.async=true; g.src=u+'counter.js'; s.parentNode.insertBefore(g,s);
-  })();
-</script>
-<!-- End Matomo Code -->
+<script type="text/javascript">var sitecode = 2;</script>
+<script async src="https://counter.clh.sh/counter.js"></script>
+<!-- End Matomo Code -->`;
 
-`;
 const PRODUCTION_ANALYTICS = `<!-- Matomo -->
-<script type="text/javascript">
-  var _paq = window._paq = window._paq || [];
-  /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
-  _paq.push(['disableCookies']);
-  _paq.push(['trackPageView']);
-  _paq.push(['enableLinkTracking']);
-  (function() {
-    var u="https://counter.clh.sh/";
-    _paq.push(['setTrackerUrl', u+'counter.php']);
-    _paq.push(['setSiteId', '1']);
-    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-    g.type='text/javascript'; g.async=true; g.src=u+'counter.js'; s.parentNode.insertBefore(g,s);
-  })();
-</script>
+<script type="text/javascript">var sitecode = 1;</script>
+<script async src="https://counter.clh.sh/counter.js"></script>
 <!-- End Matomo Code -->`;
 
 
@@ -205,6 +180,10 @@ function compileMarkdown(mdSource, sourceFileName, shortened, cb) {
 
     compiledHtml.html.text = replaceToc(compiledHtml);
 
+    var metaParsed = parseAndRemoveMetadata(compiledHtml.html.text);
+    compiledHtml.html.text = metaParsed.html;
+    var meta = metaParsed.meta;
+
     let builtFileName = sourceFileName.replace(mdSourceFolder,mdBuildFolder).replace(/\.md$/,".html");
 
     //don't override the file if it's already custom-made from the source directory
@@ -227,7 +206,7 @@ function compileMarkdown(mdSource, sourceFileName, shortened, cb) {
 
         let erbTemplate = fs.readFileSync(templateFileName, {encoding: "utf-8"});
 
-        resolveDocpageTemplate(compiledHtml, builtFileName, erbTemplate, fileDiagramContext, function(erbHtml) {
+        resolveDocpageTemplate(compiledHtml, builtFileName, erbTemplate, fileDiagramContext, meta, function(erbHtml) {
             cb(erbHtml,builtFileName);
         });
     } else {
@@ -264,6 +243,35 @@ function replaceToc(compiledHtml) {
     }
 }
 
+function parseAndRemoveMetadata(html) {
+    let metaRegex = /<meta [^>]+>\n?/;
+
+    let metaStart = html.indexOf("<meta ");
+    
+    let metaTags = [];
+
+    while(metaStart != -1) {
+        let metaResult = metaRegex.exec(html);
+        if(!metaResult) {
+            //if it's not correct, ruin the match, then continue
+            html = html.replace("<meta", "<notmeta");
+            metaStart = html.indexOf("<meta ");
+            continue;
+        }
+
+        metaTags.push(metaResult[0]);
+
+        html = html.replace(metaRegex, "");
+
+        metaStart = html.indexOf("<meta ");
+    }
+
+    return {
+        html: html,
+        meta: metaTags.join("\n")
+    }
+} 
+
 function generateTocList(toc,maxLevel,parserProblemState,currentLevel) {
     if(!toc.topics) return "";
     if(!parserProblemState) parserProblemState = 0;
@@ -291,7 +299,7 @@ function generateTocList(toc,maxLevel,parserProblemState,currentLevel) {
     return html;
 }
 
-function resolveDocpageTemplate(compiledHtml, fileName, erbTemplate, fileDiagramContext, cb) {
+function resolveDocpageTemplate(compiledHtml, fileName, erbTemplate, fileDiagramContext, metaTags, cb) {
         let title;
 
         if(compiledHtml.jsonToc.text.length > "{\"toc\":{}}".length) {
@@ -333,6 +341,8 @@ function resolveDocpageTemplate(compiledHtml, fileName, erbTemplate, fileDiagram
         let version = /(v\d+)/.exec(fileName);
         if(version) version = `<a href="./">This page is part of ${version[1]}</a>`;
 
+        console.log("mt", metaTags);
+
         erbParser({
             data: {
                 fields: {
@@ -343,7 +353,8 @@ function resolveDocpageTemplate(compiledHtml, fileName, erbTemplate, fileDiagram
                     logoImage: "https://cdn.discordapp.com/icons/392830469500043266/ec0abbd24cc285867bf1a0f98048d327.png",
                     breadcrumbs: breadcrumbHtml,
                     docVersion: version,
-                    analyticsScript: (process.env.CI=="true")?PRODUCTION_ANALYTICS:DEVENV_ANALYTICS
+                    analyticsScript: (process.env.CI=="true")?PRODUCTION_ANALYTICS:DEVENV_ANALYTICS,
+                    metaTags: metaTags
                 }
             },
             template: erbTemplate

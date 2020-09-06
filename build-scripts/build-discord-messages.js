@@ -60,7 +60,6 @@ function buildMessageListItemFromJson(messageObj) {
     let postDate = new Date(messageObj.timestamp);
     let messageTime = `${(postDate.getHours()%13)+1}:${postDate.getMinutes()>9?"":"0"}${postDate.getMinutes()} ${postDate.getHours()<12?"A":"P"}M`;
     let messageAuthor = messageObj.author.username;
-    let messageContent = messageObj.content;
 
     let li = fakeDom.createElement("li");
     li.setAttribute("class", "message-2 cozyMessage-3 groupStart-23 wrapper-2 cozy-3 zalgo");
@@ -92,6 +91,17 @@ function parseMessageContent(messageObj) {
 
     let components = [];
     let lastComponentIndex = 0;
+
+    //check if the type of message is normal, pin, etc
+    switch(messageObj.type) {
+        case 0:
+            break;
+        case 6:
+            return [{
+                type: "text",
+                content: `${messageObj.author.username} pinned a message to this channel.`
+            }]
+    }
     //loop through for links & mentions
     for(var i = 0; i < messageContent.length; i++) {
 
@@ -106,8 +116,7 @@ function parseMessageContent(messageObj) {
                 type: "text",
                 content: messageContent.substring(lastComponentIndex, i)
             });
-
-            console.log(nextWord);
+            
             components.push({
                 type: "link",
                 content: nextWord
@@ -156,20 +165,19 @@ function parseMessageContent(messageObj) {
                 lastComponentIndex = i += 22;
             }
             //channel mentions
-            if(/<@#\d{18}>/.test(messageContent.substring(i, i + 22))) {
+            if(/<#\d{18}>/.test(messageContent.substring(i, i + 21))) {
                 //fill in text before here
                 components.push({
                     type: "text",
-                    content: messageContent.substring(lastComponentIndex, i-1)
+                    content: messageContent.substring(lastComponentIndex, i)
                 });
 
                 let mentionText = messageContent.substring(i, i + 22);
-                let channelId = /<@#(\d{18})>/.exec(mentionText)[1];
-                let mention = messageObj.mention_channels.find(x => x.id == channelId);
+                let channelId = /<#(\d{18})>/.exec(mentionText)[1];
 
                 components.push({
                     type: "channelMention",
-                    mention: mention
+                    mention: `deleted-channel ${channelId % 100}`
                 });
 
                 lastComponentIndex = i += 22;
@@ -179,12 +187,12 @@ function parseMessageContent(messageObj) {
                 //fill in text before here
                 components.push({
                     type: "text",
-                    content: messageContent.substring(lastComponentIndex, i-1)
+                    content: messageContent.substring(lastComponentIndex, i)
                 });
 
                 let mentionText = messageContent.substring(i, i + 22);
                 let roleId = /<@&(\d{18})>/.exec(mentionText)[1];
-                let mention = messageObj.mention_roles.find(x => x.id == roleId);
+                let mention = messageObj.mention_roles.find(x => x.id == roleId) || {};
 
                 components.push({
                     type: "roleMention",
@@ -236,7 +244,7 @@ function buildMessageContents(components) {
             case "channelMention":
                 mention = fakeDom.createElement("span");
                 mention.setAttribute("class", "mention mentionWrapper interactive");
-                mention.textContent = `@${component.mention.username || component.mention.name || "Unknown Role"}`;
+                mention.textContent = `#${component.mention || "Unknown Channel"}`;
                 content.appendChild(mention);
             break;
         }
@@ -264,6 +272,7 @@ function buildEmbedsContainer(messageObj) {
             image.setAttribute("loading", "lazy");
             image.setAttribute("alt", `Attachment ${messageObj.attachments[i].name}`);
             image.setAttribute("src", messageObj.attachments[i].proxy_url + "?height=300&width=" + Math.round(imageWidth));
+            image.setAttribute("height", imageHeight);
             
             imageWrapper.appendChild(image);
             container.appendChild(imageWrapper);
@@ -301,7 +310,7 @@ function buildEmbedsContainer(messageObj) {
                 
                 let titleLink = fakeDom.createElement("a");
                 titleLink.setAttribute("class", "anchor anchorUnderlineOnHover embedTitleLink embedLink embedTitle");
-                titleLink.setAttribute("href", embedObj.url);
+                titleLink.setAttribute("href", embedObj.url || "");
                 titleLink.setAttribute("target", "_blank");
                 titleLink.setAttribute("rel", "noreferrer noopener");
                 titleLink.textContent = embedObj.title;
@@ -352,16 +361,27 @@ function buildEmbedsContainer(messageObj) {
             let reactionInner = fakeDom.createElement("div");
             reactionInner.setAttribute("class", "reactionInner focusable");
             
-            let emojiText = messageObj.reactions[i].emoji.name
-            //if it's 2 characters or more, treat it as a utf-16 emoji and do Confusing Bitwise Math to convert it to a single codepoint
-            let reactionEmojiCode = emojiText.length == 1 ? 
-                    emojiText.charCodeAt(0).toString(16)
-                    : (0x10000 + (((emojiText.charCodeAt(0) & 0x3ff)<<10) | (emojiText.charCodeAt(1) & 0x3ff))).toString(16);
+            let emojiText = messageObj.reactions[i].emoji.name;
+            let emojiImageUrl = "";
+
+            //load twemoji if it's a normal unicode emoji
+            if(messageObj.reactions[i].emoji.id == null) {
+                //if it's 2 characters or more, treat it as a utf-16 emoji and do Confusing Bitwise Math to convert it to a single codepoint
+                let reactionEmojiCode = emojiText.length == 1 ? 
+                        emojiText.charCodeAt(0).toString(16)
+                        : (0x10000 + (((emojiText.charCodeAt(0) & 0x3ff)<<10) | (emojiText.charCodeAt(1) & 0x3ff))).toString(16);
+
+                emojiImageUrl = `https://twemoji.maxcdn.com/v/13.0.0/svg/${reactionEmojiCode}.svg`;
+            } else {
+                //load the discord cdn if it's not unicode
+                emojiImageUrl = `https://cdn.discordapp.com/emojis/${messageObj.reactions[i].emoji.id}.png`;
+            }
+
             let reactionEmoji = fakeDom.createElement("img");
             reactionEmoji.setAttribute("class", "emoji");
             reactionEmoji.setAttribute("alt", "Emoji reaction " + emojiText);
             reactionEmoji.setAttribute("loading", "lazy");
-            reactionEmoji.setAttribute("src", `https://twemoji.maxcdn.com/v/13.0.0/svg/${reactionEmojiCode}.svg`);
+            reactionEmoji.setAttribute("src", emojiImageUrl);
 
             let reactionCount = fakeDom.createElement("div");
             reactionCount.setAttribute("class", "reactionCount");
