@@ -16,7 +16,7 @@
   },
   "devDependencies": {},
   "scripts": {
-    "build": "./build-scripts/github-build.sh",
+    "build": "./build-scripts/build.sh",
     "start": "node build-scripts/local-dev-server.js"
   },
   "repository": {
