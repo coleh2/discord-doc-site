@@ -18,6 +18,7 @@
         margin: 40px auto;
         width: 12.5in;
         max-width: 100vw;
+        box-sizing: border-box;
         padding: 0 10px;
         flex-grow: 1;
     }
