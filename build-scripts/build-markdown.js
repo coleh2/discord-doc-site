@@ -154,6 +154,7 @@ cleanMarkdownFilesFromFolder(mdBuildFolder);
 
 function compileMarkdown(mdSource, sourceFileName, shortened, cb) {
     let fileDiagramContext = {}; 
+    let existingIdCache = {};
 
     let compiledHtml = markedIt.generate(mdSource, {
         extensions: {
@@ -172,7 +173,17 @@ function compileMarkdown(mdSource, sourceFileName, shortened, cb) {
                     else if(html.startsWith("<ul index>")) return "<ul index></ul>";
                 },
                 onHeading: function(html, data) {
-                    if(html.startsWith("<h1")) return html.replace("</h1>", SHARE_BUTTON_HTML.replace("{{shortened}}", shortened) + "</h1>")
+                    var idRegex = (/id="([\w-]+)"/).exec(html),
+                        id = idRegex[1];
+                    if(!existingIdCache[id]) {
+                        existingIdCache[id]=1;
+                    } else {
+                        existingIdCache[id]++;
+                        console.log( `id="${id}-${existingIdCache[id]}"`);
+                        return html.replace(`id="${id}"`, `id="${id}-${existingIdCache[id]}"`);
+                    }
+
+                    if(html.startsWith("<h1")) return html.replace("</h1>", SHARE_BUTTON_HTML.replace("{{shortened}}", shortened) + "</h1>");
                 }
             }
         }
@@ -272,10 +283,11 @@ function parseAndRemoveMetadata(html) {
     }
 } 
 
-function generateTocList(toc,maxLevel,parserProblemState,currentLevel) {
+function generateTocList(toc,maxLevel,parserProblemState,currentLevel,existingTopics) {
     if(!toc.topics) return "";
     if(!parserProblemState) parserProblemState = 0;
     if(!currentLevel) currentLevel = 0;
+    if(!existingTopics) existingTopics = {};
 
     if(!toc.label) parserProblemState = 2;
 
@@ -289,9 +301,16 @@ function generateTocList(toc,maxLevel,parserProblemState,currentLevel) {
         //communicate current parser-weirdness to the children so they can adapt to it
         let childParserProblem = 0;
         if(toc.topics[i+1] && !toc.topics[i+1].label) childParserProblem = 1;
+
+        if(!existingTopics[toc.topics[i].label]) {
+            existingTopics[toc.topics[i].label]=1;
+        } else {
+            existingTopics[toc.topics[i].label]++;
+            toc.topics[i].id = `${toc.topics[i].id}-${existingTopics[toc.topics[i].label]}`;
+        }
         
-        if(!toc.topics[i].label) html += generateTocList(toc.topics[i], maxLevel, 3,currentLevel+1);
-        else html += `<li><a href="#${toc.topics[i].id}">${toc.topics[i].label}</a>${generateTocList(toc.topics[i], maxLevel, childParserProblem,currentLevel+1)}</li>`
+        if(!toc.topics[i].label) html += generateTocList(toc.topics[i], maxLevel, 3,currentLevel+1,existingTopics);
+        else html += `<li><a href="#${toc.topics[i].id}">${toc.topics[i].label}</a>${generateTocList(toc.topics[i], maxLevel, childParserProblem,currentLevel+1,existingTopics)}</li>`
     }
 
     if(parserProblemState != 1 && parserProblemState != 3) html += "</ul>";
@@ -338,11 +357,6 @@ function resolveDocpageTemplate(compiledHtml, fileName, erbTemplate, fileDiagram
             </ul>`
         }
 
-        let version = /(v\d+)/.exec(fileName);
-        if(version) version = `<a href="./">This page is part of ${version[1]}</a>`;
-
-        console.log("mt", metaTags);
-
         erbParser({
             data: {
                 fields: {
@@ -352,7 +366,6 @@ function resolveDocpageTemplate(compiledHtml, fileName, erbTemplate, fileDiagram
                     railroadStyle: fileDiagramContext.railroad>0?RAILROAD_STYLE:"",
                     logoImage: "https://cdn.discordapp.com/icons/392830469500043266/ec0abbd24cc285867bf1a0f98048d327.png",
                     breadcrumbs: breadcrumbHtml,
-                    docVersion: version,
                     analyticsScript: (process.env.CI=="true")?PRODUCTION_ANALYTICS:DEVENV_ANALYTICS,
                     metaTags: metaTags
                 }
