@@ -34,7 +34,7 @@
         }
     });
 
-    var results = searchIndex.search(params.get("q"));
+    window.results = searchIndex.search(params.get("q"));
 
     serpQuery.textContent = `${results.length} results for "${params.get("q")}"`
 
@@ -75,20 +75,35 @@
         let snippet = document.createElement("p");
         let matchTerm = Object.keys(matchData.metadata)[0];
 
-        let matchIndex = text.indexOf(matchTerm);
+        let matchIndex = caseInsensitiveIndexOf(text, matchTerm);
         let snippetText = text.substring(matchIndex-100,matchIndex+100);
 
-        snippet.innerHTML = `&hellip;${boldifySubstring(snippetText, matchTerm)}&hellip;`;
+        snippet.appendChild(boldifySubstring(snippetText, matchTerm, matchIndex));
 
         return snippet;
     }
 
-    function boldifySubstring(text, substr) {
-        let subIndex = text.indexOf(substr);
+    function boldifySubstring(text, substr, indexOverride) {
+        let subIndex = indexOverride || caseInsensitiveIndexOf(text, matchTerm);
 
         let before = text.substring(0,subIndex);
+        let instance = text.substring(subIndex, subIndex + substr.length);
         let after = text.substring(subIndex + substr.length);
 
-        return `${before}<strong>${substr}</strong>${after}`
+        let paragraph = document.createElement("p");
+
+        paragraph.appendChild(document.createTextNode(before));
+
+        let strong = document.createElement("strong");
+        strong.innerText = instance;
+        paragraph.appendChild(strong);
+
+        paragraph.appendChild(document.createTextNode(after));
+
+        return paragraph;
+    }
+
+    function caseInsensitiveIndexOf(text, substr) {
+        return text.toLowerCase().indexOf(substr.toLowerCase());
     }
 })();
