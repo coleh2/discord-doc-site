@@ -57,7 +57,7 @@ for(let i = 0; i < additionalCharts.length; i++) {
 
 const debugLevel = 3;
 
-let erbParser = require("erb");
+let erbParser = require("./templater.js");
 
 let projectFolder = process.env.NHS_RULES_DIR || path.resolve(__dirname,"..");
 
@@ -358,7 +358,7 @@ function resolveDocpageTemplate(compiledHtml, fileName, erbTemplate, fileDiagram
                 }
             },
             template: erbTemplate
-        }).then(function(erbHtml) {
+        }, function(erbHtml) {
             if(debugLevel >=2) console.log(`Template applied successfully`);
             cb(erbHtml);
         }, function(error) {
