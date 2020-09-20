@@ -179,7 +179,6 @@ function compileMarkdown(mdSource, sourceFileName, shortened, cb) {
                         existingIdCache[id]=1;
                     } else {
                         existingIdCache[id]++;
-                        console.log( `id="${id}-${existingIdCache[id]}"`);
                         return html.replace(`id="${id}"`, `id="${id}-${existingIdCache[id]}"`);
                     }
 
@@ -477,6 +476,17 @@ function parseDiagrams(html, data, context) {
                 //default to no-credits
                 if(!chartParams.credits) chartParams.credits = {};
                 if(!chartParams.credits.enabled) chartParams.credits.enabled = false;
+
+                if(!chartParams.colors) chartParams.colors = [
+                    "#CD9575","#78DBE2","#87A96B","#FFA474","#9F8170","#FD7C6E","#1F75FE","#A2A2D0","#0D98BA","#7366BD","#DE5D83","#CB4154","#B4674D",
+                    "#FF7F49","#EA7E5D","#B0B7C6","#00CC99","#DD4492","#1DACD6","#BC5D58","#DD9475","#9ACEEB","#FDDB6D","#2B6CC4","#CEFF1D","#71BC78",
+                    "#6DAE81","#C364C5","#CC6666","#E7C697","#FCD975","#A8E4A0","#95918C","#1CAC78","#FF1DCE","#B2EC5D","#5D76CB","#CA3767","#3BB08F",
+                    "#FEFE22","#FFBD88","#F664AF","#CD4A4C","#979AAA","#FF8243","#C8385A","#EF98AA","#30BA8F","#1974D2","#FFA343","#BAB86C","#FF7538",
+                    "#FF6E4A","#1CA9C9","#F78FA7","#8E4585","#7442C8","#9D81BA","#FE4EDA","#FF496C","#D68A59","#FF48D0","#E3256B","#EE204D","#FF5349",
+                    "#C0448F","#1FCECB","#7851A9","#FF9BAA","#FC2847","#76FF7A","#93DFB8","#A5694F","#8A795D","#45CEA2","#CDC5C2","#80DAEB","#FFCF48",
+                    "#FD5E53","#FAA76C","#FC89AC","#DEAA88","#77DDE7","#926EAE","#F75394","#FFA089","#8F509D","#A2ADD0","#FF43A4","#FC6C85","#CDA4DE",
+                    "#C5E384","#FFAE42"
+                  ];
 
                 let chart = Highcharts.chart(chartParams);
 
