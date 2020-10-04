@@ -2,3 +2,10 @@
 
 /versions/latest  /versions/4
 /versions/latest/*  /versions/4/:splat
+
+# redirect vanity domains to cannonical (doc.nhs.gg)
+
+http://docs.nhs.gg/* https://doc.nhs.gg/:splat 301!
+https://docs.nhs.gg/* https://doc.nhs.gg/:splat 301!
+http://d.nhs.gg/* https://doc.nhs.gg/:splat 301!
+https://d.nhs.gg/* https://doc.nhs.gg/:splat 301!
