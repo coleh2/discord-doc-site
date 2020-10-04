@@ -51,7 +51,7 @@ In order to build locally, you must first install build dependencies-- luckily, 
 Make sure your terminal is open and navigated to the project folder (you should see `discord-doc-site` before your cursor), and then enter `npm install`. 
 This command may take a bit depending on your computer's speed.
 
-Next, enter `build-scripts/local-build.sh` to start the build. This should take a moderate amount of time; if it takes over 5m on a relatively recent computer, something has gone wrong.
+Next, enter `npm run build` to start the build. This should take a moderate amount of time; if it takes over 5m on a relatively recent computer, something has gone wrong.
 
 In order to preview the files exactly as they will appear online, you can enter `npm start` to start a debugging server.
 It will tell you a web address that you can enter into your web browser to connect to the local server; this should appear just like the version that's published on the Internet!
