@@ -32,9 +32,9 @@
             if(!response.results || response.results.length == 0) {
                 return serpQuery.textContent = `No results found for "${params.get("q")}"`;
             } else {
-                serpQuery.textContent = `${results.length} results for "${params.get("q")}"`
+                serpQuery.textContent = `${response.results.length} results for "${params.get("q")}"`
                 serpLoading.hidden = true;
-                for(var i = 0; i < results.length; i++) {
+                for(var i = 0; i < response.results.length; i++) {
                     serpList.appendChild(buildResult(response.results[i]));
                 }
             }
