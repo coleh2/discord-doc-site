@@ -28,7 +28,7 @@ If you want to see who you're pinging, use `>notified <role>` to see a list of p
 
 ### Images
 
-Fossilbot can automatically Google images for you; just use `>getme <any image search terms>`.
+Fossilbot can automatically Google images for you; just use `>getme <any image search terms>`. If you don't like the first result, you can use `>getme <your search terms> number <number>` to get the `number`th result instead.
 
 ## Voting-Bot
 
