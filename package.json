@@ -4,6 +4,7 @@
   "description": "",
   "dependencies": {
     "compression": "^1.7.4",
+    "elasticlunr": "^0.9.5",
     "express": "^4.17.1",
     "marked-it-core": "^0.14.1",
     "parse5": "^6.0.0",
