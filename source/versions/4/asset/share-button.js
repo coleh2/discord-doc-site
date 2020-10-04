@@ -4,7 +4,7 @@ window.addEventListener("load", function() {
 
     let shareButton = document.getElementById("share-button"),
         shareUrlPath = shareButton.getAttribute("data-shorten-address"),
-        shortShareUrl = new URL("/" + shareUrlPath, location.origin);
+        shortShareUrl = new URL("/" + shareUrlPath, location.origin.match(/https:\/\/d(ocs?)?.nhs.gg/) ? "https://d.nhs.gg" : location.origin); //go to shortener domain if applicable
     let sharePop;
 
     if(shareButton) {
