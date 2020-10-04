@@ -32,6 +32,8 @@ Fossilbot can automatically Google images for you; just use `>getme <any image s
 
 ## Voting-Bot
 
+> **Warning**: Voting-Bot is permenantly down for the foreseeable future; none of these features will currently work. This documentation is preserved for historical reasons.
+
 Voting-bot is made by Adam C. It mainly manages voting, and has several different types of vote available.
 
 ### Yes/No/Maybe
@@ -46,11 +48,7 @@ This is like Yes/No/Maybe, but doesn't add maybe. Use `<y <your message>` for th
 
 This command lets you pick from a customizable multiple-choice. Use `<m <number> <your message>`, where `<number>` is the amount of choices you'd like.
 
-### Anonymous Voting
-
-
-
-### Uncrutsicalc
+### Uncrusticalc
 
 Do you want to know how much an [Uncrustable](https://en.wikipedia.org/wiki/Sealed_crustless_sandwich) costs? Just use `<uncrusticalc <number>`, where `<number>` is the number of Uncrustables. To clarify, this is a meme feature.
 
