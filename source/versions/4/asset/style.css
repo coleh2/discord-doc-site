@@ -455,21 +455,21 @@
     }
 
     .breadcrumb li a {
-        color: inherit;
+        color: #0095dd;
         text-decoration: none;
     }
 
     .breadcrumb li::before {
         content: "\0000A0/";
-        font-weight: normal;
+        font-weight: lighter;
     }
 
     .breadcrumb li:first-child::before {
         content: "";
     }
 
-    .breadcrumb li:last-child {
-        font-weight: bold;
+    .breadcrumb li:last-child a {
+        color: inherit;
     }
 
     svg.icon {
