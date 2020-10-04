@@ -1,3 +1,5 @@
+<meta name="description" content="Which channels to use, when they're used, and when to switch between them" />
+
 # Channel Usage Guidelines
 
 This document is an explanation of which channel you should use, when you should use them, and when you should move to other channels. This is not a rule, though; just guidelines! Don't feel pressured to move if you've started a conversation, unless people are telling you to, in which case it's polite to!

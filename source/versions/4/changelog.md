@@ -1,3 +1,5 @@
+<meta name="description" content="Basic description of changes made in version 4" />
+
 # Version 4.0.0 Changes
 
 ## Multi-File

@@ -1,3 +1,5 @@
+<meta name="description" content="Mark's ruleset. This is the currently enforced ruleset" />
+
 *Author: Mark*
 
 # Rules while I am King (and hopefully others use these as well):

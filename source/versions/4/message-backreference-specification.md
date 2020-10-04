@@ -1,3 +1,5 @@
+<meta name="description" content="How to use backreferences to quickly refer to other messages" />
+
 # Message Backreference Specification
 
 * Table of Contents
