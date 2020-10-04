@@ -27,6 +27,9 @@ exports.handler = function(event, context, callback) {
 
     if(!searchQuery) return callback(null, {
         statusCode: 400,
+        headers: {
+            "Content-Type": "application/json"
+        },
         body: `{"error": "No search param q"}`
     });
 
@@ -39,13 +42,9 @@ exports.handler = function(event, context, callback) {
     }
     callback(null, {
         statusCode: 200,
+        headers: {
+            "Content-Type": "application/json"
+        },
         body: JSON.stringify({ results: searchResults })
     });
 };
-
-exports.handler({
-    queryStringParameters: {
-        q: "mark"
-    }
-}, 
-{}, console.log)
