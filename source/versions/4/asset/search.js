@@ -1,8 +1,8 @@
 (function() {
-    if(!window.pageIndex) return;
 
     var params = new URLSearchParams(window.location.search);
 
+    let serpInput = document.getElementById("main-search-input");
     let serpList = document.getElementById("serp-list");
     let serpQuery = document.getElementById("serp-query");
     let serpLoading = document.getElementById("serp-loading");
@@ -12,49 +12,50 @@
         serpQuery.textContent = "Enter a query and hit the button to search!";
         serpLoading.hidden = true;
         return;
-    };
+    } else {
+        serpInput.value = params.get("q");
 
-    serpLoading.hidden = false;
+        var searchXhr = new XMLHttpRequest();
+        searchXhr.open("GET", "/.netlify/functions/search?q=" + encodeURIComponent(params.get("q")));
 
-    var searchIndex = lunr(function() {
-        let index = this;
+        searchXhr.onload = function() {
+            var response;
+            
+            //parse the JSON reply
+            try { 
+                response = JSON.parse(searchXhr.responseText);
+            } catch(e) {
+                response = {};
+            }
+            
+            //if no results, tell the user. if yes results, create the result list
+            if(!response.results || response.results.length == 0) {
+                return serpQuery.textContent = `No results found for "${params.get("q")}"`;
+            } else {
+                serpQuery.textContent = `${results.length} results for "${params.get("q")}"`
+                serpLoading.hidden = true;
+                for(var i = 0; i < results.length; i++) {
+                    serpList.appendChild(buildResult(response.results[i]));
+                }
+            }
+        };
 
-        index.ref("id");
-        index.field("title", { boost: 10 });
-        index.field("text");
-
-        let keys = Object.keys(pageIndex);
-        for (var i = 0; i < keys.length; i++) {
-            let indexItem = pageIndex[keys[i]];
-            index.add({
-                "id": indexItem.id,
-                "title": indexItem.title,
-                "text": indexItem.text
-            });
-        }
-    });
-
-    window.results = searchIndex.search(params.get("q"));
-
-    serpQuery.textContent = `${results.length} results for "${params.get("q")}"`
-
-    for(var i = 0; i < results.length; i++) {
-        serpList.appendChild(buildResult(pageIndex[results[i].ref],results[i].matchData));
+        searchXhr.send();
+        serpLoading.hidden = false;
     }
 
-    serpLoading.hidden = true;
+    
 
 
-    function buildResult(resultDocObject, matchData) {
+    function buildResult(result) {
         let li = document.createElement("li");
-        let resultId = results[i].ref;
-
-        let resultObject = pageIndex[resultId];
+        let resultId = result.ref;
+        let resultDocObject = result.doc;
 
         let resultHeading = document.createElement("h3");
 
         let resultLink = document.createElement("a");
-        resultLink.href = resultDocObject.id;
+        resultLink.href = resultId;
         resultLink.textContent = resultDocObject.title;
 
         resultHeading.appendChild(resultLink);
@@ -62,7 +63,7 @@
         let resultSubheading = document.createElement("div");
         resultSubheading.textContent = resultDocObject.id;
 
-        let resultSnippet = buildSnippet(resultDocObject.text, matchData);
+        let resultSnippet = buildSnippet(resultDocObject.text);
 
         li.appendChild(resultHeading);
         li.appendChild(resultSubheading);
@@ -71,14 +72,10 @@
         return li;
     }
 
-    function buildSnippet(text, matchData) {
+    function buildSnippet(text) {
         let snippet = document.createElement("p");
-        let matchTerm = Object.keys(matchData.metadata)[0];
-
-        let matchIndex = caseInsensitiveIndexOf(text, matchTerm);
-        let snippetText = text.substring(matchIndex-100,matchIndex+100);
-
-        snippet.appendChild(boldifySubstring(snippetText, matchTerm, matchIndex));
+        
+        snippet.innerText = text;
 
         return snippet;
     }
