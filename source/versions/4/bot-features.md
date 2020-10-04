@@ -1,3 +1,5 @@
+<meta name="description" content="Bots available on NHS and their features" />
+
 # Bot Features
 
 * Table of Contents

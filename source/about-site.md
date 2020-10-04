@@ -1,3 +1,5 @@
+<meta name="description" content="About this documentation site" />
+
 # About the Site
 
 ## Why?

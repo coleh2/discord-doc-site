@@ -1,3 +1,5 @@
+<meta name="description" content="This page has examples of all 'widgets' that this site supports. Widgets are small extensions and expansions in order to make cool stuff!" />
+
 # Widget Examples
 
 This page has examples of all 'widgets' that this site supports. Widgets are small extensions and expansions in order to make cool stuff!

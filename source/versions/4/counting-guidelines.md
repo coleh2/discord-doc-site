@@ -1,3 +1,5 @@
+<meta name="description" content="Rules to follow in #counting" />
+
 # `#counting` Guidelines
 
 This is a description of how to count with friends (specifically in the #counting channel). Please adhere to these guidelines in order to keep the channel orderly!

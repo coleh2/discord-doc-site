@@ -1,3 +1,5 @@
+<meta name="description" content="A short guide to semantic versioning" />
+
 # Semantic Versioning
 
 ## What is it?
