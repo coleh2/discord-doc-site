@@ -1,4 +1,4 @@
-<meta name="description" content="Data from the movie night ratings" />
+<meta name="description" content="Some useful data to have on hand; including rosters, schedules, and ratings" />
 
 # Useful NHS-related Data Spreadsheets
 
@@ -66,3 +66,7 @@ Rosters holds the class lists that we know.
 ### MachineReadable
 
 This has every class in a machine-readable format. If you use this data in another app, this sheet is the one to use.
+
+## NHS Planner
+
+This document is made by the school. We have it linked [here](https://docs.google.com/document/d/1293yIJJPLSH5-xDrNNJWRNXtD0eBxbPaJ3xxwU_TCzY/edit#) for ease of access. This document has 1 page per week, and includes all class schedules and times.
