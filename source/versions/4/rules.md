@@ -55,3 +55,7 @@ Lets say you are in a chat like #hamilton were the clear intention typing out th
 ## Part 9 - Simplified punishments:
 
 Basically, unless if what you are doing is obvious spam then you will get three warnings. If you reach three warnings or are obviously spamming then you will be muted until you send me an apology via dms which will be posted in #news. This section was just to clear up confusion and summarize.
+
+## Part 10 - Political memes:
+
+Sorry for not making this clear but all political memes need to be put in #paulitics. If a political memes channel is ever made then that will also be an acceptable place to put political memes. The punishment will be the same as posting politics in a chat that is not politics.
