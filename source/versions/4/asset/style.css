@@ -21,6 +21,7 @@
         box-sizing: border-box;
         padding: 0 10px;
         flex-grow: 1;
+        overflow-x: auto;
         box-sizing: border-box;
     }
     main h1,h2,h3 {
