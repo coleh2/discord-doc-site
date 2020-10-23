@@ -70,3 +70,7 @@ This has every class in a machine-readable format. If you use this data in anoth
 ## NHS Planner
 
 This document is made by the school. We have it linked [here](https://docs.google.com/document/d/1293yIJJPLSH5-xDrNNJWRNXtD0eBxbPaJ3xxwU_TCzY/edit#) for ease of access. This document has 1 page per week, and includes all class schedules and times.
+
+## 9Axis Results
+
+[Here](https://docs.google.com/spreadsheets/d/1E-V1ti_LOJJU_bZmOec6RhUgh_mmg19RXS3MssCtoJI/edit#gid=0), we have the [9-axis political test](https://9axes.github.io/fullquiz.html) results for most of the people in the server. They are split up into seperate sheets based on the date when people tested.
