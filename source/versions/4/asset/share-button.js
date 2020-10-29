@@ -4,7 +4,7 @@ window.addEventListener("load", function() {
 
     let shareButton = document.getElementById("share-button"),
         shareUrlPath = shareButton.getAttribute("data-shorten-address"),
-        shortShareUrl = new URL("/" + shareUrlPath, location.origin.match(/https:\/\/d(ocs?)?.nhs.gg/) ? "https://d.nhs.gg" : location.origin); //go to shortener domain if applicable
+        shortShareUrl (location.origin.match(/https:\/\/d(ocs?)?.nhs.gg/) ? "https://nm.je/g" : location.origin + "/") + shareUrlPath; //go to shortener domain if applicable
     let sharePop;
 
     if(shareButton) {
@@ -36,10 +36,12 @@ window.addEventListener("load", function() {
                     urlCopyUrl.setSelectionRange(0, window.location.toString().length);
 
                     document.execCommand("copy");
+                    urlCopyButton.innerHTML = COPY_DONE_ICON;
 
                     urlCopy.classList.add("copied");
                     setTimeout(function() {
                         urlCopy.classList.remove("copied");
+                        urlCopyButton.innerHTML = COPY_ICON;
                     }, 1500);
                 });
 
