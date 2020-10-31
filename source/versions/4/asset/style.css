@@ -44,12 +44,83 @@
         animation: flashIndicate 2s;
     }
 
-    h1 #share-button {
+    h1 .actions {
         float: right;
+    }
+
+    h1 button, h1 a {
+        font-weight: initial;
+        float: left;
         cursor: pointer;
+        display: block;
         padding: 0;
+        box-sizing: border-box;
+        height: min-content;
+        white-space: unset;
+        text-indent: 0;
+        text-shadow: initial;
+        text-transform: initial;
+        word-spacing: initial;
+        letter-spacing: initial;
         border: 0;
+        margin-left: 1em;
         background: none;
+    }
+
+    h1 button svg, h1 a svg {
+        display: block;
+    }
+
+    [data-tooltip] {
+        position: relative;
+        overflow-x: visible;
+    }
+
+    [data-tooltip]::after {
+        content: attr(data-tooltip);
+        position: absolute;
+        top: -1em;
+        right: -999px;
+        left: -999px;
+        width: max-content;
+        max-width: 20ch;
+        text-align: center;
+        margin: auto;
+        padding: 3px;
+        font-size: 1.125rem;
+        background: #000e;
+        border-radius: 5px;
+        color: #eee;
+        opacity: 0;
+        transform: translateY(0em);
+        transition: all 0.1s 0.3s;
+        pointer-events: none;
+        cursor: default;
+    }
+
+    .tooltip-newtab::after {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath fill='white' d='M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z'/%3E%3C/svg%3E");
+        padding-right: 1.5em;
+        background-size: auto 1em;
+        background-position: right 3px center;
+        background-repeat: no-repeat;
+    }
+
+    .tooltip-right[data-tooltip]::after {
+        right: 0px;
+        left: unset;
+    }
+
+    .tooltip-left[data-tooltip]::after {
+        left: 0px;
+        right: unset;
+    }
+
+    [data-tooltip]:hover::after {
+        z-index: 100;
+        transform: translateY(-.5em);
+        opacity: 0.8;
+        transition-delay: 0;
     }
 
     #share-popup {
