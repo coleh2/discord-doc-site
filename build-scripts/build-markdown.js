@@ -28,15 +28,25 @@ const PRODUCTION_ANALYTICS = `<!-- Matomo -->
 <script async src="https://counter.clh.sh/counter.js"></script>
 <!-- End Matomo Code -->`;
 
+const EDIT_BUTTON_HTML = `
+<a id="edit-link" rel="noopener" aria-label="Edit in Github" class="tooltip-right tooltip-newtab" href="https://github.com/coleh2/discord-doc-site/edit/develop/{{address}}" target="_blank" data-tooltip="Edit in Github">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M7.127 22.562l-7.127 1.438 1.438-7.128 5.689 5.69zm1.414-1.414l11.228-11.225-5.69-5.692-11.227 11.227 5.689 5.69zm9.768-21.148l-2.816 2.817 5.691 5.691 2.816-2.819-5.691-5.689z"/></svg>
+</a>
+`;
 
 const SHARE_BUTTON_HTML = `
-<button id="share-button" tabindex="0" aria-label="share" data-shorten-address="{{shortened}}">
-<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M5 7c2.761 0 5 2.239 5 5s-2.239 5-5 5-5-2.239-5-5 2.239-5 5-5zm11.122 12.065c-.073.301-.122.611-.122.935 0 2.209 1.791 4 4 4s4-1.791 4-4-1.791-4-4-4c-1.165 0-2.204.506-2.935 1.301l-5.488-2.927c-.23.636-.549 1.229-.943 1.764l5.488 2.927zm7.878-15.065c0-2.209-1.791-4-4-4s-4 1.791-4 4c0 .324.049.634.122.935l-5.488 2.927c.395.535.713 1.127.943 1.764l5.488-2.927c.731.795 1.77 1.301 2.935 1.301 2.209 0 4-1.791 4-4z"/></svg>
-</button>`
+<button id="share-button" tabindex="0" aria-label="share" data-tooltip="Share" class="tooltip-right" data-shorten-address="{{shortened}}">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 7c2.761 0 5 2.239 5 5s-2.239 5-5 5-5-2.239-5-5 2.239-5 5-5zm11.122 12.065c-.073.301-.122.611-.122.935 0 2.209 1.791 4 4 4s4-1.791 4-4-1.791-4-4-4c-1.165 0-2.204.506-2.935 1.301l-5.488-2.927c-.23.636-.549 1.229-.943 1.764l5.488 2.927zm7.878-15.065c0-2.209-1.791-4-4-4s-4 1.791-4 4c0 .324.049.634.122.935l-5.488 2.927c.395.535.713 1.127.943 1.764l5.488-2.927c.731.795 1.77 1.301 2.935 1.301 2.209 0 4-1.791 4-4z"/></svg>
+</button>`;
+
+const DOCUMENT_AUTHOR_ALIASES = {
+    "coleh2": "coleh"
+};
 
 let markedIt = require("marked-it-core");
 
 var fs = require("fs");
+var cp = require("child_process");
 var path = require("path");
 var sha1 = require("sha1");
 var elasticlunr = require("elasticlunr");
@@ -194,7 +204,7 @@ function compileMarkdown(mdSource, sourceFileName, shortened, cb) {
                         return html.replace(`id="${id}"`, `id="${id}-${existingIdCache[id]}"`);
                     }
 
-                    if(html.startsWith("<h1")) return html.replace("</h1>", SHARE_BUTTON_HTML.replace("{{shortened}}", shortened) + "</h1>");
+                    if(html.startsWith("<h1")) return html.replace("</h1>", `<span class="actions">` + EDIT_BUTTON_HTML.replace("{{address}}", sourceFileName.replace(mdSourceFolder, "source")) + SHARE_BUTTON_HTML.replace("{{shortened}}", shortened) + "</span></h1>");
                 }
             }
         }
@@ -204,7 +214,6 @@ function compileMarkdown(mdSource, sourceFileName, shortened, cb) {
 
     var metaParsed = parseAndRemoveMetadata(compiledHtml.html.text);
     compiledHtml.html.text = metaParsed.html;
-    var meta = metaParsed.meta;
 
     let builtFileName = sourceFileName.replace(mdSourceFolder,mdBuildFolder).replace(/\.md$/,".html");
 
@@ -228,7 +237,7 @@ function compileMarkdown(mdSource, sourceFileName, shortened, cb) {
 
         let erbTemplate = fs.readFileSync(templateFileName, {encoding: "utf-8"});
 
-        resolveDocpageTemplate(compiledHtml, builtFileName, erbTemplate, fileDiagramContext, meta, function(erbHtml) {
+        resolveDocpageTemplate(compiledHtml, builtFileName, erbTemplate, fileDiagramContext, metaParsed, function(erbHtml) {
             cb(erbHtml,builtFileName, metaParsed.metaData);
         });
     } else {
@@ -336,7 +345,7 @@ function generateTocList(toc,maxLevel,parserProblemState,currentLevel,existingTo
     return html;
 }
 
-function resolveDocpageTemplate(compiledHtml, fileName, erbTemplate, fileDiagramContext, metaTags, cb) {
+function resolveDocpageTemplate(compiledHtml, fileName, erbTemplate, fileDiagramContext, metaData, cb) {
         let title;
 
         if(compiledHtml.jsonToc.text.length > "{\"toc\":{}}".length) {
@@ -375,17 +384,43 @@ function resolveDocpageTemplate(compiledHtml, fileName, erbTemplate, fileDiagram
             </ul>`
         }
 
+        var sourceFile = fileName.replace(mdBuildFolder, mdSourceFolder).replace(/\.html$/, ".md");
+        var unixEscapedSourceFile = sourceFile.replace(/\"/, "\\\"");
+
+        //on windows, backslashes are used for path spearators, so don't escape them
+        if(process.platform !== "win32") unixEscapedSourceFile = unixEscapedSourceFile.replace(/\\/g, "\\\\");
+        var gitAuthors = cp
+            .execSync(`git log --pretty=format:'%an' -- "${unixEscapedSourceFile}" | cat | sort | uniq`)
+            .toString()
+            .split("\n")
+            .filter(x=>x)
+            .map(x=> x.match(/\w+/)[0]);
+
+        var documentDefinedAuthors = [];
+        if(metaData.metaData.author != undefined) {
+            documentDefinedAuthors = metaData.metaData.author.split(/, +/);
+        }
+        var allAuthors = documentDefinedAuthors.concat(gitAuthors);
+        
+        allAuthors = Array.from(new Set(
+            allAuthors
+            .map(x=>DOCUMENT_AUTHOR_ALIASES[x]||x)
+        ));
+
+        var authorPluralization = (allAuthors || [1]).length == 1 ? "Author" : "Authors";
+
         erbParser({
             data: {
                 fields: {
                     body: compiledHtml.html.text,
+                    credits: allAuthors ? authorPluralization + ": " + allAuthors.join(", ") : "",
                     title: title,
                     generator: "markedIt",
                     railroadStyle: fileDiagramContext.railroad>0?RAILROAD_STYLE:"",
                     logoImage: "https://cdn.discordapp.com/icons/392830469500043266/ec0abbd24cc285867bf1a0f98048d327.png",
                     breadcrumbs: breadcrumbHtml,
                     analyticsScript: (process.env.CI=="true")?PRODUCTION_ANALYTICS:DEVENV_ANALYTICS,
-                    metaTags: metaTags
+                    metaTags: metaData.meta
                 }
             },
             template: erbTemplate
