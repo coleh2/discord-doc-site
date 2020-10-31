@@ -5,11 +5,15 @@ window.addEventListener("load", function() {
     let shareButton = document.getElementById("share-button"),
         shareUrlPath = shareButton.getAttribute("data-shorten-address"),
         shortShareUrl = (location.origin.match(/https:\/\/d(ocs?)?.nhs.gg/) ? "https://nm.je/g" : location.origin + "/") + shareUrlPath; //go to shortener domain if applicable
-    let sharePop;
+    let sharePop, shareRecreationLock;
 
     if(shareButton) {
         shareButton.addEventListener("click", function(event) {
             event.stopPropagation();
+            event.preventDefault();
+            
+            console.log(shareRecreationLock);
+
             if(!document.getElementById("share-popup")) {
 
                 let shareBox = shareButton.getBoundingClientRect();
@@ -68,16 +72,22 @@ window.addEventListener("load", function() {
                     e.stopPropagation();
                 });
 
-                document.body.addEventListener("click", function() {
+                document.body.addEventListener("click", function(event) {
+                    event.stopPropagation();
                     if(document.activeElement === sharePop) shareButton.focus();
                     document.body.removeEventListener("click",this);
                     sharePop&&sharePop.remove();
+                    console.log("bodyClick");
                 });
 
-                shareButton.addEventListener("focus", function() {
+                shareButton.addEventListener("focus", function(event) {
+                    event.preventDefault();
+                    console.log("shareFocus");
                     shareButton.removeEventListener("focus",this);
                     sharePop&&sharePop.remove();
                 });
+            } else {
+                sharePop&&sharePop.remove();
             }
         });
     }
