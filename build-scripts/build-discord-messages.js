@@ -263,6 +263,11 @@ function buildEmbedsContainer(messageObj) {
             let imageHeight = 300;
             let imageWidth = messageObj.attachments[i].width / messageObj.attachments[i].height * imageHeight;
 
+            if(imageWidth > 400) {
+                imageWidth = 400;
+                imageHeight =  messageObj.attachments[i].height / messageObj.attachments[i].width * imageWidth
+            }
+
             let imageWrapper = fakeDom.createElement("a");
             imageWrapper.setAttribute("class", "anchor anchorUnderlineOnHover imageWrapper imageZoom clickable embedWrapper");
             imageWrapper.style.setProperty("width", imageWidth + "px");
@@ -271,7 +276,7 @@ function buildEmbedsContainer(messageObj) {
             let image = fakeDom.createElement("img");
             image.setAttribute("loading", "lazy");
             image.setAttribute("alt", `Attachment ${messageObj.attachments[i].name}`);
-            image.setAttribute("src", messageObj.attachments[i].proxy_url + "?height=300&width=" + Math.round(imageWidth));
+            image.setAttribute("src", messageObj.attachments[i].proxy_url + "?height=" + Math.round(imageHeight) + "&width=" + Math.round(imageWidth));
             image.setAttribute("height", imageHeight);
             
             imageWrapper.appendChild(image);

@@ -92,8 +92,9 @@
         border-radius: 5px;
         color: #eee;
         opacity: 0;
-        transform: translateY(0em);
-        transition: all 0.1s 0.3s;
+        transform: translateY(0em) translateZ(0);
+        will-change: transform;
+        transition: all 0.1s;
         pointer-events: none;
         cursor: default;
     }
@@ -118,7 +119,7 @@
 
     [data-tooltip]:hover::after {
         z-index: 100;
-        transform: translateY(-.5em);
+        transform: translateY(-.5em) translateZ(0);
         opacity: 0.8;
         transition-delay: 0;
     }
