@@ -1,7 +1,6 @@
 # discord-doc-site
 
 [![Netlify Deploy Status](https://api.netlify.com/api/v1/badges/fe092549-31a9-4416-b581-68c0fbf1e928/deploy-status)](https://app.netlify.com/sites/coleh-discord-doc-25568/deploys)
-[![GitHub Build Status](https://github.com/coleh2/discord-doc-site/workflows/CI/badge.svg)
 
 A documentation site for rules, standards, and other 'need'-to-know information related to a Discord server
 
