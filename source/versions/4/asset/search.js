@@ -16,7 +16,7 @@
         serpInput.value = params.get("q");
 
         var searchXhr = new XMLHttpRequest();
-        searchXhr.open("GET", "/.netlify/functions/search?q=" + encodeURIComponent(params.get("q")));
+        searchXhr.open("GET", "/api/search?q=" + encodeURIComponent(params.get("q")));
 
         searchXhr.onload = function() {
             var response;

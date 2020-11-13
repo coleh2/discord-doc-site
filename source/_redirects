@@ -1,7 +1,13 @@
 # Netlify redirects file; https://docs.netlify.com/routing/redirects/#syntax-for-the-redirects-file
 
+# redirect latest versions
+
 /versions/latest  /versions/4
 /versions/latest/*  /versions/4/:splat
+
+# redirect /api to functions directory
+
+/api/* /.netlify/functions/:splat   200
 
 # redirect vanity domains to cannonical (doc.nhs.gg)
 
