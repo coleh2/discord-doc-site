@@ -1,3 +1,21 @@
+let markedIt = require("marked-it-core");
+
+var fs = require("fs");
+var cp = require("child_process");
+var path = require("path");
+var sha1 = require("sha1");
+var elasticlunr = require("elasticlunr");
+
+let parseRailroad = require(path.resolve(__dirname, "parse-railroad-diagram.js"));
+let parseExpression = require(path.resolve(__dirname, "parse-js-expression.js"));
+let Highcharts = require(path.resolve(__dirname, "highcharts-server-version.js"))();
+let buildDiscord = require(path.resolve(__dirname, "build-discord-messages.js"));
+//initialize additional charts
+let additionalChartDir = path.resolve(__dirname, "highcharts-more-chart-types");
+let additionalCharts = fs.readdirSync(additionalChartDir);
+
+const PROJECT_FOLDER = process.env.NHS_RULES_DIR || path.resolve(__dirname,"..");
+
 const SEARCH_INDEX_FILE = "../functions/search.js"
 const REDIRECT_FILE = "_redirects";
 
@@ -39,41 +57,28 @@ const SHARE_BUTTON_HTML = `
 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 7c2.761 0 5 2.239 5 5s-2.239 5-5 5-5-2.239-5-5 2.239-5 5-5zm11.122 12.065c-.073.301-.122.611-.122.935 0 2.209 1.791 4 4 4s4-1.791 4-4-1.791-4-4-4c-1.165 0-2.204.506-2.935 1.301l-5.488-2.927c-.23.636-.549 1.229-.943 1.764l5.488 2.927zm7.878-15.065c0-2.209-1.791-4-4-4s-4 1.791-4 4c0 .324.049.634.122.935l-5.488 2.927c.395.535.713 1.127.943 1.764l5.488-2.927c.731.795 1.77 1.301 2.935 1.301 2.209 0 4-1.791 4-4z"/></svg>
 </button>`;
 
+//load font style and minify it
+const FONTS_STYLE = "<style>" +
+    fs.readFileSync(path.resolve(PROJECT_FOLDER, "source", "versions", "4", "asset", "fonts.css")).toString().replace(/\n\s*/g, "").replace(/;}/g, "}") +
+    "</style>";
+
 const DOCUMENT_AUTHOR_ALIASES = {
     "coleh2": "coleh"
 };
-
-let markedIt = require("marked-it-core");
-
-var fs = require("fs");
-var cp = require("child_process");
-var path = require("path");
-var sha1 = require("sha1");
-var elasticlunr = require("elasticlunr");
-
-let parseRailroad = require(path.resolve(__dirname, "parse-railroad-diagram.js"));
-let parseExpression = require(path.resolve(__dirname, "parse-js-expression.js"));
-let Highcharts = require(path.resolve(__dirname, "highcharts-server-version.js"))();
-let buildDiscord = require(path.resolve(__dirname, "build-discord-messages.js"));
-//initialize additional charts
-let additionalChartDir = path.resolve(__dirname, "highcharts-more-chart-types");
-let additionalCharts = fs.readdirSync(additionalChartDir);
-
-for(let i = 0; i < additionalCharts.length; i++) {
-    let chartModule = require(path.resolve(additionalChartDir, additionalCharts[i]));
-
-    chartModule(Highcharts);
-}
-
 
 const debugLevel = 3;
 
 let erbParser = require("./templater.js");
 
-let projectFolder = process.env.NHS_RULES_DIR || path.resolve(__dirname,"..");
+let mdSourceFolder = path.resolve(PROJECT_FOLDER, "source");
+let mdBuildFolder = path.resolve(PROJECT_FOLDER, "build");
 
-let mdSourceFolder = path.resolve(projectFolder, "source");
-let mdBuildFolder = path.resolve(projectFolder, "build");
+//init extra chart types
+for(let i = 0; i < additionalCharts.length; i++) {
+    let chartModule = require(path.resolve(additionalChartDir, additionalCharts[i]));
+
+    chartModule(Highcharts);
+}
 
 //replace analytics scripts
 let htmlFiles = loadHtmlFilesFromFolder(mdBuildFolder);
@@ -145,14 +150,22 @@ for(var i = 0; i < mdFiles.length; i++) {
         //only write if a custom-made version doesn't exist
         if(!fs.existsSync(builtFileName)) fs.writeFileSync(builtFileName,html);
 
-        searchIndex.addDoc({
-            id: filePath,
-            title: fileTitle,
-            text: source,
-            description: metadata.description || "",
-            author: metadata.author || "",
-            keywords: metadata.keywords || ""
-        });
+        //only add to search if meta robots allows it
+        var metaRobots = (metadata.robots || "") //get tag, default to empty
+            .toLowerCase() //normalize case
+            .replace("none", "nofollow, noindex") //expand none to its simpler equivelant
+            .split("\W+"); //split into words
+        
+        if(!metaRobots.includes("noindex")) {
+            searchIndex.addDoc({
+                id: filePath,
+                title: fileTitle,
+                text: source,
+                description: metaRobots.includes("nosnippet") ? (metadata.description || "") : "",
+                author: metadata.author || "",
+                keywords: metadata.keywords || ""
+            });
+        }
 
         //write to search index if it's the last file
         if(iSave+1 == mdFiles.length) {
@@ -412,6 +425,7 @@ function resolveDocpageTemplate(compiledHtml, fileName, erbTemplate, fileDiagram
         erbParser({
             data: {
                 fields: {
+                    fontsStyle: FONTS_STYLE,
                     body: compiledHtml.html.text,
                     credits: allAuthors ? authorPluralization + ": " + allAuthors.join(", ") : "",
                     title: title,
