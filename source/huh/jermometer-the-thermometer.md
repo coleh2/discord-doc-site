@@ -1,8 +1,9 @@
 <meta name="keywords" content="charlie jokes, charlie, joke">
+<meta name="description" content="Jermometer The Thermometer is a reoccurring joke from Charlie.">
 
 # Jermometer The Thermometer
 
-Jermometer The Thermometer is a reoccurring joke from Charlie. Jermometer first showed up in the NHS/NHRS server (an exchange server created by Steven to introduce us to Nashoba students he knew). Jermometer is usually introduced by Charlie proposing to "invite Jermometer The Thermometer to the server." 
+Jermometer The Thermometer is a reoccurring joke from Charlie. Jermometer first showed up in the NHS/NHRS server (an exchange server created by Steven to introduce us to the Timmy crew). Jermometer is usually introduced by Charlie proposing to "invite Jermometer The Thermometer to the server." 
 
 Jermometer's spelling and capitalization vary from appearance to appearance; he has also shown up as "Jermometer the Thermometer," "Jermomiter the thermometer," and "Jermometer the thermometer." Charlie's first message spelled his name as "Jermomiter," but this was later changed for Jermometer's Discord account.
 

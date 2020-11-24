@@ -1,4 +1,5 @@
 <meta name="keywords" content="charlie jokes, charlie, joke">
+<meta name="description" content="Charlie likes to say that he'll eat, or has eaten, a dog.">
 
 # I Will Eat a Dog
 

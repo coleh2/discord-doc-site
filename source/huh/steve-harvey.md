@@ -1,4 +1,5 @@
 <meta name="keywords" content="charlie jokes, charlie, joke, religion">
+<meta name="description" content="If you see Steve Harvey mentioned in NHS, it's probably because of Charlie.">
 
 # Steve Harvey
 
