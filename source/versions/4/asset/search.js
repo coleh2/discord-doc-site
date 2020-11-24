@@ -63,7 +63,7 @@
         let resultSubheading = document.createElement("div");
         resultSubheading.textContent = resultDocObject.id;
 
-        let resultSnippet = buildSnippet(resultDocObject.text);
+        let resultSnippet = buildSnippet(resultDocObject.description || resultDocObject.text);
 
         li.appendChild(resultHeading);
         li.appendChild(resultSubheading);
