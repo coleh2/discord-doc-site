@@ -1,3 +1,5 @@
+<meta name="description" content="Bounty system rules for Minecraft SMP servers" />
+
 # Bounties
 
 You can, whenever you want, put a bounty on someone. A bounty is a set of items that you'll give someone else for killing the target. You can't undo or change a bounty once it's set, so be careful!

@@ -1,3 +1,5 @@
+<meta name="description" content="Basic rules for Minecraft SMP servers" />
+
 # Basic SMP Rules
 
 This is a very basic set of rules to be used where no rules should really be needed, but just in case.
