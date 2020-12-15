@@ -208,10 +208,10 @@ Node.prototype.__buildOuterHTML = function (includeStyles) {
         if (attribute == "style" && this.attributes.style == "") return "";
 
 
-        else return `${attribute}="${this.attributes[attribute]}"`
+        else return ` ${attribute}="${this.attributes[attribute]}"`
     });
 
-    return "<" + this.nodeName + " " + attrs.join(" ") + ">" +
+    return "<" + this.nodeName + attrs.join("") + ">" +
         this.childNodes.map(node => node.__buildOuterHTML(includeStyles)).join("") +
         "</" + this.nodeName + ">";
 };
