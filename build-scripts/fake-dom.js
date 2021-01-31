@@ -34,7 +34,7 @@ function Node(tag, value) {
                 if (!trimmed) continue;
 
                 let styleName = trimmed.split(":")[0];
-                let styleVal = trimed.substring(styleName.length, trimmed.length - 1);
+                let styleVal = trimmed.substring(styleName.length, trimmed.length - 1);
 
                 self.style.setProperty(styleName, styleVal);
             }
@@ -282,7 +282,7 @@ function parseHTML(str) {
     //remove leading/trailing whitespace and comments
     str = parserTools.stripComments(str.trim(), { start: "<!--", end: "-->" });
 
-    let elemHtmls = parserTools.groupAwareSplit(str, ">", { doGroups: true, doQuotes: true, groupEnter: ["<"], groupExit: ["</"] });
+    let elemHtmls = parserTools.groupAwareSplit(str, ">", { doGroups: true, doQuotes: false, groupEnter: ["<"], groupExit: ["</"] });
 
     let elements = [];
     for (var i = 0; i < elemHtmls.length; i++) {
