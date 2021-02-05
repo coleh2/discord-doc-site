@@ -5,6 +5,9 @@
 /versions/latest  /versions/4
 /versions/latest/*  /versions/4/:splat
 
+# redirect 404
+/sicotte-email/* /sicotte-email/404 404
+
 # redirect /api to functions directory
 
 /api/* /.netlify/functions/:splat   200
